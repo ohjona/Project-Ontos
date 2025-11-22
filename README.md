@@ -7,6 +7,25 @@ Ontos is a local-first CLI tool that helps you manage your project documentation
 ### Prerequisites
 - Python 3.9+
 
+### Global Installation (Recommended for Usage)
+To use `ontos` from any directory without activating a virtual environment:
+
+1. Build the package:
+   ```bash
+   cd /path/to/Ontos  # Navigate to the project directory first!
+   /usr/bin/python3 -m build
+   ```
+2. Install the built wheel globally:
+   ```bash
+   /usr/bin/python3 -m pip install --user dist/ontos-0.1.0-py3-none-any.whl
+   ```
+3. **Important:** Ensure your user binary directory is in your PATH.
+   Add this to your `~/.zshrc` or `~/.bashrc`:
+   ```bash
+   export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+   ```
+   *(Note: The python version (3.9) may vary. Check the install output.)*
+
 ### Local Installation (Development)
 1. Clone the repository.
 2. Create a virtual environment:

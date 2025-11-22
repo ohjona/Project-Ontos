@@ -3,6 +3,7 @@ from ontos.groom import check_file_size, check_headers
 import os
 
 @click.group()
+@click.version_option(version='0.1.0')
 def cli():
     """Ontos: The Context Operating System."""
     pass

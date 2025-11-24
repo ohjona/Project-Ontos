@@ -8,6 +8,8 @@ Ontos is a "Manual MVP" framework for managing project context. It structures yo
 
 This repository serves as a template and guide. To use this approach in your own project, follow these steps.
 
+> **Tip:** See [DEPLOYMENT.md](DEPLOYMENT.md) for a step-by-step guide on adding Ontos to an existing repository.
+
 ### 1. Setup Directory Structure
 
 Create a `docs/` directory with the following hierarchy to organize your "knowledge atoms":
@@ -36,6 +38,8 @@ depends_on: []        # List of IDs this document depends on (e.g. [strategy_mon
 ```
 
 *See `docs/template.md` for a copy-pasteable version.*
+
+> **Automation:** Use [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) and `scripts/migrate_frontmatter.py` to automatically tag your existing docs using an LLM.
 
 ### 3. Automation (The Context Map)
 

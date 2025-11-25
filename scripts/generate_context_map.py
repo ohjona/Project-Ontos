@@ -9,7 +9,7 @@ OUTPUT_FILE = 'CONTEXT_MAP.md'
 
 def parse_frontmatter(filepath):
     """Parses YAML frontmatter from a markdown file."""
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
         content = f.read()
     
     if content.startswith('---'):
@@ -87,6 +87,9 @@ def validate_dependencies(files_data):
     for doc_id, data in files_data.items():
         deps = data['depends_on']
         if deps:
+            # Handle case where user wrote string instead of list
+            if isinstance(deps, str):
+                deps = [deps]
             for dep in deps:
                 if dep not in existing_ids:
                     issues.append(f"- [BROKEN LINK] **{doc_id}** links to missing ID: `{dep}`")
@@ -120,15 +123,19 @@ def validate_dependencies(files_data):
         if doc_id not in visited:
             detect_cycle(doc_id, [])
 
-    # 3. Orphan Detection (No incoming edges)
-    # Note: We exclude 'product' and 'strategy' from being orphans as they are often top-level.
-    # Adjust this logic based on your specific needs.
+    # 3. Orphan Detection
     for doc_id in existing_ids:
         if not rev_adj[doc_id]:
-            # Optional: Filter out types that are expected to be roots
             doc_type = files_data[doc_id]['type']
-            if doc_type not in ['product', 'strategy', 'kernel']: 
-                 issues.append(f"- [ORPHAN] **{doc_id}** is not depended on by any other document.")
+            filename = files_data[doc_id]['filename']
+            
+            # Skip expected root types and templates
+            if doc_type in ['product', 'strategy', 'kernel']:
+                continue
+            if 'template' in filename.lower():
+                continue
+                
+            issues.append(f"- [ORPHAN] **{doc_id}** is not depended on by any other document.")
 
     # 4. Dependency Depth
     # Calculate max depth for each node
@@ -163,6 +170,21 @@ def validate_dependencies(files_data):
         my_rank = type_rank.get(my_type, 4)
         
         for dep in data['depends_on']:
+            # Handle case where user wrote string instead of list
+            if isinstance(dep, str) and dep not in files_data: 
+                 # This check is slightly redundant with loop above but safe. 
+                 # Actually, data['depends_on'] is the list. 
+                 # We need to handle if data['depends_on'] is a string before iterating?
+                 # Wait, the previous fix handles 'deps' variable. 
+                 # Here we iterate data['depends_on'] directly.
+                 pass
+
+        # Let's fix the iteration logic properly.
+        deps = data['depends_on']
+        if isinstance(deps, str):
+            deps = [deps]
+            
+        for dep in deps:
             if dep in files_data:
                 dep_type = files_data[dep]['type']
                 if isinstance(dep_type, list): dep_type = dep_type[0]
@@ -212,6 +234,7 @@ Scanned Directory: `{target_dir}`
         f.write(content)
         
     print(f"Successfully generated {OUTPUT_FILE}")
+    print(f"📊 Scanned {len(files_data)} documents, found {len(issues)} issues.")
 
     # Return issue count for strict mode
     return len(issues)

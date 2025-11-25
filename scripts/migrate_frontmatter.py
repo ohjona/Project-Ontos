@@ -8,9 +8,9 @@ PROMPT_FILE = 'migration_prompt.txt'
 def has_frontmatter(filepath):
     """Checks if a file already has YAML frontmatter."""
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
             return f.readline().strip() == '---'
-    except:
+    except (IOError, PermissionError, OSError):
         return False
 
 def scan_for_untagged_files(root_dir):

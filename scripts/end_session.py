@@ -65,7 +65,7 @@ Date: {today}
 - 
 """
 
-    with open(filepath, 'w') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
 
     print(f"✅ Created session log: {filepath}")

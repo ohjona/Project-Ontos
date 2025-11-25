@@ -6,18 +6,22 @@ import sys
 
 LOGS_DIR = 'docs/logs'
 
-def get_git_changes():
-    """Gets the list of modified/staged files from git."""
+def get_daily_git_log():
+    """Gets the git log for the current day."""
     try:
-        # Get status of modified files
-        result = subprocess.run(['git', 'status', '--short'], capture_output=True, text=True)
+        # Get commits since midnight
+        result = subprocess.run(
+            ['git', 'log', '--since=midnight', '--pretty=format:%h - %s'], 
+            capture_output=True, 
+            text=True
+        )
         if result.returncode != 0:
-            return "Error getting git status."
+            return "Error getting git log."
         
-        changes = result.stdout.strip()
-        if not changes:
-            return "No file changes detected."
-        return changes
+        logs = result.stdout.strip()
+        if not logs:
+            return "No commits found for today."
+        return logs
     except Exception as e:
         return f"Error running git: {e}"
 
@@ -35,10 +39,10 @@ def create_log_file(topic_slug):
         print(f"⚠️  Log file already exists: {filepath}")
         return filepath
 
-    git_changes = get_git_changes()
+    daily_log = get_daily_git_log()
 
     content = f"""---
-id: log_{today.replace('-', '')}_{topic_slug}
+id: log_{today.replace('-', '')}_{topic_slug.replace('-', '_')}
 type: atom
 status: active
 depends_on: []
@@ -48,21 +52,25 @@ depends_on: []
 Date: {today}
 
 ## 1. Goal
-<!-- What was the primary objective of this session? -->
+<!-- [AGENT: Fill this in. What was the primary objective of this session?] -->
 
 ## 2. Key Decisions
-<!-- What architectural or design choices were made? -->
+<!-- [AGENT: Fill this in. What architectural or design choices were made?] -->
 - 
 
 ## 3. Changes Made
-<!-- Summary of file changes -->
-```bash
-{git_changes}
-```
+<!-- [AGENT: Fill this in. Summary of file changes.] -->
+- 
 
 ## 4. Next Steps
-<!-- What should the next agent work on? -->
+<!-- [AGENT: Fill this in. What should the next agent work on?] -->
 - 
+
+---
+## Raw Session History
+```text
+{daily_log}
+```
 """
 
     with open(filepath, 'w', encoding='utf-8') as f:

@@ -33,8 +33,9 @@ If you create a new file or change dependencies:
 3.  Check the output for errors (Cycles, Orphans, Architectural Violations).
     *   **Violation**: A **Kernel** (0) cannot depend on an **Atom** (3). Dependencies must flow DOWN the stack.
 
-### 3. Session Archival (End of Task)
-When the user says **"Archive Ontos"** (or "Ontos archive"):
-1.  Run `python3 scripts/end_session.py "topic-slug"` to scaffold the log file.
-2.  Fill in the "Decisions" and "Summary" sections in the newly created file.
-3.  Commit the log file to git.
+### 3. Session Archival
+When the user says **"Ontos archive"** (or "Archive our session"):
+1.  Run `python3 scripts/end_session.py "slug-for-session"`.
+2.  **READ** the generated log file.
+3.  **OVERWRITE** the placeholders in the file with a high-quality summary of the session (Goal, Decisions, Changes, Next Steps).
+4.  Commit the changes.

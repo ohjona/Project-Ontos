@@ -1,3 +1,13 @@
+---
+id: manual_mvp_playbook_deprecated
+type: strategy
+status: deprecated
+owner: null
+depends_on: []
+---
+
+> ⚠️ **DEPRECATED**: This document is superseded by [The Manual v0.3](20251124_Project%20Ontos%20The%20Manual.md). Retained for historical reference only.
+
 # **Ontos: The Manual MVP Playbook**
 
 ## **Phase 0: The "Future-Proof" Setup**

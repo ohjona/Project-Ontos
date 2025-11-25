@@ -212,9 +212,18 @@ Scanned Directory: `{target_dir}`
         
     print(f"Successfully generated {OUTPUT_FILE}")
 
+    # Return issue count for strict mode
+    return len(issues)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate Ontos Context Map')
-    parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR, help='Directory to scan for documentation (default: docs)')
+    parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR, help='Directory to scan (default: docs)')
+    parser.add_argument('--strict', action='store_true', help='Exit with error code 1 if issues found')
     args = parser.parse_args()
     
-    generate_context_map(args.dir)
+    issue_count = generate_context_map(args.dir)
+    
+    if args.strict and issue_count > 0:
+        print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
+        sys.exit(1)
+```

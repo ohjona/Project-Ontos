@@ -1,11 +1,11 @@
 # Ontos Context Map
-Generated on: 2025-11-24 18:37:31
+Generated on: 2025-11-25 00:03:46
 Scanned Directory: `docs`
 
 ## 1. Hierarchy Tree
 ### ATOM
 - **unique_slug_name** (template.md)
-  - Status: ['draft | active | deprecated']
+  - Status: draft
   - Depends On: None
 
 

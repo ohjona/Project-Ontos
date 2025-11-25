@@ -19,7 +19,34 @@ depends_on: []        # List of dependency IDs. Example: [auth_flow, user_model]
 ---
 ```
 
-> **Automation:** Use `scripts/migrate_frontmatter.py` to automatically tag existing documents.
+> **Automation:** Use `scripts/migrate_frontmatter.py --auto` to automatically tag existing documents using an LLM.
+
+## **Document Type Taxonomy**
+
+Ontos uses four hierarchical document types. When tagging documents, select the type that best matches the document's *purpose*, not its format.
+
+| Type | Rank | Definition | Signal Words |
+|------|------|------------|--------------|
+| `kernel` | 0 | Immutable foundational principles that rarely change. | mission, values, philosophy, principles, "why we exist" |
+| `strategy` | 1 | High-level decisions about goals, audiences, and approaches. | goals, roadmap, monetization, target market, competitive positioning |
+| `product` | 2 | User-facing features, journeys, and requirements. | user flow, feature spec, requirements, user story, journey |
+| `atom` | 3 | Technical implementation details and specifications. | API, schema, config, implementation, technical spec, code |
+
+### Dependency Rule
+
+Dependencies flow **down** the hierarchy. Higher-ranked documents can depend on lower-ranked documents.
+
+- ✅ `atom` → `product` → `strategy` → `kernel` (valid chain)
+- ❌ `kernel` → `atom` (architectural violation)
+
+### Classification Heuristic
+
+When uncertain, ask: *"If this document changes, what else breaks?"*
+
+- If everything breaks → `kernel`
+- If business direction changes → `strategy`
+- If user experience changes → `product`
+- If only implementation changes → `atom`
 
 ## **Phase 1: The "Architect" (Initialization)**
 
@@ -46,6 +73,14 @@ Whenever you add a file or change a dependency:
 2.  Run `python3 scripts/generate_context_map.py`.
 3.  Fix any errors reported in the "Dependency Audit".
 4.  Commit the updated map.
+
+### Strict Mode (CI/CD)
+
+To enforce graph integrity in pipelines, use the `--strict` flag:
+```bash
+python3 scripts/generate_context_map.py --strict
+```
+This will exit with an error code if any issues are found.
 
 ## **Phase 3: Vibe Coding (The Usage)**
 

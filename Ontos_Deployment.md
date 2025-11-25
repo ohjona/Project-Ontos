@@ -2,11 +2,15 @@
 
 This guide covers how to install and configure Project Ontos for your repository.
 
+## 0. Preparation
+
+Pull the Project-Ontos repository (https://github.com/ohjona/Project-Ontos/tree/main) into your project folder.
+
 ## Prerequisites
 
 *   **Python 3.x** (for the automation scripts)
 *   **Git** (for version control)
-*   **An AI Agent** (Cursor, Claude Code, etc.)
+*   **An Agentic CLI** (Cursor, Claude Code, etc.)
 
 ## 1. Installation
 

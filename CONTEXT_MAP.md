@@ -1,5 +1,5 @@
 # Ontos Context Map
-Generated on: 2025-11-25 00:03:46
+Generated on: 2025-11-25 11:00:06
 Scanned Directory: `docs`
 
 ## 1. Hierarchy Tree
@@ -7,12 +7,21 @@ Scanned Directory: `docs`
 - **unique_slug_name** (template.md)
   - Status: draft
   - Depends On: None
+- **log_20251125_iteration_3_complete** (2025-11-25_iteration-3-complete.md)
+  - Status: active
+  - Depends On: None
+- **log_20251125_deployment_guide_update** (2025-11-25_deployment-guide-update.md)
+  - Status: active
+  - Depends On: None
 
 
 ## 2. Dependency Audit
-- [ORPHAN] **unique_slug_name** is not depended on by any other document.
+- [ORPHAN] **log_20251125_deployment_guide_update** is not depended on by any other document.
+- [ORPHAN] **log_20251125_iteration_3_complete** is not depended on by any other document.
 
 ## 3. Index
 | ID | Filename | Type |
 |---|---|---|
 | unique_slug_name | [template.md](docs/template.md) | atom |
+| log_20251125_iteration_3_complete | [2025-11-25_iteration-3-complete.md](docs/logs/2025-11-25_iteration-3-complete.md) | atom |
+| log_20251125_deployment_guide_update | [2025-11-25_deployment-guide-update.md](docs/logs/2025-11-25_deployment-guide-update.md) | atom |

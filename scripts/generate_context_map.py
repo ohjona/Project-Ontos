@@ -250,4 +250,4 @@ if __name__ == "__main__":
     if args.strict and issue_count > 0:
         print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
         sys.exit(1)
-```
+

@@ -27,8 +27,8 @@ cp /path/to/ontos/scripts/*.py scripts/
 Ensure `scripts/generate_context_map.py` is executable (optional, usually python3 command is enough).
 
 ### B. The System Prompt
-1.  Copy `AGENT_INSTRUCTIONS.md` to your project root.
-2.  (Optional) If using Cursor, copy the content of `AGENT_INSTRUCTIONS.md` into your `.cursorrules` file.
+1.  Copy `Ontos_Agent_Instructions.md` to your project root.
+2.  (Optional) If using Cursor, copy the content of `Ontos_Agent_Instructions.md` into your `.cursorrules` file.
 
 ### C. The Template
 Copy `docs/template.md` to `docs/_template.md` (or similar) to use as a starting point for new files.
@@ -53,3 +53,9 @@ You can add a step in your GitHub Actions to verify graph integrity:
 ```
 
 If the script encounters "Cycles" or "Architectural Violations", it will output them to the map. The `--strict` flag causes the script to exit with error code 1 if any issues are found, failing the pipeline.
+
+## 5. Next Steps
+
+Now that you have the tools installed, you need to apply Ontos to your documentation.
+
+👉 **Go to the [Ontos Initiation Guide](Ontos_Initiation_Guide.md)** to start tagging your files.

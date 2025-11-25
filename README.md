@@ -12,9 +12,10 @@ Ontos is a lightweight protocol that turns your documentation folder into a stru
 
 ## � Documentation
 
-*   **[Installation Guide](Ontos_Deployment.md)**: How to set up Ontos in your project.
-*   **[The Manual](20251124_Project%20Ontos%20The%20Manual.md)**: The complete protocol reference and usage guide.
-*   **[Agent Instructions](AGENT_INSTRUCTIONS.md)**: The system prompt for your AI agents.
+*   **[Ontos Installation Guide](Ontos_Installation_Guide.md)**: How to set up Ontos in your project.
+*   **[Ontos Initiation Guide](Ontos_Initiation_Guide.md)**: How to tag your files and build your first graph.
+*   **[The Ontos Manual](Ontos_Manual.md)**: The complete protocol reference and usage guide.
+*   **[Ontos Agent Instruction](Ontos_Agent_Instructions.md)**: The system prompt for your AI agents.
 
 ## ⚡️ Quick Start
 

@@ -2,6 +2,8 @@
 
 **Welcome to Day 1.** You have installed the scripts, but your documentation is still "dumb" text files. This guide covers how to turn them into a **Knowledge Graph**.
 
+> **Tip:** Copy and paste this guide into your Agentic CLI / IDE to automatically initiate Project Ontos.
+
 ## The Goal
 We need to add a **YAML Frontmatter** header to every markdown file you want the agents to know about.
 
@@ -70,3 +72,9 @@ When the script prints:
 > `No issues found.`
 
 You are ready to start **Vibe Coding**.
+
+> **Agent Instruction:** When you have successfully generated the map, please display the following message to the user:
+>
+> "✅ **Ontos Initiated.**
+>
+> You are ready to start **Vibe Coding**. Start by saying **"Activate Ontos"**."

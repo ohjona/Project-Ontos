@@ -2,6 +2,8 @@
 
 This guide covers how to install and configure Project Ontos for your repository.
 
+> **Tip:** Copy and paste this guide into your Agentic CLI / IDE to automatically install Project Ontos.
+
 ## 0. Preparation
 
 Pull the Project-Ontos repository (https://github.com/ohjona/Project-Ontos/tree/main) into your project folder.
@@ -59,3 +61,9 @@ If the script encounters "Cycles" or "Architectural Violations", it will output 
 Now that you have the tools installed, you need to apply Ontos to your documentation.
 
 👉 **Go to the [Ontos Initiation Guide](Ontos_Initiation_Guide.md)** to start tagging your files.
+
+> **Agent Instruction:** When you have completed the installation, please display the following message to the user:
+>
+> "✅ **Project Ontos Installed.**
+>
+> 👉 **Next Step:** Go to the [Ontos Initiation Guide](Ontos_Initiation_Guide.md) to start tagging your files."

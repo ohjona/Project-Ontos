@@ -19,9 +19,11 @@ Ontos is a lightweight protocol that turns your documentation folder into a stru
 
 ## ⚡️ Quick Start
 
-Once installed, simply tell your Agent:
+Once installed and initiated, simply tell your Agent:
 
 > **"Ontos"** (or "Activate Ontos")
+
+Follow [Ontos_Agent_Instructions.md](Ontos_Agent_Instructions.md) for Ontos task.
 
 The Agent will:
 1.  Read the Context Map.

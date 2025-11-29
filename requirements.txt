@@ -1,1 +1,10 @@
-pyyaml
+# Core dependencies
+pyyaml>=6.0
+
+# Optional: Watch mode for generate_context_map.py
+watchdog>=3.0
+
+# Development dependencies
+pytest>=7.0
+pytest-cov>=4.0
+pre-commit>=3.0

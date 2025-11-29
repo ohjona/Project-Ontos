@@ -1,0 +1,21 @@
+# See https://pre-commit.com for more information
+# Install: pip install pre-commit && pre-commit install
+
+repos:
+  - repo: local
+    hooks:
+      - id: ontos-validate
+        name: Validate Ontos Context Map
+        entry: python3 scripts/generate_context_map.py --strict --quiet
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [commit]
+
+      - id: ontos-check-frontmatter
+        name: Check for untagged documentation files
+        entry: python3 scripts/migrate_frontmatter.py --strict --quiet
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [commit]

@@ -1,20 +1,39 @@
+"""Scan for untagged Ontos documentation files."""
+
 import os
-
 import argparse
+import sys
 
-DEFAULT_DOCS_DIR = 'docs'
-PROMPT_FILE = 'migration_prompt.txt'
+from config import __version__, DEFAULT_DOCS_DIR, MIGRATION_PROMPT_FILE
 
-def has_frontmatter(filepath):
-    """Checks if a file already has YAML frontmatter."""
+PROMPT_FILE = MIGRATION_PROMPT_FILE
+
+
+def has_frontmatter(filepath: str) -> bool:
+    """Checks if a file already has YAML frontmatter.
+
+    Args:
+        filepath: Path to the file to check.
+
+    Returns:
+        True if the file starts with '---', False otherwise.
+    """
     try:
         with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
             return f.readline().strip() == '---'
     except (IOError, PermissionError, OSError):
         return False
 
-def scan_for_untagged_files(root_dir):
-    """Finds all markdown files without frontmatter."""
+
+def scan_for_untagged_files(root_dir: str) -> list[str]:
+    """Finds all markdown files without frontmatter.
+
+    Args:
+        root_dir: Directory to scan.
+
+    Returns:
+        List of file paths without frontmatter.
+    """
     untagged = []
     for subdir, _, files in os.walk(root_dir):
         for file in files:
@@ -24,8 +43,16 @@ def scan_for_untagged_files(root_dir):
                     untagged.append(filepath)
     return untagged
 
-def generate_prompt(files):
-    """Generates a prompt for the agent to process."""
+
+def generate_prompt(files: list[str]) -> str:
+    """Generates a prompt for the agent to process.
+
+    Args:
+        files: List of file paths to include in the prompt.
+
+    Returns:
+        Formatted prompt string.
+    """
     prompt = """# Ontos Migration Task
 
 You are tagging documentation files with YAML frontmatter.
@@ -63,32 +90,63 @@ For each file below:
 
     return prompt
 
-def main():
-    parser = argparse.ArgumentParser(description='Scan for untagged Ontos documentation files.')
+
+def main() -> None:
+    """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description='Scan for untagged Ontos documentation files.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 migrate_frontmatter.py                 # Scan default 'docs' directory
+  python3 migrate_frontmatter.py --dir specs     # Scan 'specs' directory
+  python3 migrate_frontmatter.py --dry-run       # Show what would be done
+  python3 migrate_frontmatter.py --strict        # Exit with error if untagged files found
+"""
+    )
+    parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')
     parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR,
                         help='Directory to scan (default: docs)')
+    parser.add_argument('--strict', action='store_true', help='Exit with error if untagged files found')
+    parser.add_argument('--quiet', '-q', action='store_true', help='Suppress non-error output')
+    parser.add_argument('--dry-run', action='store_true', help='Show what would be done without writing files')
     args = parser.parse_args()
 
     untagged = scan_for_untagged_files(args.dir)
 
     if not untagged:
-        print("✅ All files are tagged. No migration needed.")
+        if not args.quiet:
+            print("✅ All files are tagged. No migration needed.")
         return
 
-    print(f"📋 Found {len(untagged)} untagged files:\n")
-    for f in untagged:
-        print(f"   - {f}")
+    if args.strict:
+        print(f"❌ Strict mode: Found {len(untagged)} untagged files.")
+        for f in untagged:
+            print(f"   - {f}")
+        sys.exit(1)
+
+    if not args.quiet:
+        print(f"📋 Found {len(untagged)} untagged files:\n")
+        for f in untagged:
+            print(f"   - {f}")
+
+    if args.dry_run:
+        print(f"\n🔍 Dry run: Would generate prompt for {len(untagged)} files")
+        print(f"   Output would be written to: {PROMPT_FILE}")
+        return
 
     prompt = generate_prompt(untagged)
 
-    with open(PROMPT_FILE, 'w') as f:
+    with open(PROMPT_FILE, 'w', encoding='utf-8') as f:
         f.write(prompt)
 
-    print(f"\n📄 Migration prompt saved to '{PROMPT_FILE}'")
-    print("\n💡 Next steps:")
-    print("   1. Read each file listed above")
-    print("   2. Add appropriate YAML frontmatter")
-    print("   3. Run: python3 scripts/generate_context_map.py")
+    if not args.quiet:
+        print(f"\n📄 Migration prompt saved to '{PROMPT_FILE}'")
+        print("\n💡 Next steps:")
+        print("   1. Read each file listed above")
+        print("   2. Add appropriate YAML frontmatter")
+        print("   3. Run: python3 scripts/generate_context_map.py")
+
 
 if __name__ == "__main__":
     main()

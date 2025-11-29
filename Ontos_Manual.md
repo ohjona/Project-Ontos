@@ -126,3 +126,51 @@ Tell your Agent:
 1.  Run `python3 scripts/end_session.py "topic-slug"`.
 2.  Fill in the generated log file with **Decisions Made**, **Alternatives Rejected**, and **Files Modified**.
 3.  Commit the log file to git.
+
+## **Troubleshooting**
+
+### "My file doesn't appear in the context map"
+
+**Cause:** File is missing YAML frontmatter or the `id` field.
+
+**Solution:**
+1. Run `python3 scripts/migrate_frontmatter.py` to identify untagged files
+2. Add frontmatter to the file:
+   ```yaml
+   ---
+   id: your_unique_id
+   type: atom
+   ---
+   ```
+3. Regenerate the map: `python3 scripts/generate_context_map.py`
+
+### "How do I fix a circular dependency?"
+
+**Example Error:** `[CYCLE] Circular dependency detected: doc_a -> doc_b -> doc_a`
+
+**Solution:**
+1. Identify which dependency is incorrect (usually the one that points "up" the hierarchy)
+2. Remove the problematic `depends_on` entry from one of the files
+3. Consider if documents should be merged or restructured
+
+### "Two files have the same ID"
+
+**Behavior:** Only the last-scanned file will appear in the map.
+
+**Solution:**
+1. Search for duplicate IDs: `grep -r "^id:" docs/`
+2. Rename one of the IDs to be unique
+3. Update any `depends_on` references to the renamed ID
+
+### "Architectural violation error"
+
+**Example Error:** `[ARCHITECTURE] kernel_mission (kernel) depends on higher-layer api_spec (atom)`
+
+**Explanation:** Kernels are foundational and should not depend on implementation details.
+
+**Solution:**
+1. Review if the dependency is actually needed
+2. If needed, consider changing the document type:
+   - Maybe `kernel_mission` should be `strategy`
+   - Or `api_spec` should be elevated to `product`
+3. Remove the dependency if it's not essential

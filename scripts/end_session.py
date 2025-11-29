@@ -4,7 +4,7 @@ import subprocess
 import argparse
 import sys
 
-LOGS_DIR = 'docs/logs'
+from config import LOGS_DIR
 
 def get_daily_git_log():
     """Gets the git log for the current day."""
@@ -25,18 +25,20 @@ def get_daily_git_log():
     except Exception as e:
         return f"Error running git: {e}"
 
-def create_log_file(topic_slug):
+def create_log_file(topic_slug, quiet=False):
     """Creates a new session log file with a template."""
     if not os.path.exists(LOGS_DIR):
         os.makedirs(LOGS_DIR)
-        print(f"Created directory: {LOGS_DIR}")
+        if not quiet:
+            print(f"Created directory: {LOGS_DIR}")
 
     today = datetime.datetime.now().strftime("%Y-%m-%d")
     filename = f"{today}_{topic_slug}.md"
     filepath = os.path.join(LOGS_DIR, filename)
 
     if os.path.exists(filepath):
-        print(f"⚠️  Log file already exists: {filepath}")
+        if not quiet:
+            print(f"⚠️  Log file already exists: {filepath}")
         return filepath
 
     daily_log = get_daily_git_log()
@@ -76,16 +78,18 @@ Date: {today}
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    print(f"✅ Created session log: {filepath}")
+    if not quiet:
+        print(f"✅ Created session log: {filepath}")
     return filepath
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Scaffold a new session log file.')
     parser.add_argument('topic', type=str, help='Short slug describing the session (e.g. auth-refactor)')
+    parser.add_argument('--quiet', action='store_true', help='Suppress non-error output')
     
     if len(sys.argv) < 2:
         parser.print_help()
         sys.exit(1)
 
     args = parser.parse_args()
-    create_log_file(args.topic)
+    create_log_file(args.topic, args.quiet)

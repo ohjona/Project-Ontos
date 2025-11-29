@@ -24,7 +24,7 @@ When the user says **"Ontos"** (or "Activate Ontos"), you MUST:
 
 **Dependency Rule:** Higher ranks depend on lower ranks. `atom` → `product` → `strategy` → `kernel`.
 
-For full definitions, see [The Manual](20251124_Project%20Ontos%20The%20Manual.md).
+For full definitions, see [The Manual](Ontos_Manual.md).
 
 ### 2. Context Maintenance (During Task)
 If you create a new file or change dependencies:

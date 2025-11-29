@@ -1,9 +1,10 @@
 import os
 
 import argparse
+import sys
 
-DEFAULT_DOCS_DIR = 'docs'
-PROMPT_FILE = 'migration_prompt.txt'
+from config import DEFAULT_DOCS_DIR, MIGRATION_PROMPT_FILE
+PROMPT_FILE = MIGRATION_PROMPT_FILE
 
 def has_frontmatter(filepath):
     """Checks if a file already has YAML frontmatter."""
@@ -67,28 +68,37 @@ def main():
     parser = argparse.ArgumentParser(description='Scan for untagged Ontos documentation files.')
     parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR,
                         help='Directory to scan (default: docs)')
+    parser.add_argument('--strict', action='store_true', help='Exit with error if untagged files found')
+    parser.add_argument('--quiet', action='store_true', help='Suppress non-error output')
     args = parser.parse_args()
 
     untagged = scan_for_untagged_files(args.dir)
 
     if not untagged:
-        print("✅ All files are tagged. No migration needed.")
+        if not args.quiet:
+            print("✅ All files are tagged. No migration needed.")
         return
 
-    print(f"📋 Found {len(untagged)} untagged files:\n")
-    for f in untagged:
-        print(f"   - {f}")
+    if args.strict:
+        print(f"❌ Strict mode: Found {len(untagged)} untagged files.")
+        sys.exit(1)
+
+    if not args.quiet:
+        print(f"📋 Found {len(untagged)} untagged files:\n")
+        for f in untagged:
+            print(f"   - {f}")
 
     prompt = generate_prompt(untagged)
 
-    with open(PROMPT_FILE, 'w') as f:
+    with open(PROMPT_FILE, 'w', encoding='utf-8') as f:
         f.write(prompt)
 
-    print(f"\n📄 Migration prompt saved to '{PROMPT_FILE}'")
-    print("\n💡 Next steps:")
-    print("   1. Read each file listed above")
-    print("   2. Add appropriate YAML frontmatter")
-    print("   3. Run: python3 scripts/generate_context_map.py")
+    if not args.quiet:
+        print(f"\n📄 Migration prompt saved to '{PROMPT_FILE}'")
+        print("\n💡 Next steps:")
+        print("   1. Read each file listed above")
+        print("   2. Add appropriate YAML frontmatter")
+        print("   3. Run: python3 scripts/generate_context_map.py")
 
 if __name__ == "__main__":
     main()

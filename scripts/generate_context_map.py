@@ -4,8 +4,17 @@ import yaml
 import datetime
 import argparse
 
-DEFAULT_DOCS_DIR = 'docs'
-OUTPUT_FILE = 'CONTEXT_MAP.md'
+from config import (
+    DEFAULT_DOCS_DIR, 
+    CONTEXT_MAP_FILE, 
+    TYPE_HIERARCHY, 
+    MAX_DEPENDENCY_DEPTH,
+    ALLOWED_ORPHAN_TYPES,
+    SKIP_PATTERNS
+)
+
+OUTPUT_FILE = CONTEXT_MAP_FILE
+__version__ = '0.3.2'
 
 def parse_frontmatter(filepath):
     """Parses YAML frontmatter from a markdown file."""
@@ -130,9 +139,19 @@ def validate_dependencies(files_data):
             filename = files_data[doc_id]['filename']
             
             # Skip expected root types and templates
-            if doc_type in ['product', 'strategy', 'kernel']:
+            if doc_type in ALLOWED_ORPHAN_TYPES:
                 continue
-            if 'template' in filename.lower():
+            
+            # Check skip patterns
+            should_skip = False
+            for pattern in SKIP_PATTERNS:
+                if pattern in filename:
+                    should_skip = True
+                    break
+            if should_skip:
+                continue
+
+            if filename.startswith('session_log_'):
                 continue
                 
             issues.append(f"- [ORPHAN] **{doc_id}** is not depended on by any other document.")
@@ -157,12 +176,12 @@ def validate_dependencies(files_data):
 
     for doc_id in existing_ids:
         depth = get_depth(doc_id)
-        if depth > 5:
-            issues.append(f"- [DEPTH] **{doc_id}** has a dependency depth of {depth} (max recommended: 5).")
+        if depth > MAX_DEPENDENCY_DEPTH:
+            issues.append(f"- [DEPTH] **{doc_id}** has a dependency depth of {depth} (max recommended: {MAX_DEPENDENCY_DEPTH}).")
 
     # 5. Type Hierarchy Violations
     # Hierarchy: Kernel (0) < Strategy (1) < Product (2) < Atom (3)
-    type_rank = {'kernel': 0, 'strategy': 1, 'product': 2, 'atom': 3, 'unknown': 4}
+    type_rank = TYPE_HIERARCHY
     
     for doc_id, data in files_data.items():
         my_type = data['type']
@@ -199,15 +218,18 @@ def validate_dependencies(files_data):
 
     return issues
 
-def generate_context_map(target_dir):
+def generate_context_map(target_dir, quiet=False):
     """Main function to generate the CONTEXT_MAP.md file."""
-    print(f"Scanning {target_dir}...")
+    if not quiet:
+        print(f"Scanning {target_dir}...")
     files_data = scan_docs(target_dir)
     
-    print("Generating tree...")
+    if not quiet:
+        print("Generating tree...")
     tree_view = generate_tree(files_data)
     
-    print("Validating dependencies...")
+    if not quiet:
+        print("Validating dependencies...")
     issues = validate_dependencies(files_data)
     
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -233,8 +255,9 @@ Scanned Directory: `{target_dir}`
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
         
-    print(f"Successfully generated {OUTPUT_FILE}")
-    print(f"📊 Scanned {len(files_data)} documents, found {len(issues)} issues.")
+    if not quiet:
+        print(f"Successfully generated {OUTPUT_FILE}")
+        print(f"📊 Scanned {len(files_data)} documents, found {len(issues)} issues.")
 
     # Return issue count for strict mode
     return len(issues)
@@ -243,9 +266,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate Ontos Context Map')
     parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR, help='Directory to scan (default: docs)')
     parser.add_argument('--strict', action='store_true', help='Exit with error code 1 if issues found')
+    parser.add_argument('--quiet', action='store_true', help='Suppress non-error output')
     args = parser.parse_args()
     
-    issue_count = generate_context_map(args.dir)
+    issue_count = generate_context_map(args.dir, args.quiet)
     
     if args.strict and issue_count > 0:
         print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")

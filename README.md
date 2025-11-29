@@ -1,35 +1,42 @@
-# 🧶 Project Ontos
+# Project Ontos
 
 **Context-Aware Documentation for the Agentic Era.**
 
-Ontos is a lightweight protocol that turns your documentation folder into a structured **Knowledge Graph**. It allows AI Agents (Cursor, Claude, Antigravity) to navigate your project intelligently, understanding dependencies and architectural decisions without hallucinating.
+Ontos is a lightweight protocol that turns your documentation folder into a structured **Knowledge Graph**. It allows AI Agents (Cursor, Claude, Gemini) to navigate your project intelligently, understanding dependencies and architectural decisions without hallucinating.
 
-## � Why Ontos?
+## Why Ontos?
 
-*   **Stop Hallucinations**: Agents read a map, not just random files.
-*   **Zero Overhead**: Just markdown files with simple YAML headers.
-*   **Agent-Native**: Built specifically for the "Agentic Workflow" (CLI tools).
+- **Stop Hallucinations**: Agents read a map, not just random files.
+- **Zero Overhead**: Just markdown files with simple YAML headers.
+- **Agent-Native**: Built specifically for the "Agentic Workflow" (CLI tools).
 
-## � Documentation
+## Documentation
 
-*   **[Ontos Installation Guide](Ontos_Installation_Guide.md)**: How to set up Ontos in your project.
-*   **[Ontos Initiation Guide](Ontos_Initiation_Guide.md)**: How to tag your files and build your first graph.
-*   **[The Ontos Manual](Ontos_Manual.md)**: The complete protocol reference and usage guide.
-*   **[Ontos Agent Instruction](Ontos_Agent_Instructions.md)**: The system prompt for your AI agents.
+### Guides
+- **[Installation Guide](docs/guides/Ontos_Installation_Guide.md)**: How to set up Ontos in your project.
+- **[Initiation Guide](docs/guides/Ontos_Initiation_Guide.md)**: How to tag your files and build your first graph.
+- **[Migration Guide](docs/guides/MIGRATION_GUIDE.md)**: How to migrate existing documentation.
 
-## ⚡️ Quick Start
+### Reference
+- **[The Ontos Manual](docs/reference/Ontos_Manual.md)**: The complete protocol reference and usage guide.
+- **[Agent Instructions](docs/reference/Ontos_Agent_Instructions.md)**: The system prompt for your AI agents.
+
+### Meta
+- **[Changelog](CHANGELOG.md)**: Version history and changes.
+
+## Quick Start
 
 Once installed and initiated, simply tell your Agent:
 
 > **"Ontos"** (or "Activate Ontos")
 
 The Agent will:
-0.  Follow [Ontos_Agent_Instructions.md](Ontos_Agent_Instructions.md).
-1.  Read the Context Map.
-2.  Load *only* the relevant files for your task.
-3.  Confirm what context it has loaded.
+1. Follow [Agent Instructions](docs/reference/Ontos_Agent_Instructions.md).
+2. Read the Context Map.
+3. Load *only* the relevant files for your task.
+4. Confirm what context it has loaded.
 
-## 📦 Archiving
+## Archiving
 
 When you are done with a session:
 
@@ -37,10 +44,45 @@ When you are done with a session:
 
 The Agent will save a log of all decisions made, ensuring no context is lost for the next session.
 
-## 🛠️ Maintenance
+## Maintenance
 
 To keep your graph healthy:
 
 > **"Maintain Ontos"**
 
 The Agent will scan for new files, rebuild the context map, and fix any integrity issues (broken links, circular dependencies).
+
+## Development
+
+### Running Tests
+
+```bash
+pip install pytest pytest-cov
+pytest tests/ -v
+```
+
+### Pre-commit Hooks
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### Script Usage
+
+```bash
+# Generate context map
+python3 scripts/generate_context_map.py
+
+# Watch for changes
+python3 scripts/generate_context_map.py --watch
+
+# Scan multiple directories
+python3 scripts/generate_context_map.py --dir docs --dir specs
+
+# Check for untagged files
+python3 scripts/migrate_frontmatter.py
+
+# Create session log
+python3 scripts/end_session.py "session-name"
+```

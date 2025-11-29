@@ -1,3 +1,5 @@
+"""Scaffold a new session log file for Ontos."""
+
 import os
 import datetime
 import subprocess
@@ -6,18 +8,22 @@ import sys
 
 from config import __version__, LOGS_DIR
 
-def get_daily_git_log():
-    """Gets the git log for the current day."""
+
+def get_daily_git_log() -> str:
+    """Gets the git log for the current day.
+
+    Returns:
+        Formatted git log string or error message.
+    """
     try:
-        # Get commits since midnight
         result = subprocess.run(
-            ['git', 'log', '--since=midnight', '--pretty=format:%h - %s'], 
-            capture_output=True, 
+            ['git', 'log', '--since=midnight', '--pretty=format:%h - %s'],
+            capture_output=True,
             text=True
         )
         if result.returncode != 0:
             return "Error getting git log."
-        
+
         logs = result.stdout.strip()
         if not logs:
             return "No commits found for today."
@@ -25,8 +31,17 @@ def get_daily_git_log():
     except Exception as e:
         return f"Error running git: {e}"
 
-def create_log_file(topic_slug, quiet=False):
-    """Creates a new session log file with a template."""
+
+def create_log_file(topic_slug: str, quiet: bool = False) -> str:
+    """Creates a new session log file with a template.
+
+    Args:
+        topic_slug: Short slug describing the session.
+        quiet: Suppress output if True.
+
+    Returns:
+        Path to the created log file.
+    """
     if not os.path.exists(LOGS_DIR):
         os.makedirs(LOGS_DIR)
         if not quiet:
@@ -58,15 +73,15 @@ Date: {today}
 
 ## 2. Key Decisions
 <!-- [AGENT: Fill this in. What architectural or design choices were made?] -->
-- 
+-
 
 ## 3. Changes Made
 <!-- [AGENT: Fill this in. Summary of file changes.] -->
-- 
+-
 
 ## 4. Next Steps
 <!-- [AGENT: Fill this in. What should the next agent work on?] -->
-- 
+-
 
 ---
 ## Raw Session History
@@ -82,8 +97,18 @@ Date: {today}
         print(f"✅ Created session log: {filepath}")
     return filepath
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Scaffold a new session log file.')
+
+def main() -> None:
+    """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description='Scaffold a new session log file.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 end_session.py auth-refactor       # Create log for auth refactor session
+  python3 end_session.py bug-fix --quiet     # Create log without output
+"""
+    )
     parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')
     parser.add_argument('topic', type=str, nargs='?', help='Short slug describing the session (e.g. auth-refactor)')
     parser.add_argument('--quiet', '-q', action='store_true', help='Suppress non-error output')
@@ -94,3 +119,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     create_log_file(args.topic, args.quiet)
+
+
+if __name__ == "__main__":
+    main()

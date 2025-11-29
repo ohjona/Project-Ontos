@@ -1,8 +1,12 @@
+"""Generate Ontos Context Map from documentation files."""
+
 import os
 import sys
+import time
 import yaml
 import datetime
 import argparse
+from typing import Optional
 
 from config import (
     __version__,
@@ -16,14 +20,21 @@ from config import (
 
 OUTPUT_FILE = CONTEXT_MAP_FILE
 
-def parse_frontmatter(filepath):
-    """Parses YAML frontmatter from a markdown file."""
+
+def parse_frontmatter(filepath: str) -> Optional[dict]:
+    """Parses YAML frontmatter from a markdown file.
+
+    Args:
+        filepath: Path to the markdown file.
+
+    Returns:
+        Dictionary of frontmatter fields, or None if no valid frontmatter.
+    """
     with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
         content = f.read()
-    
+
     if content.startswith('---'):
         try:
-            # Split by '---' and take the second element (the frontmatter)
             parts = content.split('---', 2)
             if len(parts) >= 3:
                 frontmatter = yaml.safe_load(parts[1])
@@ -32,75 +43,101 @@ def parse_frontmatter(filepath):
             print(f"Error parsing YAML in {filepath}: {e}")
     return None
 
-def scan_docs(root_dir):
-    """Scans the docs directory for markdown files and parses their metadata."""
+
+def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
+    """Scans directories for markdown files and parses their metadata.
+
+    Args:
+        root_dirs: List of directories to scan.
+
+    Returns:
+        Dictionary mapping doc IDs to their metadata.
+    """
     files_data = {}
-    for subdir, dirs, files in os.walk(root_dir):
-        for file in files:
-            if file.endswith('.md'):
-                filepath = os.path.join(subdir, file)
-                frontmatter = parse_frontmatter(filepath)
-                if frontmatter and 'id' in frontmatter:
-                    doc_id = frontmatter['id']
-                    # Skip internal/template documents (IDs starting with underscore)
-                    if doc_id.startswith('_'):
-                        continue
-                    files_data[doc_id] = {
-                        'filepath': filepath,
-                        'filename': file,
-                        'type': frontmatter.get('type', 'unknown'),
-                        'depends_on': frontmatter.get('depends_on', []),
-                        'status': frontmatter.get('status', 'unknown')
-                    }
+    for root_dir in root_dirs:
+        if not os.path.isdir(root_dir):
+            print(f"Warning: Directory not found: {root_dir}")
+            continue
+        for subdir, dirs, files in os.walk(root_dir):
+            for file in files:
+                if file.endswith('.md'):
+                    filepath = os.path.join(subdir, file)
+                    frontmatter = parse_frontmatter(filepath)
+                    if frontmatter and 'id' in frontmatter:
+                        doc_id = frontmatter['id']
+                        # Skip internal/template documents (IDs starting with underscore)
+                        if doc_id.startswith('_'):
+                            continue
+                        files_data[doc_id] = {
+                            'filepath': filepath,
+                            'filename': file,
+                            'type': frontmatter.get('type', 'unknown'),
+                            'depends_on': frontmatter.get('depends_on', []),
+                            'status': frontmatter.get('status', 'unknown')
+                        }
     return files_data
 
-def generate_tree(files_data):
-    """Generates a hierarchy tree string."""
+
+def generate_tree(files_data: dict[str, dict]) -> str:
+    """Generates a hierarchy tree string.
+
+    Args:
+        files_data: Dictionary of document metadata.
+
+    Returns:
+        Formatted tree string.
+    """
     tree = []
-    
+
     # Group by type
     by_type = {'kernel': [], 'strategy': [], 'product': [], 'atom': [], 'unknown': []}
     for doc_id, data in files_data.items():
         doc_type = data['type']
         if isinstance(doc_type, list):
             doc_type = doc_type[0] if doc_type else 'unknown'
-            # Clean up if it looks like "[option1 | option2]"
-            if '|' in str(doc_type): 
-                 doc_type = 'unknown'
+            if '|' in str(doc_type):
+                doc_type = 'unknown'
 
         if doc_type in by_type:
             by_type[doc_type].append(doc_id)
         else:
             by_type['unknown'].append(doc_id)
-            
+
     order = ['kernel', 'strategy', 'product', 'atom', 'unknown']
-    
+
     for doc_type in order:
         if by_type[doc_type]:
             tree.append(f"### {doc_type.upper()}")
-            for doc_id in by_type[doc_type]:
+            for doc_id in sorted(by_type[doc_type]):
                 data = files_data[doc_id]
                 deps = ", ".join(data['depends_on']) if data['depends_on'] else "None"
                 tree.append(f"- **{doc_id}** ({data['filename']})")
                 tree.append(f"  - Status: {data['status']}")
                 tree.append(f"  - Depends On: {deps}")
             tree.append("")
-            
+
     return "\n".join(tree)
 
-def validate_dependencies(files_data):
-    """Checks for broken links, cycles, orphans, depth, and type violations."""
+
+def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
+    """Checks for broken links, cycles, orphans, depth, and type violations.
+
+    Args:
+        files_data: Dictionary of document metadata.
+
+    Returns:
+        List of issue strings.
+    """
     issues = []
     existing_ids = set(files_data.keys())
-    
+
     # 1. Build Adjacency List & Reverse Graph
-    adj = {doc_id: [] for doc_id in existing_ids}
-    rev_adj = {doc_id: [] for doc_id in existing_ids}
-    
+    adj: dict[str, list[str]] = {doc_id: [] for doc_id in existing_ids}
+    rev_adj: dict[str, list[str]] = {doc_id: [] for doc_id in existing_ids}
+
     for doc_id, data in files_data.items():
         deps = data['depends_on']
         if deps:
-            # Handle case where user wrote string instead of list
             if isinstance(deps, str):
                 deps = [deps]
             for dep in deps:
@@ -111,14 +148,14 @@ def validate_dependencies(files_data):
                     rev_adj[dep].append(doc_id)
 
     # 2. Cycle Detection (DFS)
-    visited = set()
-    recursion_stack = set()
-    
-    def detect_cycle(node, path):
+    visited: set[str] = set()
+    recursion_stack: set[str] = set()
+
+    def detect_cycle(node: str, path: list[str]) -> bool:
         visited.add(node)
         recursion_stack.add(node)
         path.append(node)
-        
+
         for neighbor in adj[node]:
             if neighbor not in visited:
                 if detect_cycle(neighbor, path):
@@ -127,7 +164,7 @@ def validate_dependencies(files_data):
                 cycle_path = " -> ".join(path[path.index(neighbor):] + [neighbor])
                 issues.append(f"- [CYCLE] Circular dependency detected: {cycle_path}")
                 return True
-        
+
         recursion_stack.remove(node)
         path.pop()
         return False
@@ -143,35 +180,30 @@ def validate_dependencies(files_data):
             filename = files_data[doc_id]['filename']
             filepath = files_data[doc_id]['filepath']
 
-            # Skip expected root types (they are naturally at the top of the hierarchy)
             if doc_type in ALLOWED_ORPHAN_TYPES:
                 continue
-
-            # Skip files matching skip patterns (e.g., templates)
             if any(pattern in filename for pattern in SKIP_PATTERNS):
                 continue
-
-            # Skip log files - they are intentionally standalone historical records
             if '/logs/' in filepath or '\\logs\\' in filepath:
                 continue
 
             issues.append(f"- [ORPHAN] **{doc_id}** is not depended on by any other document.")
 
     # 4. Dependency Depth
-    # Calculate max depth for each node
-    memo_depth = {}
-    def get_depth(node):
-        if node in memo_depth: return memo_depth[node]
-        if not adj[node]: return 0
-        
-        # Avoid infinite recursion in cycles by temporarily setting a value
-        # (Cycles are already reported, so we just need to terminate)
-        memo_depth[node] = 0 
-        
+    memo_depth: dict[str, int] = {}
+
+    def get_depth(node: str) -> int:
+        if node in memo_depth:
+            return memo_depth[node]
+        if not adj[node]:
+            return 0
+
+        memo_depth[node] = 0  # Prevent infinite recursion in cycles
+
         max_d = 0
         for neighbor in adj[node]:
             max_d = max(max_d, get_depth(neighbor))
-        
+
         memo_depth[node] = 1 + max_d
         return memo_depth[node]
 
@@ -181,9 +213,6 @@ def validate_dependencies(files_data):
             issues.append(f"- [DEPTH] **{doc_id}** has a dependency depth of {depth} (max recommended: {MAX_DEPENDENCY_DEPTH}).")
 
     # 5. Type Hierarchy Violations
-    # Hierarchy: Kernel (0) < Strategy (1) < Product (2) < Atom (3)
-    # Rule: Dependencies flow DOWN the hierarchy (higher rank can depend on lower rank)
-    # Violation: Lower rank depending on higher rank (e.g., Kernel depending on Atom)
     type_rank = TYPE_HIERARCHY
 
     for doc_id, data in files_data.items():
@@ -192,7 +221,6 @@ def validate_dependencies(files_data):
             my_type = my_type[0]
         my_rank = type_rank.get(my_type, 4)
 
-        # Normalize depends_on to list (handle string case)
         deps = data['depends_on']
         if isinstance(deps, str):
             deps = [deps]
@@ -204,31 +232,40 @@ def validate_dependencies(files_data):
                     dep_type = dep_type[0]
                 dep_rank = type_rank.get(dep_type, 4)
 
-                # Violation: Lower rank (e.g., Kernel=0) depending on higher rank (e.g., Atom=3)
                 if my_rank < dep_rank:
                     issues.append(f"- [ARCHITECTURE] **{doc_id}** ({my_type}) depends on higher-layer **{dep}** ({dep_type}).")
 
     return issues
 
-def generate_context_map(target_dir, quiet=False):
-    """Main function to generate the CONTEXT_MAP.md file."""
+
+def generate_context_map(target_dirs: list[str], quiet: bool = False) -> int:
+    """Main function to generate the CONTEXT_MAP.md file.
+
+    Args:
+        target_dirs: List of directories to scan.
+        quiet: Suppress output if True.
+
+    Returns:
+        Number of issues found.
+    """
+    dirs_str = ", ".join(target_dirs)
     if not quiet:
-        print(f"Scanning {target_dir}...")
-    files_data = scan_docs(target_dir)
-    
+        print(f"Scanning {dirs_str}...")
+    files_data = scan_docs(target_dirs)
+
     if not quiet:
         print("Generating tree...")
     tree_view = generate_tree(files_data)
-    
+
     if not quiet:
         print("Validating dependencies...")
     issues = validate_dependencies(files_data)
-    
+
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     content = f"""# Ontos Context Map
 Generated on: {timestamp}
-Scanned Directory: `{target_dir}`
+Scanned Directory: `{dirs_str}`
 
 ## 1. Hierarchy Tree
 {tree_view}
@@ -240,31 +277,99 @@ Scanned Directory: `{target_dir}`
 | ID | Filename | Type |
 |---|---|---|
 """
-    
-    for doc_id, data in files_data.items():
+
+    for doc_id, data in sorted(files_data.items()):
         content += f"| {doc_id} | [{data['filename']}]({data['filepath']}) | {data['type']} |\n"
-        
+
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
-        
+
     if not quiet:
         print(f"Successfully generated {OUTPUT_FILE}")
         print(f"📊 Scanned {len(files_data)} documents, found {len(issues)} issues.")
 
-    # Return issue count for strict mode
     return len(issues)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generate Ontos Context Map')
-    parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')
-    parser.add_argument('--dir', type=str, default=DEFAULT_DOCS_DIR, help='Directory to scan (default: docs)')
-    parser.add_argument('--strict', action='store_true', help='Exit with error code 1 if issues found')
-    parser.add_argument('--quiet', '-q', action='store_true', help='Suppress non-error output')
-    args = parser.parse_args()
-    
-    issue_count = generate_context_map(args.dir, args.quiet)
-    
-    if args.strict and issue_count > 0:
-        print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
+
+def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
+    """Watch for file changes and regenerate map.
+
+    Args:
+        target_dirs: List of directories to watch.
+        quiet: Suppress output if True.
+    """
+    try:
+        from watchdog.observers import Observer
+        from watchdog.events import FileSystemEventHandler
+    except ImportError:
+        print("Error: watchdog not installed. Install with: pip install watchdog")
+        print("Or add watchdog to requirements.txt")
         sys.exit(1)
 
+    class ChangeHandler(FileSystemEventHandler):
+        def __init__(self):
+            self.last_run = 0
+            self.debounce_seconds = 1  # Prevent rapid re-runs
+
+        def on_any_event(self, event):
+            if event.src_path.endswith('.md'):
+                current_time = time.time()
+                if current_time - self.last_run > self.debounce_seconds:
+                    self.last_run = current_time
+                    print(f"\n🔄 Change detected: {event.src_path}")
+                    generate_context_map(target_dirs, quiet)
+
+    observer = Observer()
+    handler = ChangeHandler()
+
+    for target_dir in target_dirs:
+        if os.path.isdir(target_dir):
+            observer.schedule(handler, target_dir, recursive=True)
+
+    observer.start()
+    dirs_str = ", ".join(target_dirs)
+    print(f"👀 Watching {dirs_str} for changes... (Ctrl+C to stop)")
+
+    # Generate initial map
+    generate_context_map(target_dirs, quiet)
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+        print("\n✅ Watch mode stopped.")
+    observer.join()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Generate Ontos Context Map',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 generate_context_map.py                    # Scan default 'docs' directory
+  python3 generate_context_map.py --dir docs --dir specs  # Scan multiple directories
+  python3 generate_context_map.py --watch            # Watch for changes
+  python3 generate_context_map.py --strict           # Exit with error if issues found
+"""
+    )
+    parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')
+    parser.add_argument('--dir', type=str, action='append', dest='dirs',
+                        help='Directory to scan (can be specified multiple times)')
+    parser.add_argument('--strict', action='store_true', help='Exit with error code 1 if issues found')
+    parser.add_argument('--quiet', '-q', action='store_true', help='Suppress non-error output')
+    parser.add_argument('--watch', '-w', action='store_true', help='Watch for file changes and regenerate')
+    args = parser.parse_args()
+
+    # Default to docs directory if none specified
+    target_dirs = args.dirs if args.dirs else [DEFAULT_DOCS_DIR]
+
+    if args.watch:
+        watch_mode(target_dirs, args.quiet)
+    else:
+        issue_count = generate_context_map(target_dirs, args.quiet)
+
+        if args.strict and issue_count > 0:
+            print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
+            sys.exit(1)

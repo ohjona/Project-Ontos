@@ -1,11 +1,3 @@
----
-id: ontos_installation_guide
-title: Ontos Installation Guide
-type: product
-status: active
-depends_on: []
----
-
 # Ontos Installation Guide
 
 This guide covers how to install and configure Project Ontos for your repository.

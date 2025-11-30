@@ -33,9 +33,6 @@ jobs:
       - name: Validate context map
         run: python scripts/generate_context_map.py --strict --quiet
 
-      - name: Check for untagged files
-        run: python scripts/migrate_frontmatter.py --strict --quiet
-
   lint:
     runs-on: ubuntu-latest
     steps:

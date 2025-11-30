@@ -44,6 +44,52 @@ def parse_frontmatter(filepath: str) -> Optional[dict]:
     return None
 
 
+def normalize_depends_on(value) -> list[str]:
+    """Normalize depends_on field to a list of strings.
+
+    Handles YAML edge cases: null, empty, string, or list.
+
+    Args:
+        value: Raw value from YAML frontmatter.
+
+    Returns:
+        List of dependency IDs (empty list if none).
+    """
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value.strip() else []
+    if isinstance(value, list):
+        # Filter out None/empty values in list
+        return [str(v) for v in value if v is not None and str(v).strip()]
+    return []
+
+
+def normalize_type(value) -> str:
+    """Normalize type field to a string.
+
+    Handles YAML edge cases: null, empty, string, or list.
+
+    Args:
+        value: Raw value from YAML frontmatter.
+
+    Returns:
+        Type string ('unknown' if invalid).
+    """
+    if value is None:
+        return 'unknown'
+    if isinstance(value, str):
+        return value.strip() if value.strip() else 'unknown'
+    if isinstance(value, list):
+        if value and value[0] is not None:
+            first = str(value[0]).strip()
+            # Clean up if it looks like "[option1 | option2]"
+            if '|' in first:
+                return 'unknown'
+            return first if first else 'unknown'
+    return 'unknown'
+
+
 def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
     """Scans directories for markdown files and parses their metadata.
 
@@ -65,15 +111,21 @@ def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
                     frontmatter = parse_frontmatter(filepath)
                     if frontmatter and 'id' in frontmatter:
                         doc_id = frontmatter['id']
+                        # Skip if ID is None or empty
+                        if not doc_id or not str(doc_id).strip():
+                            continue
+                        doc_id = str(doc_id).strip()
                         # Skip internal/template documents (IDs starting with underscore)
                         if doc_id.startswith('_'):
                             continue
+
+                        # Normalize fields to handle YAML null/empty values
                         files_data[doc_id] = {
                             'filepath': filepath,
                             'filename': file,
-                            'type': frontmatter.get('type', 'unknown'),
-                            'depends_on': frontmatter.get('depends_on', []),
-                            'status': frontmatter.get('status', 'unknown')
+                            'type': normalize_type(frontmatter.get('type')),
+                            'depends_on': normalize_depends_on(frontmatter.get('depends_on')),
+                            'status': str(frontmatter.get('status') or 'unknown').strip() or 'unknown'
                         }
     return files_data
 
@@ -82,22 +134,17 @@ def generate_tree(files_data: dict[str, dict]) -> str:
     """Generates a hierarchy tree string.
 
     Args:
-        files_data: Dictionary of document metadata.
+        files_data: Dictionary of document metadata (already normalized).
 
     Returns:
         Formatted tree string.
     """
     tree = []
 
-    # Group by type
+    # Group by type (data is already normalized by scan_docs)
     by_type = {'kernel': [], 'strategy': [], 'product': [], 'atom': [], 'unknown': []}
     for doc_id, data in files_data.items():
         doc_type = data['type']
-        if isinstance(doc_type, list):
-            doc_type = doc_type[0] if doc_type else 'unknown'
-            if '|' in str(doc_type):
-                doc_type = 'unknown'
-
         if doc_type in by_type:
             by_type[doc_type].append(doc_id)
         else:
@@ -136,16 +183,16 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
     rev_adj: dict[str, list[str]] = {doc_id: [] for doc_id in existing_ids}
 
     for doc_id, data in files_data.items():
-        deps = data['depends_on']
-        if deps:
-            if isinstance(deps, str):
-                deps = [deps]
-            for dep in deps:
-                if dep not in existing_ids:
-                    issues.append(f"- [BROKEN LINK] **{doc_id}** links to missing ID: `{dep}`")
-                else:
-                    adj[doc_id].append(dep)
-                    rev_adj[dep].append(doc_id)
+        # depends_on is already normalized to list[str] by scan_docs
+        for dep in data['depends_on']:
+            if dep not in existing_ids:
+                issues.append(
+                    f"- [BROKEN LINK] **{doc_id}** ({data['filepath']}) references missing ID: `{dep}`\n"
+                    f"  Fix: Add a document with `id: {dep}` or remove it from depends_on"
+                )
+            else:
+                adj[doc_id].append(dep)
+                rev_adj[dep].append(doc_id)
 
     # 2. Cycle Detection (DFS)
     visited: set[str] = set()
@@ -162,7 +209,10 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
                     return True
             elif neighbor in recursion_stack:
                 cycle_path = " -> ".join(path[path.index(neighbor):] + [neighbor])
-                issues.append(f"- [CYCLE] Circular dependency detected: {cycle_path}")
+                issues.append(
+                    f"- [CYCLE] Circular dependency: {cycle_path}\n"
+                    f"  Fix: Remove one of the depends_on links to break the cycle"
+                )
                 return True
 
         recursion_stack.remove(node)
@@ -187,7 +237,10 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
             if '/logs/' in filepath or '\\logs\\' in filepath:
                 continue
 
-            issues.append(f"- [ORPHAN] **{doc_id}** is not depended on by any other document.")
+            issues.append(
+                f"- [ORPHAN] **{doc_id}** ({filepath}) has no dependents\n"
+                f"  Fix: Add `{doc_id}` to another document's depends_on, or delete if unused"
+            )
 
     # 4. Dependency Depth
     memo_depth: dict[str, int] = {}
@@ -210,30 +263,29 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
     for doc_id in existing_ids:
         depth = get_depth(doc_id)
         if depth > MAX_DEPENDENCY_DEPTH:
-            issues.append(f"- [DEPTH] **{doc_id}** has a dependency depth of {depth} (max recommended: {MAX_DEPENDENCY_DEPTH}).")
+            issues.append(
+                f"- [DEPTH] **{doc_id}** has dependency depth {depth} (max: {MAX_DEPENDENCY_DEPTH})\n"
+                f"  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in config.py"
+            )
 
     # 5. Type Hierarchy Violations
+    # Data is already normalized by scan_docs (type is str, depends_on is list[str])
     type_rank = TYPE_HIERARCHY
 
     for doc_id, data in files_data.items():
         my_type = data['type']
-        if isinstance(my_type, list):
-            my_type = my_type[0]
         my_rank = type_rank.get(my_type, 4)
 
-        deps = data['depends_on']
-        if isinstance(deps, str):
-            deps = [deps]
-
-        for dep in deps:
+        for dep in data['depends_on']:
             if dep in files_data:
                 dep_type = files_data[dep]['type']
-                if isinstance(dep_type, list):
-                    dep_type = dep_type[0]
                 dep_rank = type_rank.get(dep_type, 4)
 
                 if my_rank < dep_rank:
-                    issues.append(f"- [ARCHITECTURE] **{doc_id}** ({my_type}) depends on higher-layer **{dep}** ({dep_type}).")
+                    issues.append(
+                        f"- [ARCHITECTURE] **{doc_id}** ({my_type}) depends on **{dep}** ({dep_type})\n"
+                        f"  Fix: {my_type} should not depend on {dep_type}. Invert the dependency or change document types"
+                    )
 
     return issues
 
@@ -281,12 +333,16 @@ Scanned Directory: `{dirs_str}`
     for doc_id, data in sorted(files_data.items()):
         content += f"| {doc_id} | [{data['filename']}]({data['filepath']}) | {data['type']} |\n"
 
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        f.write(content)
+    try:
+        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+            f.write(content)
+    except (IOError, OSError, PermissionError) as e:
+        print(f"Error: Failed to write {OUTPUT_FILE}: {e}")
+        sys.exit(1)
 
     if not quiet:
         print(f"Successfully generated {OUTPUT_FILE}")
-        print(f"📊 Scanned {len(files_data)} documents, found {len(issues)} issues.")
+        print(f"Scanned {len(files_data)} documents, found {len(issues)} issues.")
 
     return len(issues)
 

@@ -1,5 +1,5 @@
-# **Ontos: The Manual (v0.3 - Foundation Edition)**
-*Updated: 2025-11-24*
+# **Ontos: The Manual (v0.4 - Production Ready)**
+*Updated: 2025-11-29*
 
 This document is the **Single Source of Truth** for the Ontos Protocol.
 

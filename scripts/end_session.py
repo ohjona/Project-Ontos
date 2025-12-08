@@ -52,15 +52,50 @@ def validate_topic_slug(slug: str) -> tuple[bool, str]:
     return True, ""
 
 
-def get_daily_git_log() -> str:
-    """Gets the git log for the current day.
+def find_last_session_date() -> str:
+    """Find the date of the most recent session log.
+
+    Returns:
+        Date string in YYYY-MM-DD format, or empty string if no logs found.
+    """
+    if not os.path.exists(LOGS_DIR):
+        return ""
+
+    log_files = []
+    for filename in os.listdir(LOGS_DIR):
+        if filename.endswith('.md') and len(filename) >= 10:
+            # Extract date from filename (format: YYYY-MM-DD_topic.md)
+            date_part = filename[:10]
+            # Validate it looks like a date
+            if date_part.count('-') == 2:
+                log_files.append(date_part)
+
+    if not log_files:
+        return ""
+
+    # Return the most recent date
+    return sorted(log_files)[-1]
+
+
+def get_session_git_log() -> str:
+    """Gets the git log since the last session log.
+
+    Falls back to last 20 commits if no previous session log exists.
 
     Returns:
         Formatted git log string or error message.
     """
     try:
+        last_session_date = find_last_session_date()
+
+        if last_session_date:
+            cmd = ['git', 'log', f'--since={last_session_date}', '--pretty=format:%h - %s']
+        else:
+            # No previous session log, get last 20 commits
+            cmd = ['git', 'log', '-n', '20', '--pretty=format:%h - %s']
+
         result = subprocess.run(
-            ['git', 'log', '--since=midnight', '--pretty=format:%h - %s'],
+            cmd,
             capture_output=True,
             text=True,
             timeout=10
@@ -70,7 +105,9 @@ def get_daily_git_log() -> str:
 
         logs = result.stdout.strip()
         if not logs:
-            return "No commits found for today."
+            if last_session_date:
+                return f"No commits found since last session ({last_session_date})."
+            return "No commits found."
         return logs
     except subprocess.TimeoutExpired:
         return "Git log timed out."
@@ -289,7 +326,7 @@ def create_log_file(topic_slug: str, quiet: bool = False) -> str:
             print(f"Log file already exists: {filepath}")
         return filepath
 
-    daily_log = get_daily_git_log()
+    daily_log = get_session_git_log()
 
     content = f"""---
 id: log_{today.replace('-', '')}_{topic_slug.replace('-', '_')}

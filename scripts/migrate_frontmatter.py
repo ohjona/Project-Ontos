@@ -4,7 +4,7 @@ import os
 import argparse
 import sys
 
-from config import __version__, DEFAULT_DOCS_DIR, MIGRATION_PROMPT_FILE
+from config import __version__, DEFAULT_DOCS_DIR, MIGRATION_PROMPT_FILE, TYPE_DEFINITIONS
 
 PROMPT_FILE = MIGRATION_PROMPT_FILE
 
@@ -44,6 +44,27 @@ def scan_for_untagged_files(root_dir: str) -> list[str]:
     return untagged
 
 
+def generate_taxonomy_table() -> str:
+    """Generate the type taxonomy table from TYPE_DEFINITIONS.
+
+    Returns:
+        Formatted markdown table string.
+    """
+    lines = ["| Type | Definition | Signal Words |", "|------|------------|--------------|"]
+
+    # Sort by rank to maintain hierarchy order, exclude 'unknown'
+    sorted_types = sorted(
+        [(k, v) for k, v in TYPE_DEFINITIONS.items() if k != 'unknown'],
+        key=lambda x: x[1]['rank']
+    )
+
+    for type_name, type_info in sorted_types:
+        signals = ', '.join(type_info['signals'])
+        lines.append(f"| {type_name} | {type_info['definition']} | {signals} |")
+
+    return '\n'.join(lines)
+
+
 def generate_prompt(files: list[str]) -> str:
     """Generates a prompt for the agent to process.
 
@@ -53,18 +74,15 @@ def generate_prompt(files: list[str]) -> str:
     Returns:
         Formatted prompt string.
     """
-    prompt = """# Ontos Migration Task
+    taxonomy_table = generate_taxonomy_table()
+
+    prompt = f"""# Ontos Migration Task
 
 You are tagging documentation files with YAML frontmatter.
 
 ## Type Taxonomy
 
-| Type | Definition | Signal Words |
-|------|------------|--------------|
-| kernel | Immutable foundational principles that rarely change | mission, values, philosophy, principles |
-| strategy | High-level decisions about goals, audiences, approaches | goals, roadmap, monetization, target market |
-| product | User-facing features, journeys, requirements | user flow, feature spec, requirements, user story |
-| atom | Technical implementation details and specifications | API, schema, config, implementation, technical spec |
+{taxonomy_table}
 
 ## Classification Heuristic
 

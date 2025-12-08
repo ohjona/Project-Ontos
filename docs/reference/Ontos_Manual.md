@@ -34,10 +34,10 @@ Ontos uses four hierarchical document types. When tagging documents, select the 
 
 ### Dependency Rule
 
-Dependencies flow **down** the hierarchy. Higher-ranked documents can depend on lower-ranked documents.
+Dependencies flow **down** the hierarchy (towards stability). Lower-level documents depend on higher-level documents — implementation details depend on abstractions, not the reverse.
 
-- ✅ `atom` → `product` → `strategy` → `kernel` (valid chain)
-- ❌ `kernel` → `atom` (architectural violation)
+- ✅ `atom` → `product` → `strategy` → `kernel` (valid: details depend on abstractions)
+- ❌ `kernel` → `atom` (invalid: abstractions should not depend on details)
 
 ### Classification Heuristic
 

@@ -1,6 +1,6 @@
 # Ontos Context Map
-Generated on: 2025-12-10 00:20:24
-Scanned Directory: `docs`
+Generated on: 2025-12-10 01:34:12
+Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/docs`
 
 ## 1. Hierarchy Tree
 ### ATOM
@@ -24,7 +24,7 @@ No issues found.
 ## 3. Index
 | ID | Filename | Type |
 |---|---|---|
-| log_20251125_deployment_guide_update | [2025-11-25_deployment-guide-update.md](docs/logs/2025-11-25_deployment-guide-update.md) | atom |
-| log_20251125_iteration_3_complete | [2025-11-25_iteration-3-complete.md](docs/logs/2025-11-25_iteration-3-complete.md) | atom |
-| log_20251125_refining_documentation | [2025-11-25_refining-documentation.md](docs/logs/2025-11-25_refining-documentation.md) | atom |
-| log_20251130_production_ready_fixes | [2025-11-30_production-ready-fixes.md](docs/logs/2025-11-30_production-ready-fixes.md) | atom |
+| log_20251125_deployment_guide_update | [2025-11-25_deployment-guide-update.md](/Users/jonathanoh/Dev/Project-Ontos/docs/logs/2025-11-25_deployment-guide-update.md) | atom |
+| log_20251125_iteration_3_complete | [2025-11-25_iteration-3-complete.md](/Users/jonathanoh/Dev/Project-Ontos/docs/logs/2025-11-25_iteration-3-complete.md) | atom |
+| log_20251125_refining_documentation | [2025-11-25_refining-documentation.md](/Users/jonathanoh/Dev/Project-Ontos/docs/logs/2025-11-25_refining-documentation.md) | atom |
+| log_20251130_production_ready_fixes | [2025-11-30_production-ready-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/docs/logs/2025-11-30_production-ready-fixes.md) | atom |

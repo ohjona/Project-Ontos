@@ -110,6 +110,9 @@ def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
         for subdir, dirs, files in os.walk(root_dir):
             for file in files:
                 if file.endswith('.md'):
+                    # Skip files matching skip patterns (e.g., Ontos_ tooling files)
+                    if any(pattern in file for pattern in SKIP_PATTERNS):
+                        continue
                     filepath = os.path.join(subdir, file)
                     frontmatter = parse_frontmatter(filepath)
                     if frontmatter and 'id' in frontmatter:

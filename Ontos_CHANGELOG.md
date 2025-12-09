@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Ontos tooling files (`Ontos_*.md`) are now excluded from project context maps
+- Migration script no longer prompts to tag Ontos tooling files
+
 ## [1.0.0] - 2025-12-10
 
 ### Added

@@ -4,7 +4,7 @@ import os
 import argparse
 import sys
 
-from ontos_config import __version__, DOCS_DIR, MIGRATION_PROMPT_FILE, TYPE_DEFINITIONS
+from ontos_config import __version__, DOCS_DIR, MIGRATION_PROMPT_FILE, TYPE_DEFINITIONS, SKIP_PATTERNS
 
 PROMPT_FILE = MIGRATION_PROMPT_FILE
 
@@ -38,6 +38,9 @@ def scan_for_untagged_files(root_dir: str) -> list[str]:
     for subdir, _, files in os.walk(root_dir):
         for file in files:
             if file.endswith('.md'):
+                # Skip files matching skip patterns (e.g., Ontos_ tooling files)
+                if any(pattern in file for pattern in SKIP_PATTERNS):
+                    continue
                 filepath = os.path.join(subdir, file)
                 if not has_frontmatter(filepath):
                     untagged.append(filepath)

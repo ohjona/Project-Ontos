@@ -32,6 +32,7 @@ From Greek ὄντος (ontos), meaning "being"—the root of ontology. Your doc
 - **[Installation Guide](docs/guides/Ontos_Installation_Guide.md)**: How to set up Ontos in your project.
 - **[Initiation Guide](docs/guides/Ontos_Initiation_Guide.md)**: How to tag your files and build your first graph.
 - **[Migration Guide](docs/guides/MIGRATION_GUIDE.md)**: How to migrate existing documentation.
+- **[Uninstallation Guide](docs/guides/Ontos_Uninstallation_Guide.md)**: How to remove Ontos from your project.
 
 ### Reference
 - **[The Ontos Manual](docs/reference/Ontos_Manual.md)**: The complete protocol reference and usage guide.

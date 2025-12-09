@@ -23,7 +23,7 @@ Run `python3 .ontos/scripts/ontos_generate_context_map.py` after structural chan
 
 ## Archival
 When the user says **"Archive Ontos"** (or "Ontos archive"):
-1.  Run `python3 .ontos/scripts/ontos_end_session.py "slug"`.
+1.  Run `python3 .ontos/scripts/ontos_end_session.py "slug" --source "Cursor"`.
 2.  **READ** the generated log file.
 3.  **OVERWRITE** the placeholders with a high-quality summary (Goal, Decisions, Changes, Next Steps).
 4.  Commit.

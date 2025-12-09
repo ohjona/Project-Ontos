@@ -36,7 +36,7 @@ If you create a new file or change dependencies:
 ### 3. Session Archival
 When the user says **"Ontos archive"** (or "Archive our session"):
 1.  **Final Polish**: Run `python3 .ontos/scripts/ontos_generate_context_map.py` one last time to ensure the graph is clean and up-to-date. Fix any issues found.
-2.  Run `python3 .ontos/scripts/ontos_end_session.py "slug-for-session" --changelog` to create a session log AND prompt for changelog entries.
+2.  Run `python3 .ontos/scripts/ontos_end_session.py "slug-for-session" --source "Your LLM Name" --changelog` to create a session log AND prompt for changelog entries. Replace "Your LLM Name" with your actual name (e.g., "Claude Code", "Gemini", "Cursor").
 3.  **READ** the generated log file.
 4.  **OVERWRITE** the placeholders in the file with a high-quality summary of the session (Goal, Decisions, Changes, Next Steps).
 5.  Commit the changes.

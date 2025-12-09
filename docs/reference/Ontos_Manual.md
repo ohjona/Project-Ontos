@@ -123,7 +123,7 @@ Tell your Agent:
 > **"Archive Ontos"** (or "Ontos archive")
 
 **The Agent will:**
-1.  Run `python3 .ontos/scripts/ontos_end_session.py "topic-slug"`.
+1.  Run `python3 .ontos/scripts/ontos_end_session.py "topic-slug" --source "LLM Name"` (where "LLM Name" is the agent's name, e.g., "Claude Code", "Gemini", "Cursor").
 2.  Fill in the generated log file with **Decisions Made**, **Alternatives Rejected**, and **Files Modified**.
 3.  Commit the log file to git.
 

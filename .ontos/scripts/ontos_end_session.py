@@ -295,12 +295,13 @@ def add_changelog_entry(category: str, description: str, quiet: bool = False) ->
         return False
 
 
-def create_log_file(topic_slug: str, quiet: bool = False) -> str:
+def create_log_file(topic_slug: str, quiet: bool = False, source: str = "") -> str:
     """Creates a new session log file with a template.
 
     Args:
         topic_slug: Short slug describing the session.
         quiet: Suppress output if True.
+        source: LLM/program that generated this log (e.g., "Claude Code", "Gemini").
 
     Returns:
         Path to the created log file, or empty string on error.
@@ -317,8 +318,10 @@ def create_log_file(topic_slug: str, quiet: bool = False) -> str:
         print(f"Error: Failed to create directory {LOGS_DIR}: {e}")
         return ""
 
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
-    filename = f"{today}_{topic_slug}.md"
+    now = datetime.datetime.now().astimezone()
+    today_date = now.strftime("%Y-%m-%d")
+    today_datetime = now.strftime("%Y-%m-%d %H:%M %Z")
+    filename = f"{today_date}_{topic_slug}.md"
     filepath = os.path.join(LOGS_DIR, filename)
 
     if os.path.exists(filepath):
@@ -327,16 +330,17 @@ def create_log_file(topic_slug: str, quiet: bool = False) -> str:
         return filepath
 
     daily_log = get_session_git_log()
+    source_line = f"\nSource: {source}" if source else ""
 
     content = f"""---
-id: log_{today.replace('-', '')}_{topic_slug.replace('-', '_')}
+id: log_{today_date.replace('-', '')}_{topic_slug.replace('-', '_')}
 type: atom
 status: active
 depends_on: []
 ---
 
 # Session Log: {topic_slug.replace('-', ' ').title()}
-Date: {today}
+Date: {today_datetime}{source_line}
 
 ## 1. Goal
 <!-- [AGENT: Fill this in. What was the primary objective of this session?] -->
@@ -379,10 +383,11 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 ontos_end_session.py auth-refactor           # Create log for auth refactor session
-  python3 ontos_end_session.py bug-fix --changelog     # Create log and prompt for changelog entry
-  python3 ontos_end_session.py feature-x -c            # Short form of --changelog
-  python3 ontos_end_session.py hotfix --quiet          # Create log without output
+  python3 ontos_end_session.py auth-refactor                     # Create log for auth refactor session
+  python3 ontos_end_session.py bug-fix --source "Claude Code"    # Create log with LLM source
+  python3 ontos_end_session.py bug-fix --changelog               # Create log and prompt for changelog entry
+  python3 ontos_end_session.py feature-x -c -s "Gemini"          # With changelog and source
+  python3 ontos_end_session.py hotfix --quiet                    # Create log without output
 
 Changelog Integration:
   Use --changelog to be prompted for a changelog entry. The entry will be
@@ -404,6 +409,8 @@ Slug format:
                         help='Changelog category (added/changed/fixed/etc.) - skips prompt')
     parser.add_argument('--changelog-message', type=str, metavar='MSG',
                         help='Changelog description - skips prompt')
+    parser.add_argument('--source', '-s', type=str, metavar='NAME',
+                        help='LLM/program that generated this log (e.g., "Claude Code", "Gemini")')
     args = parser.parse_args()
 
     if not args.topic:
@@ -417,7 +424,7 @@ Slug format:
         sys.exit(1)
 
     # Create session log
-    result = create_log_file(args.topic, args.quiet)
+    result = create_log_file(args.topic, args.quiet, args.source or "")
     if not result:
         sys.exit(1)
 

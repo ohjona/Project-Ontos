@@ -379,10 +379,10 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 end_session.py auth-refactor           # Create log for auth refactor session
-  python3 end_session.py bug-fix --changelog     # Create log and prompt for changelog entry
-  python3 end_session.py feature-x -c            # Short form of --changelog
-  python3 end_session.py hotfix --quiet          # Create log without output
+  python3 ontos_end_session.py auth-refactor           # Create log for auth refactor session
+  python3 ontos_end_session.py bug-fix --changelog     # Create log and prompt for changelog entry
+  python3 ontos_end_session.py feature-x -c            # Short form of --changelog
+  python3 ontos_end_session.py hotfix --quiet          # Create log without output
 
 Changelog Integration:
   Use --changelog to be prompted for a changelog entry. The entry will be

@@ -50,7 +50,7 @@ When the user says **"Ontos archive"** (or "Archive our session"):
 | `Ontos_CHANGELOG.md` | Changes to Project Ontos tooling itself | Only when modifying Ontos scripts, protocol, or docs |
 | `CHANGELOG.md` | Changes to the project using Ontos | During normal development sessions |
 
-**Important**: When working on a project that *uses* Ontos as its documentation system, update that project's `CHANGELOG.md` via the `--changelog` flag in `end_session.py`. **Never** update `Ontos_CHANGELOG.md` unless you are directly modifying Project Ontos itself.
+**Important**: When working on a project that *uses* Ontos as its documentation system, update that project's `CHANGELOG.md` via the `--changelog` flag in `ontos_end_session.py`. **Never** update `Ontos_CHANGELOG.md` unless you are directly modifying Project Ontos itself.
 
 ### 4. Maintenance (Weekly Ritual)
 When the user says **"Maintain Ontos"** (or "Ontos maintenance"):

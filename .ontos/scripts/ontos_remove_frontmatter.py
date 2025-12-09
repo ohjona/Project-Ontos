@@ -82,10 +82,10 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 remove_frontmatter.py                 # Scan and remove from 'docs' directory
-  python3 remove_frontmatter.py --dir specs     # Scan 'specs' directory
-  python3 remove_frontmatter.py --dry-run       # Preview without making changes
-  python3 remove_frontmatter.py --file doc.md   # Remove from a single file
+  python3 ontos_remove_frontmatter.py                 # Scan and remove from 'docs' directory
+  python3 ontos_remove_frontmatter.py --dir specs     # Scan 'specs' directory
+  python3 ontos_remove_frontmatter.py --dry-run       # Preview without making changes
+  python3 ontos_remove_frontmatter.py --file doc.md   # Remove from a single file
 """
     )
     parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')

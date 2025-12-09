@@ -1,4 +1,4 @@
-# Migration Guide
+# Ontos Migration Guide
 
 This guide explains how to tag existing documentation with Ontos frontmatter.
 

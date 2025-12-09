@@ -4,8 +4,8 @@ You are operating within the Ontos framework.
 
 ## Activation
 When the user says **"Ontos"** (or "Activate Ontos"):
-1.  Check/Run `python3 scripts/generate_context_map.py`.
-2.  Read `CONTEXT_MAP.md`.
+1.  Check/Run `python3 .ontos/scripts/ontos_generate_context_map.py`.
+2.  Read `Ontos_Context_Map.md`.
 3.  Load only relevant context IDs.
 4.  Follow `depends_on` links to load parent context.
 5.  Read ONLY those specific files.
@@ -19,11 +19,11 @@ When the user says **"Ontos"** (or "Activate Ontos"):
 
 ## Maintenance
 Always update YAML frontmatter when creating files.
-Run `python3 scripts/generate_context_map.py` after structural changes.
+Run `python3 .ontos/scripts/ontos_generate_context_map.py` after structural changes.
 
 ## Archival
 When the user says **"Archive Ontos"** (or "Ontos archive"):
-1.  Run `python3 scripts/end_session.py "slug"`.
+1.  Run `python3 .ontos/scripts/ontos_end_session.py "slug"`.
 2.  **READ** the generated log file.
 3.  **OVERWRITE** the placeholders with a high-quality summary (Goal, Decisions, Changes, Next Steps).
 4.  Commit.

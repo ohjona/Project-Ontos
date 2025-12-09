@@ -116,10 +116,10 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 migrate_frontmatter.py                 # Scan default 'docs' directory
-  python3 migrate_frontmatter.py --dir specs     # Scan 'specs' directory
-  python3 migrate_frontmatter.py --dry-run       # Show what would be done
-  python3 migrate_frontmatter.py --strict        # Exit with error if untagged files found
+  python3 ontos_migrate_frontmatter.py                 # Scan default 'docs' directory
+  python3 ontos_migrate_frontmatter.py --dir specs     # Scan 'specs' directory
+  python3 ontos_migrate_frontmatter.py --dry-run       # Show what would be done
+  python3 ontos_migrate_frontmatter.py --strict        # Exit with error if untagged files found
 """
     )
     parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')

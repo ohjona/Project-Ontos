@@ -269,7 +269,7 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
         if depth > MAX_DEPENDENCY_DEPTH:
             issues.append(
                 f"- [DEPTH] **{doc_id}** has dependency depth {depth} (max: {MAX_DEPENDENCY_DEPTH})\n"
-                f"  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in config.py"
+                f"  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py"
             )
 
     # 5. Type Hierarchy Violations
@@ -296,7 +296,7 @@ def validate_dependencies(files_data: dict[str, dict]) -> list[str]:
 
 
 def generate_context_map(target_dirs: list[str], quiet: bool = False) -> int:
-    """Main function to generate the CONTEXT_MAP.md file.
+    """Main function to generate the Ontos_Context_Map.md file.
 
     Args:
         target_dirs: List of directories to scan.
@@ -409,10 +409,10 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 generate_context_map.py                    # Scan default 'docs' directory
-  python3 generate_context_map.py --dir docs --dir specs  # Scan multiple directories
-  python3 generate_context_map.py --watch            # Watch for changes
-  python3 generate_context_map.py --strict           # Exit with error if issues found
+  python3 ontos_generate_context_map.py                    # Scan default 'docs' directory
+  python3 ontos_generate_context_map.py --dir docs --dir specs  # Scan multiple directories
+  python3 ontos_generate_context_map.py --watch            # Watch for changes
+  python3 ontos_generate_context_map.py --strict           # Exit with error if issues found
 """
     )
     parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')

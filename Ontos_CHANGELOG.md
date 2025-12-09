@@ -1,11 +1,11 @@
 ---
-id: po-changelog
+id: ontos_changelog
 title: Project Ontos Changelog
 type: kernel
 scope: ontos-tooling-only
 update_policy: |
   IMPORTANT: Only update this file when making changes to Project Ontos ITSELF
-  (scripts/, protocol schema, agent instructions, Ontos documentation).
+  (.ontos/scripts/, protocol schema, agent instructions, Ontos documentation).
 
   Do NOT update this file when working on projects that USE Ontos as their
   documentation system. Those projects should have their own CHANGELOG.md.
@@ -16,7 +16,7 @@ depends_on: []
 
 All notable changes to **Project Ontos itself** (the protocol and tooling) will be documented in this file.
 
-> **For AI Agents**: This changelog is for the Ontos tooling only. If you're working on a project that *uses* Ontos, update that project's `CHANGELOG.md` instead (via `end_session.py --changelog`).
+> **For AI Agents**: This changelog is for the Ontos tooling only. If you're working on a project that *uses* Ontos, update that project's `CHANGELOG.md` instead (via `ontos_end_session.py --changelog`).
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Changelog integration in `end_session.py` (prompts for changelog entries)
+- Changelog integration in `ontos_end_session.py` (prompts for changelog entries)
 - `Ontos_CHANGELOG.md` for Project Ontos tooling changes (distinct from project changelogs)
 - MIT License (`LICENSE`)
 - `CONTRIBUTING.md` with contribution guidelines
@@ -43,10 +43,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.0] - 2025-11-29
 
 ### Added
-- Centralized configuration in `scripts/config.py`
+- Centralized configuration in `ontos_config.py`
 - `--version` / `-V` flag to all scripts
 - `-q` shorthand for `--quiet` flag
-- `--strict` mode for `migrate_frontmatter.py`
+- `--strict` mode for `ontos_migrate_frontmatter.py`
 - `--quiet` mode for all scripts (CI/CD friendly)
 - Pre-commit hook configuration (`.pre-commit-config.yaml`)
 - Troubleshooting section in `Ontos_Manual.md`
@@ -66,16 +66,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Broken link in `Ontos_Agent_Instructions.md` (now points to `Ontos_Manual.md`)
-- UTF-8 encoding in `migrate_frontmatter.py`
+- UTF-8 encoding in `ontos_migrate_frontmatter.py`
 - Log files no longer flagged as orphans
 
 ## [0.3.0] - 2025-11-24
 
 ### Added
-- Strict mode (`--strict` flag) for CI/CD integration in `generate_context_map.py`
+- Strict mode (`--strict` flag) for CI/CD integration in `ontos_generate_context_map.py`
 - Maintenance protocol ("Maintain Ontos" command)
-- Session archival with `end_session.py`
-- Migration script `migrate_frontmatter.py` for untagged files
+- Session archival with `ontos_end_session.py`
+- Migration script `ontos_migrate_frontmatter.py` for untagged files
 - Five integrity checks (broken links, cycles, orphans, depth, architecture)
 
 ### Fixed
@@ -99,6 +99,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial YAML frontmatter specification
-- Basic context map generation (`generate_context_map.py`)
+- Basic context map generation (`ontos_generate_context_map.py`)
 - Document type taxonomy (kernel, strategy, product, atom)
-- `CONTEXT_MAP.md` auto-generation
+- `Ontos_Context_Map.md` auto-generation

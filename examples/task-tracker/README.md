@@ -43,8 +43,10 @@ python3 ../../.ontos/scripts/ontos_generate_context_map.py --dir docs
 You should see:
 ```
 Successfully generated Ontos_Context_Map.md
-Scanned 7 documents, found 0 issues.
+Scanned 7 documents, found 1 issues.
 ```
+
+> **Note:** The 1 issue is expected—`api_spec.md` is flagged as an "orphan" because nothing depends on it. In a real project, implementation docs would reference the API spec. This is intentional: it shows how Ontos catches disconnected documentation.
 
 ### 2. Explore the Map
 
@@ -84,6 +86,7 @@ The AI should identify that:
 | Strategy connects to Mission | Every goal traces back to "why we exist" |
 | No circular dependencies | The graph is clean and navigable |
 | `api_spec.md` is marked `draft` | Status field shows what's settled vs speculative |
+| `api_spec.md` flagged as orphan | Ontos detects disconnected docs—useful for finding dead documentation |
 
 ## Exercises
 

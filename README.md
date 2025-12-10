@@ -8,39 +8,75 @@
 
 *Never explain twice. Own your context.*
 
+---
+
+## Contents
+
+- [The Problem](#the-problem)
+- [The Solution](#the-solution)
+- [Why "Ontos"?](#why-ontos)
+- [Quick Start](#quick-start)
+- [Archiving](#archiving)
+- [Maintenance](#maintenance)
+- [Updating](#updating)
+- [Use Cases](#use-cases)
+- [What It Doesn't Do](#what-it-doesnt-do)
+- [Documentation](#documentation)
+
+---
+
 ## The Problem
 
-I didn't want to be the orchestrator agent. Using multiple AI tools (Claude, ChatGPT, Gemini) means uploading the same documents repeatedly, each AI starting from zero and giving conflicting advice. Building several vibe coding projects, I was spending 10+ hours weekly re-establishing context across different LLMs. Each tool had its own interpretation of my intentions and owned fragments of the conversation. It felt like working with teammates who never talk to each other.
+Context dies in three ways:
+
+1. **AI Amnesia.** You explain your architecture to Claude. Then again to ChatGPT. Then again to Cursor. Each starts from zero and gives conflicting advice.
+
+2. **Prototype Graveyards.** You build fast in Streamlit, make dozens of product decisions, then rewrite in Next.js. The code is new. The decisions? Lost in old chat logs.
+
+3. **Tribal Knowledge.** Your project's "why" lives in Slack threads, abandoned docs, and your head. New collaborators (human or AI) have to rediscover everything.
+
+The common thread: **context isn't portable.**
+
+---
 
 ## The Solution
 
-I built a library with disciplined librarians, and now I tell my LLMs to do their homework there. Ontos creates this shared context layer so all your agents can cooperate. Tag your docs with simple YAML headers, declare dependencies, and a generated `Ontos_Context_Map.md` becomes your project's memory. When you tell any AI "Activate Ontos," it reads the map, loads only relevant documents, and sees decisions from previous sessions—regardless of which AI made them. Your context becomes portable across platforms through a git-based protocol.
+Ontos turns your documentation into a knowledge graph that survives everything - tool switches, tech migrations, team changes.
+
+**How it works:**
+
+1. Tag your docs with simple YAML headers (type, dependencies, status)
+2. A script generates `Ontos_Context_Map.md` - your project's memory
+3. Any AI tool reads the map, loads only what's relevant, and sees the full decision history
+
+```yaml
+---
+id: pricing_strategy
+type: strategy
+depends_on: [target_audience, mission]
+---
+```
+
+**The hierarchy:**
+
+| Layer | What It Captures | Survives Migration? |
+|-------|------------------|---------------------|
+| `kernel` | Why you exist, core values | ✅ Always |
+| `strategy` | Goals, audience, approach | ✅ Always |
+| `product` | Features, user flows, requirements | ✅ Always |
+| `atom` | Technical implementation | ❌ Rewritten |
+
+Your Streamlit atoms die. Your product decisions don't.
+
+---
 
 ## Why "Ontos"?
 
-From Greek ὄντος (ontos), meaning "being"—the root of ontology. Your documentation gains existence as a persistent knowledge graph that lives across all AI platforms, not trapped in separate chat histories.
+From Greek ὄντος (ontos), meaning "being" - the root of ontology. Your documentation gains existence as a persistent knowledge graph, not ephemeral chat history.
 
-## Key Benefits
+Or simpler: **your project's memory that works everywhere.**
 
-- **Stop Hallucinations**: Agents read a map, not just random files.
-- **Zero Overhead**: Just markdown files with simple YAML headers.
-- **Agent-Native**: Built specifically for the "Agentic Workflow" (CLI tools).
-
-## Documentation
-
-### Guides
-- **[Installation Guide](docs/guides/Ontos_Installation_Guide.md)**: How to set up Ontos in your project.
-- **[Initiation Guide](docs/guides/Ontos_Initiation_Guide.md)**: How to tag your files and build your first graph.
-- **[Migration Guide](docs/guides/Ontos_Migration_Guide.md)**: How to migrate existing documentation.
-- **[Maintenance Guide](docs/guides/Ontos_Maintenance_Guide.md)**: How to keep your graph healthy and update Ontos.
-- **[Uninstallation Guide](docs/guides/Ontos_Uninstallation_Guide.md)**: How to remove Ontos from your project.
-
-### Reference
-- **[The Ontos Manual](docs/reference/Ontos_Manual.md)**: The complete protocol reference and usage guide.
-- **[Agent Instructions](docs/reference/Ontos_Agent_Instructions.md)**: The system prompt for your AI agents.
-
-### Meta
-- **[Project Ontos Changelog](Ontos_CHANGELOG.md)**: Version history for Ontos tooling itself.
+---
 
 ## Quick Start
 
@@ -54,6 +90,8 @@ The Agent will:
 3. Load *only* the relevant files for your task.
 4. Confirm what context it has loaded.
 
+---
+
 ## Archiving
 
 When you are done with a session:
@@ -61,6 +99,8 @@ When you are done with a session:
 > **"Archive Ontos"** (or "Ontos archive")
 
 The Agent will save a log of all decisions made, ensuring no context is lost for the next session.
+
+---
 
 ## Maintenance
 
@@ -70,7 +110,7 @@ To keep your graph healthy:
 
 The Agent will scan for new files, rebuild the context map, and fix any integrity issues (broken links, circular dependencies).
 
-See the [Maintenance Guide](docs/guides/Ontos_Maintenance_Guide.md) for detailed error remediation.
+---
 
 ## Updating
 
@@ -86,57 +126,57 @@ python3 .ontos/scripts/ontos_update.py
 
 Your `ontos_config.py` customizations are never overwritten.
 
-## Development
+---
 
-### Running Tests
+## Use Cases
 
-```bash
-pip install pytest pytest-cov
-pytest tests/ -v
-```
+### Multi-AI Workflows
+Switch between Claude Code, Cursor, ChatGPT, and Gemini without re-explaining your project. Say "Activate Ontos" and they all read from the same map.
 
-### Pre-commit Hooks
+### Prototype → Production
+Built a demo in Streamlit? When you rewrite in FastAPI or Next.js, your atoms are disposable but your strategy survives. Three weeks of product decisions don't vanish with the old code.
 
-```bash
-pip install pre-commit
-pre-commit install
-```
+### Project Handoffs
+Pass a project to another developer or agency. Session logs + context map = instant knowledge transfer, not a 2-hour call.
 
-### Script Usage
+### Documentation Audits
+CI/CD validation catches broken links, circular dependencies, and architectural violations before they become tribal knowledge.
 
-```bash
-# Generate context map
-python3 .ontos/scripts/ontos_generate_context_map.py
+---
 
-# Watch for changes
-python3 .ontos/scripts/ontos_generate_context_map.py --watch
+## What It Doesn't Do
 
-# Scan multiple directories
-python3 .ontos/scripts/ontos_generate_context_map.py --dir docs --dir specs
+- No cloud service
+- No API keys
+- No vendor lock-in
+- Just Python scripts and markdown files in your repo
 
-# Check for untagged files
-python3 .ontos/scripts/ontos_migrate_frontmatter.py
+---
 
-# Create session log
-python3 .ontos/scripts/ontos_end_session.py "session-name"
+## Documentation
 
-# Create session log with changelog entry
-python3 .ontos/scripts/ontos_end_session.py "session-name" --changelog
+### Guides
+- **[Installation Guide](docs/guides/Ontos_Installation_Guide.md)**: Set up Ontos in your project.
+- **[Initiation Guide](docs/guides/Ontos_Initiation_Guide.md)**: Tag your files and build your first graph.
+- **[Migration Guide](docs/guides/Ontos_Migration_Guide.md)**: Retrofit existing documentation.
+- **[Maintenance Guide](docs/guides/Ontos_Maintenance_Guide.md)**: Keep your graph healthy and update Ontos.
+- **[Uninstallation Guide](docs/guides/Ontos_Uninstallation_Guide.md)**: Remove Ontos from your project.
 
-# Remove frontmatter (for uninstallation)
-python3 .ontos/scripts/ontos_remove_frontmatter.py --dry-run
+### Reference
+- **[The Ontos Manual](docs/reference/Ontos_Manual.md)**: The complete protocol reference.
+- **[Agent Instructions](docs/reference/Ontos_Agent_Instructions.md)**: System prompt for your AI agents.
 
-# Check for updates
-python3 .ontos/scripts/ontos_update.py --check
+### Meta
+- **[Changelog](Ontos_CHANGELOG.md)**: Version history for Ontos tooling.
 
-# Update to latest version
-python3 .ontos/scripts/ontos_update.py
-```
+---
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
 
 ## License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
+MIT - see [LICENSE](LICENSE).

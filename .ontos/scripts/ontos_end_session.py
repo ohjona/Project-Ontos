@@ -414,6 +414,8 @@ Slug format:
     args = parser.parse_args()
 
     if not args.topic:
+        print("Error: Missing required argument 'topic'. Provide a short slug describing the session.")
+        print("Example: python3 ontos_end_session.py auth-refactor --source \"Claude Code\"\n")
         parser.print_help()
         sys.exit(1)
 

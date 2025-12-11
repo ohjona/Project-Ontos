@@ -34,7 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Quick Install instructions now include hook installation step
 - Installation Guide updated with hook setup details
 
-## [1.3.0] - 2025-12-10
+## [1.1.0] - 2025-12-10
+
+### Added
+- Datetime with timezone and LLM source field in session logs
 
 ### Fixed
 - Ontos tooling files (`Ontos_*.md`) are now excluded from project context maps

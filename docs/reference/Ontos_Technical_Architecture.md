@@ -624,7 +624,7 @@ ontos_config_defaults.py          ontos_config.py
 │ # Shipped defaults      │      │ # User overrides        │
 │ # AUTO-UPDATED          │      │ # NEVER AUTO-UPDATED    │
 │                         │      │                         │
-│ ONTOS_VERSION = '1.4.1' │      │ from ontos_config_      │
+│ ONTOS_VERSION = '1.4.0' │      │ from ontos_config_      │
 │                         │      │   defaults import *     │
 │ DEFAULT_DOCS_DIR = 'docs'      │                         │
 │ DEFAULT_LOGS_DIR =      │      │ # Override defaults:    │
@@ -880,7 +880,7 @@ For projects with 1000+ documents, consider:
 | Version | Date | Notable Changes |
 |---------|------|-----------------|
 | 1.4.0 | 2025-12-10 | Added git hooks installation, hook updates via `ontos_update.py` |
-| 1.3.0 | 2025-12-10 | Excluded `Ontos_*.md` files from project context maps |
+| 1.1.0 | 2025-12-10 | Excluded `Ontos_*.md` files from project context maps, added LLM source to session logs |
 | 1.0.0 | 2025-12-10 | First stable release: update script, split config, maintenance guide |
 | 0.4.0 | 2025-11-29 | Centralized config, `--strict` mode, test suite, watch mode |
 | 0.3.0 | 2025-11-24 | Strict mode for CI/CD, session archival, five integrity checks |

@@ -1,5 +1,5 @@
 # Ontos Context Map
-Generated on: 2025-12-12 15:10:40
+Generated on: 2025-12-12 15:32:24
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 
 ## 1. Hierarchy Tree
@@ -23,7 +23,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 - **self_dev_protocol_spec** (self_development_protocol_spec.md)
   - Status: active
   - Depends On: self_dev_protocol
-- **v2_architecture** (architecture.md)
+- **v2_architecture** (v2_technical_architecture.md)
   - Status: draft
   - Depends On: v2_strategy
 
@@ -32,6 +32,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
   - Status: archived
   - Depends On: None
 - **log_20251212_v2_planning** (2025-12-12_v2-planning.md)
+  - Status: archived
+  - Depends On: None
+- **log_20251212_v2_strategy_architecture_rewrite** (2025-12-12_v2-strategy-architecture-rewrite.md)
   - Status: archived
   - Depends On: None
 
@@ -44,9 +47,10 @@ No issues found.
 |---|---|---|
 | log_20251212_pr10_review_and_fixes | [2025-12-12_pr10-review-and-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_pr10-review-and-fixes.md) | log |
 | log_20251212_v2_planning | [2025-12-12_v2-planning.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_v2-planning.md) | log |
+| log_20251212_v2_strategy_architecture_rewrite | [2025-12-12_v2-strategy-architecture-rewrite.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_v2-strategy-architecture-rewrite.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
 | self_dev_protocol | [self_development_protocol.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/self_development_protocol.md) | atom |
 | self_dev_protocol_spec | [self_development_protocol_spec.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/self_development_protocol_spec.md) | atom |
-| v2_architecture | [architecture.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/architecture.md) | atom |
+| v2_architecture | [v2_technical_architecture.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/v2_technical_architecture.md) | atom |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |

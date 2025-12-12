@@ -23,6 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Blocking pre-push hook** — Push is blocked until session is archived (prevents context loss)
+- **Marker file system** — `ontos_end_session.py` creates `.ontos/session_archived` marker
+- **Pre-Push Protocol** — Added to Agent Instructions (section 3.1) with CRITICAL enforcement
+
+### Changed
+- Pre-push hook now blocks by default (was advisory only)
+- One archive enables one push (marker deleted after successful check)
+
 ## [2.0.0] - 2025-12-12
 
 ### Added

@@ -147,7 +147,7 @@ def main() -> None:
 This script installs git hooks from .ontos/hooks/ to .git/hooks/.
 
 Hooks installed:
-  - pre-push: Reminds you to archive your session before pushing
+  - pre-push: BLOCKS push until session is archived (enforces context capture)
 
 Examples:
   python3 ontos_install_hooks.py           # Install hooks
@@ -174,7 +174,8 @@ Examples:
             print(f"Would install {installed} hook(s).")
         else:
             print(f"Successfully installed {installed} hook(s).")
-            print("\nThe pre-push hook will remind you to archive your session before pushing.")
+            print("\nThe pre-push hook will BLOCK push until you archive your session.")
+            print("Run 'Archive Ontos' before pushing. Bypass with: git push --no-verify")
 
 
 if __name__ == "__main__":

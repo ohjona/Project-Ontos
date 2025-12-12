@@ -1,11 +1,11 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-12 11:30:27 UTC
+Generated: 2025-12-12 12:09:33 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
 # Ontos Context Map
-Generated on: 2025-12-12 20:30:27
+Generated on: 2025-12-12 21:09:33
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 
 ## 1. Hierarchy Tree
@@ -37,6 +37,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
   - Depends On: v2_architecture
 
 ### LOG
+- **log_20251212_blocking_hook_implementation** (2025-12-12_blocking-hook-implementation.md) ~444 tokens
+  - Status: active
+  - Impacts: v2_architecture, self_dev_protocol
 - **log_20251212_maintenance_v2_release** (2025-12-12_maintenance-v2-release.md) ~329 tokens
   - Status: active
   - Impacts: v2_architecture, schema
@@ -76,6 +79,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 - **2025-12-12** [chore] **Maintenance V2 Release** (`log_20251212_maintenance_v2_release`)
   - Impacted: `v2_architecture`, `schema`
   - Concepts: maintenance, version-bump, v2-release
+- **2025-12-12** [feature] **Blocking Hook Implementation** (`log_20251212_blocking_hook_implementation`)
+  - Impacted: `v2_architecture`, `self_dev_protocol`
+  - Concepts: pre-push-hook, blocking, marker-file, context-enforcement
 
 ## 3. Dependency Audit
 - [INFO] **log_20251212_v2_planning** references deleted document `v2_roadmap` (archived log, no action needed)
@@ -83,6 +89,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 ## 4. Index
 | ID | Filename | Type |
 |---|---|---|
+| log_20251212_blocking_hook_implementation | [2025-12-12_blocking-hook-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_blocking-hook-implementation.md) | log |
 | log_20251212_maintenance_v2_release | [2025-12-12_maintenance-v2-release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_maintenance-v2-release.md) | log |
 | log_20251212_pr10_review_and_fixes | [2025-12-12_pr10-review-and-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_pr10-review-and-fixes.md) | log |
 | log_20251212_pr11_review_fixes | [2025-12-12_pr11-review-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-12_pr11-review-fixes.md) | log |

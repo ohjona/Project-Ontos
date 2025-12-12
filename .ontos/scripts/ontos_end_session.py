@@ -7,7 +7,10 @@ import subprocess
 import argparse
 import sys
 
-from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE
+from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT
+
+# Marker file for pre-push hook integration
+ARCHIVE_MARKER_FILE = os.path.join(PROJECT_ROOT, '.ontos', 'session_archived')
 
 # Valid slug pattern: lowercase letters, numbers, and hyphens
 VALID_SLUG_PATTERN = re.compile(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$')
@@ -559,7 +562,32 @@ Event Type: {event_type}
 
     if not quiet:
         print(f"Created session log: {filepath}")
+
+    # Create marker file for pre-push hook
+    _create_archive_marker(filepath)
+
     return filepath
+
+
+def _create_archive_marker(log_filepath: str) -> None:
+    """Create marker file to signal that a session was archived.
+
+    The pre-push hook checks for this marker to enforce archiving before push.
+    The marker is cleared by successful git push (via post-push or manual clear).
+
+    Args:
+        log_filepath: Path to the created log file (stored in marker for reference).
+    """
+    try:
+        marker_dir = os.path.dirname(ARCHIVE_MARKER_FILE)
+        os.makedirs(marker_dir, exist_ok=True)
+
+        with open(ARCHIVE_MARKER_FILE, 'w', encoding='utf-8') as f:
+            f.write(f"archived={datetime.datetime.now().isoformat()}\n")
+            f.write(f"log={log_filepath}\n")
+    except (IOError, OSError, PermissionError):
+        # Non-fatal: marker creation failure shouldn't break archiving
+        pass
 
 
 def main() -> None:

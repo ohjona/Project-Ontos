@@ -1,57 +1,46 @@
 #!/bin/bash
-# Ontos pre-push hook - reminds user to archive session if no log exists today
+# Ontos pre-push hook - enforces session archiving before push
+#
+# This hook BLOCKS push if no session has been archived since the last push.
+# To bypass in emergencies: git push --no-verify
+#
+# How it works:
+# 1. ontos_end_session.py creates .ontos/session_archived marker
+# 2. This hook checks for the marker
+# 3. If marker exists: allow push, delete marker (one archive = one push)
+# 4. If no marker: block push with instructions
 
-# Get today's date
-TODAY=$(date +%Y-%m-%d)
+MARKER_FILE=".ontos/session_archived"
 
-# Find logs directory (check common locations)
-LOGS_DIR=""
-if [ -d "docs/logs" ]; then
-    LOGS_DIR="docs/logs"
-elif [ -d "Docs/logs" ]; then
-    LOGS_DIR="Docs/logs"
-fi
+# Check if marker file exists
+if [ -f "$MARKER_FILE" ]; then
+    # Marker exists - session was archived, allow push
+    echo ""
+    echo "✅ Session archived. Proceeding with push..."
+    echo ""
 
-# If no logs directory found, skip check
-if [ -z "$LOGS_DIR" ]; then
+    # Delete marker (one archive = one push)
+    rm -f "$MARKER_FILE"
     exit 0
 fi
 
-# Check if a log file exists for today
-TODAY_LOG=$(ls "$LOGS_DIR"/${TODAY}_*.md 2>/dev/null | head -1)
-
-if [ -n "$TODAY_LOG" ]; then
-    # Log exists for today, proceed with push
-    exit 0
-fi
-
-# No log for today - show reminder
+# No marker - block push
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"
-echo "║           SESSION LOG REMINDER                             ║"
+echo "║           ❌ PUSH BLOCKED - NO SESSION ARCHIVED            ║"
 echo "╠════════════════════════════════════════════════════════════╣"
-echo "║  💡 No session log created today.                          ║"
 echo "║                                                            ║"
-echo "║  Consider running \"Archive Ontos\" to capture your          ║"
-echo "║  decisions and changes before pushing.                     ║"
+echo "║  You must archive your session before pushing.             ║"
+echo "║                                                            ║"
+echo "║  Run: \"Archive Ontos\" (or ontos_end_session.py)           ║"
+echo "║                                                            ║"
+echo "║  This ensures your decisions and context are captured      ║"
+echo "║  before code leaves your machine.                          ║"
+echo "║                                                            ║"
+echo "║  Emergency bypass: git push --no-verify                    ║"
+echo "║  (Use sparingly - you'll lose context!)                    ║"
+echo "║                                                            ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 
-# Check if we're in an interactive terminal
-if [ -t 0 ]; then
-    read -p "Continue with push anyway? [y/n]: " choice
-    case "$choice" in
-        y|Y|yes|Yes|YES)
-            echo "Proceeding with push..."
-            exit 0
-            ;;
-        *)
-            echo "Push aborted. Run \"Archive Ontos\" to create a session log."
-            exit 1
-            ;;
-    esac
-else
-    # Non-interactive, just warn and proceed
-    echo "Proceeding with push (non-interactive terminal)..."
-    exit 0
-fi
+exit 1

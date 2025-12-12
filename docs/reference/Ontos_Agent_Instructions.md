@@ -4,6 +4,20 @@ You are an intelligent agent operating within the **Ontos Protocol**. Your goal 
 
 ## The Protocol
 
+### 0. Auto-Activation (v2.2+)
+At the start of EVERY conversation, silently check for Ontos:
+1.  Look for `Ontos_Context_Map.md` in the project root
+2.  If found AND user hasn't disabled auto-activation:
+    *   Read the context map
+    *   Load relevant context based on user's first message
+    *   Do NOT announce "Loaded: [...]" unless explicitly asked
+3.  If not found:
+    *   Proceed normally (no Ontos in this project)
+
+This makes Ontos invisible when present, reducing friction.
+
+> **User can disable auto-activation:** "Don't auto-load Ontos context" or "Start fresh"
+
 ### 1. Context Discovery (Start of Task)
 When the user says **"Ontos"** (or "Activate Ontos"), you MUST:
 1.  First, check if `Ontos_Context_Map.md` exists.
@@ -36,10 +50,34 @@ If you create a new file or change dependencies:
 ### 3. Session Archival
 When the user says **"Ontos archive"** (or "Archive our session"):
 1.  **Final Polish**: Run `python3 .ontos/scripts/ontos_generate_context_map.py` one last time to ensure the graph is clean and up-to-date. Fix any issues found.
-2.  Run `python3 .ontos/scripts/ontos_end_session.py "slug-for-session" --source "Your LLM Name" --changelog` to create a session log AND prompt for changelog entries. Replace "Your LLM Name" with your actual name (e.g., "Claude Code", "Gemini", "Cursor").
+2.  Run `python3 .ontos/scripts/ontos_end_session.py "slug-for-session" -s "Your LLM Name" -e <event_type>` to create a session log. Replace "Your LLM Name" with your actual name (e.g., "Claude Code", "Antigravity", "Cursor").
 3.  **READ** the generated log file.
 4.  **OVERWRITE** the placeholders in the file with a high-quality summary of the session (Goal, Decisions, Changes, Next Steps).
 5.  Commit the changes.
+
+> **Note**: The `--source` (`-s`) flag is **required**. Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`.
+
+### 3.1 Pre-Push Protocol (CRITICAL)
+
+**BEFORE running `git push`, you MUST archive the session first.**
+
+The pre-push hook will **block** your push if no session has been archived. This is intentional — it prevents context loss.
+
+**Workflow:**
+1. Complete your work
+2. Run "Archive Ontos" to create session log (this creates a marker file)
+3. Commit your changes (including the session log)
+4. Now `git push` will succeed
+
+**If push is blocked:**
+```
+❌ PUSH BLOCKED - NO SESSION ARCHIVED
+Run: "Archive Ontos" (or ontos_end_session.py)
+```
+
+**Emergency bypass:** `git push --no-verify` (use sparingly — you'll lose context!)
+
+**NEVER ignore the pre-push hook.** If you see a block message, stop and archive first. Ask the user if unclear.
 
 ### Changelog Guidelines
 

@@ -23,6 +23,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Blocking pre-push hook** — Push is blocked until session is archived (prevents context loss)
+- **Marker file system** — `ontos_end_session.py` creates `.ontos/session_archived` marker
+- **Pre-Push Protocol** — Added to Agent Instructions (section 3.1) with CRITICAL enforcement
+- **Workflow configuration options** — `ENFORCE_ARCHIVE_BEFORE_PUSH` and `REQUIRE_SOURCE_IN_LOGS` in ontos_config.py
+- **Configuration documentation** — Added Configuration section to Manual with examples for relaxed/strict modes
+
+### Changed
+- Pre-push hook now blocks by default (was advisory only)
+- Pre-push hook respects `ENFORCE_ARCHIVE_BEFORE_PUSH` config (blocking vs advisory mode)
+- `--source` requirement in `ontos_end_session.py` respects `REQUIRE_SOURCE_IN_LOGS` config
+- One archive enables one push (marker deleted after successful check)
+
+## [2.0.0] - 2025-12-12
+
+### Added
+- **Dual Ontology Model** — Separation of Space (Truth) and Time (History) for project knowledge
+- **`impacts` field for logs** — Logs now connect to Space documents via `impacts` instead of `depends_on`
+- **`event_type` field for logs** — Categorize sessions by intent: feature, fix, refactor, exploration, chore
+- **`concepts` field for logs** — Freeform tags for searchability
+- **Token estimates** — Context map shows approximate token count per document
+- **Timeline section** — Context map includes recent session history
+- **Provenance header** — Context map shows generation mode and timestamp
+- **Auto-suggested impacts** — `ontos_end_session.py` suggests impacted docs based on git diff
+- **Log validation rules** — Validates event_type, impacts references, and log schema
+
+### Changed
+- **Major version bump** — Semver aligned with v2.0 Dual Ontology architecture
+- Logs no longer use `depends_on` (use `impacts` instead)
+- Context map structure updated with Timeline section
+- Validation now enforces log-specific schema requirements
+
+### Fixed
+- Invalid `event_type: implementation` in legacy logs (not a valid event type)
+
 ## [1.5.0] - 2025-12-12
 
 ### Added

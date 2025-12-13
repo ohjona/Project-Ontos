@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-13 14:18:23 UTC
+Generated: 2025-12-13 14:19:56 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-13 23:18:23
+Generated on: 2025-12-13 23:19:56
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 
 ## 1. Hierarchy Tree
@@ -59,9 +59,14 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 - **log_20251213_v22_ux_planning** (2025-12-13_v22-ux-planning.md) ~429 tokens
   - Status: active
   - Impacts: v2_strategy
+- **log_20251213_version_fix** (2025-12-13_version-fix.md) ~217 tokens
+  - Status: active
+  - Impacts: None
 
 
 ## 2. Recent Timeline
+- **2025-12-13** [fix] **Version Fix** (`log_20251213_version_fix`)
+  - Concepts: versioning, release
 - **2025-12-13** [exploration] **V22 Ux Planning** (`log_20251213_v22_ux_planning`)
   - Impacted: `v2_strategy`
   - Concepts: ux, friction, activation, summaries, workflow
@@ -100,6 +105,7 @@ No issues found.
 | log_20251213_pr_12_fixes | [2025-12-13_pr-12-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_pr-12-fixes.md) | log |
 | log_20251213_smart_memory_implementation | [2025-12-13_smart-memory-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_smart-memory-implementation.md) | log |
 | log_20251213_v22_ux_planning | [2025-12-13_v22-ux-planning.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_v22-ux-planning.md) | log |
+| log_20251213_version_fix | [2025-12-13_version-fix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_version-fix.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
 | v2_3_ux_improvements | [2.3_ux_improvement_ideas.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/2.3_ux_improvement_ideas.md) | strategy |

@@ -24,9 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.2.0] - 2025-12-13
+## [2.1.0] - 2025-12-13
 
-### Added (Smart Memory - v2.1)
+### Added (Smart Memory)
 - **Decision History Index** (`.ontos-internal/strategy/decision_history.md`) — Permanent ledger for archived session decisions
 - **Consolidation Ritual** — Monthly maintenance process documented in Manual (section 3)
 - **Absorption Pattern** — Documented pattern for capturing decisions in Space documents with constraints and citations

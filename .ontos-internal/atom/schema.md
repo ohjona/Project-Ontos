@@ -1,14 +1,14 @@
 ---
 id: schema
 type: atom
-status: draft
-depends_on: [v2_architecture]
+status: active
+depends_on: [v2_strategy]
 ---
 
 # Project Ontos: Schema Specification
 
-## 1. Architecture Link
-Defines data structures for [v2_architecture](architecture.md).
+## 1. Strategy Link
+Defines data structures for the Ontos protocol as specified in [v2_strategy](../strategy/v2_strategy.md).
 
 ## 2. Common Fields (All Types)
 | Field | Type | Required | Description |

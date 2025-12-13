@@ -142,6 +142,9 @@ def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
             print(f"Warning: Directory not found: {root_dir}")
             continue
         for subdir, dirs, files in os.walk(root_dir):
+            # Prune directories matching skip patterns (e.g., 'archive/')
+            dirs[:] = [d for d in dirs if not any(pattern.rstrip('/') == d for pattern in SKIP_PATTERNS)]
+
             for file in files:
                 if file.endswith('.md'):
                     # Skip files matching skip patterns (e.g., Ontos_ tooling files)

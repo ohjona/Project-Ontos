@@ -137,6 +137,25 @@ class TestLintDataQuality:
         warnings = lint_data_quality(files_data, set())
         assert any('days old' in w for w in warnings)
 
+    @patch('ontos_config.LOG_RETENTION_COUNT', 2)
+    def test_lint_exceeds_retention_count(self):
+        """Test that active logs > LOG_RETENTION_COUNT triggers warning."""
+        files_data = {}
+        for i in range(5):
+            date = datetime.now().strftime('%Y-%m-%d')
+            files_data[f'log_{i}'] = {
+                'filepath': f'logs/{date}_test{i}.md',
+                'filename': f'{date}_test{i}.md',
+                'type': 'log',
+                'status': 'active',
+                'event_type': 'chore',
+                'concepts': ['testing'],
+                'impacts': ['some_doc'],
+            }
+        
+        warnings = lint_data_quality(files_data, set())
+        assert any('exceeds threshold' in w for w in warnings)
+
     def test_lint_skips_non_log_docs(self):
         """Test that non-log documents are skipped by lint."""
         files_data = {

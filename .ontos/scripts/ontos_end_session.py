@@ -508,6 +508,7 @@ def create_log_file(
     if os.path.exists(filepath):
         if not quiet:
             print(f"Log file already exists: {filepath}")
+        _create_archive_marker(filepath)
         return filepath
 
     daily_log = get_session_git_log()

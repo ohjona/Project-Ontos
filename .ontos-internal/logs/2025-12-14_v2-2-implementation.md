@@ -33,6 +33,13 @@ Implement Ontos v2.2 "Data Quality" features to prepare for v3.0, including cont
 - **[MODIFY]** `docs/reference/Ontos_Agent_Instructions.md`: Added "Tagging Discipline" section.
 - **[MODIFY]** `.github/workflows/ci.yml`: Added lint step (allow failure).
 - **[MODIFY]** `Ontos_CHANGELOG.md`: Added v2.2 release notes.
+- [FIX] **PR #13 Feedback:** Moved `Common_Concepts.md` to `.ontos-internal/reference/` and updated `ontos_update.py`/`ontos_init.py`/docs to ensure correct distribution.
+- [FIX] `ontos_end_session.py`: Fixed bug where archive marker wasn't created if log file already existed.
+- [POLISH] `tests/test_lint.py`: Added missing `test_lint_exceeds_retention_count` test case.
+- [POLISH] `ontos_update.py`: Removed duplicate comment.
+- [FIX] `README.md` & `Ontos_Manual.md`: Updated manual installation instructions to point to correct source (`.ontos-internal/...`) and destination (`docs/reference/`).
+- [RELEASE] Bumped `ONTOS_VERSION` to `2.2.0`.
+- [CHORE] Archived `ontos_v2.2_implementation_plan_revised.md`.
 
 ## 5. Next Steps
 - Validate v2.2 features in a real workflow.

@@ -230,7 +230,7 @@ python3 .ontos/scripts/ontos_generate_context_map.py --strict
 ### Strict validation
 ```yaml
 - name: Validate Ontos
-   run: python3 .ontos/scripts/ontos_generate_context_map.py --strict --quiet
+  run: python3 .ontos/scripts/ontos_generate_context_map.py --strict --quiet
 ```
 
 ### Pre-commit hook

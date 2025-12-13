@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: feature
 concepts: [memory, consolidation]
-impacts: [decision_history, Ontos_Manual, Ontos_Agent_Instructions, v2_strategy]
+impacts: [decision_history, v2_strategy]
 ---
 
 # Session Log: Smart Memory Implementation

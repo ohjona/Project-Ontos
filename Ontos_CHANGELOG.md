@@ -42,12 +42,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Agent Instructions trimmed** — Reduced to essential commands only
 - **Example simplified** — 8-file task-tracker replaced with 1-file minimal example (-88%)
 - **Total line reduction** — 13,100 → 7,000 lines (-47%), markdown specifically -68%
+- **README.md** — Documentation section simplified from nested headers to flat list
+- **ontos_update.py** — `UPDATABLE_DOCS` reduced from 7 to 2 entries (removed deleted guide references)
 
 ### Removed
 - `docs/guides/` directory (consolidated into `Ontos_Manual.md`)
 - `examples/task-tracker/` (replaced with `examples/minimal/`)
 - `v2_implementation_plan.md`, `self_development_protocol_spec.md` (completed, no longer needed)
 - `Ontos_Technical_Architecture.md` (consolidated)
+- `docs/logs/` — 4 legacy v1-era session logs (predated current Ontos structure)
 
 ## [2.0.0] - 2025-12-12
 

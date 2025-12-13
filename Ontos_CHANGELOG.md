@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Total line reduction** — 13,100 → 7,000 lines (-47%), markdown specifically -68%
 - **README.md** — Documentation section simplified from nested headers to flat list
 - **ontos_update.py** — `UPDATABLE_DOCS` reduced from 7 to 2 entries (removed deleted guide references)
+- **Installation standardized** — `ontos_init.py` is now the single entry point (replaces separate hook + map commands)
 
 ### Removed
 - `docs/guides/` directory (consolidated into `Ontos_Manual.md`)

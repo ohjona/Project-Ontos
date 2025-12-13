@@ -24,16 +24,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (v2.1 - Smart Memory)
-- **Decision History Index** (`docs/strategy/decision_history.md`) — Permanent ledger for archived session decisions
+## [2.2.0] - 2025-12-13
+
+### Added (Smart Memory - v2.1)
+- **Decision History Index** (`.ontos-internal/strategy/decision_history.md`) — Permanent ledger for archived session decisions
 - **Consolidation Ritual** — Monthly maintenance process documented in Manual (section 3)
 - **Absorption Pattern** — Documented pattern for capturing decisions in Space documents with constraints and citations
 - **Historical Recall** — Agents can read archived logs referenced in decision_history.md (Agent Instructions update)
 - **LOG_RETENTION_COUNT** — Configurable threshold for active logs before consolidation (default: 15)
 
-### Added
+### Added (UX & Workflow)
 - **Context map notice for contributors** — When generated in Project Ontos repo, context map shows a notice explaining it will be overwritten when users initialize Ontos in their projects
 - **Agent `--no-verify` rule** — Agents must ask before using `git push --no-verify` (behavioral expectation, not technical restriction)
+- **v2.3 UX improvement ideas** — Documented 10 friction points with proposed solutions and priority matrix
 - **Blocking pre-push hook** — Push is blocked until session is archived (prevents context loss)
 - **Marker file system** — `ontos_end_session.py` creates `.ontos/session_archived` marker
 - **Pre-Push Protocol** — Added to Agent Instructions (section 3.1) with CRITICAL enforcement

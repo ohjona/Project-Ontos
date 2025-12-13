@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-13 13:59:36 UTC
+Generated: 2025-12-13 14:18:23 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-13 22:59:36
+Generated on: 2025-12-13 23:18:23
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 
 ## 1. Hierarchy Tree
@@ -22,6 +22,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 - **decision_history** (decision_history.md) ~424 tokens
   - Status: active
   - Depends On: mission
+- **v2_3_ux_improvements** (2.3_ux_improvement_ideas.md) ~1,900 tokens
+  - Status: draft
+  - Depends On: v2_strategy
 - **v2_strategy** (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
@@ -53,9 +56,15 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal`
 - **log_20251213_smart_memory_implementation** (2025-12-13_smart-memory-implementation.md) ~444 tokens
   - Status: active
   - Impacts: decision_history, v2_strategy
+- **log_20251213_v22_ux_planning** (2025-12-13_v22-ux-planning.md) ~429 tokens
+  - Status: active
+  - Impacts: v2_strategy
 
 
 ## 2. Recent Timeline
+- **2025-12-13** [exploration] **V22 Ux Planning** (`log_20251213_v22_ux_planning`)
+  - Impacted: `v2_strategy`
+  - Concepts: ux, friction, activation, summaries, workflow
 - **2025-12-13** [feature] **Smart Memory Implementation** (`log_20251213_smart_memory_implementation`)
   - Impacted: `decision_history`, `v2_strategy`
   - Concepts: memory, consolidation
@@ -90,6 +99,8 @@ No issues found.
 | log_20251213_gemini_feedback_fixes | [2025-12-13_gemini-feedback-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_gemini-feedback-fixes.md) | log |
 | log_20251213_pr_12_fixes | [2025-12-13_pr-12-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_pr-12-fixes.md) | log |
 | log_20251213_smart_memory_implementation | [2025-12-13_smart-memory-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_smart-memory-implementation.md) | log |
+| log_20251213_v22_ux_planning | [2025-12-13_v22-ux-planning.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_v22-ux-planning.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
+| v2_3_ux_improvements | [2.3_ux_improvement_ideas.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/2.3_ux_improvement_ideas.md) | strategy |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |

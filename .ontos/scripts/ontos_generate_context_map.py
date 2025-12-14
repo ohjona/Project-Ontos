@@ -16,7 +16,9 @@ from ontos_config import (
     TYPE_HIERARCHY,
     MAX_DEPENDENCY_DEPTH,
     ALLOWED_ORPHAN_TYPES,
-    SKIP_PATTERNS
+    ALLOWED_ORPHAN_TYPES,
+    SKIP_PATTERNS,
+    is_ontos_repo
 )
 
 from ontos_lib import (
@@ -713,6 +715,11 @@ Scanned Directory: `{dirs_str}`
     if not quiet:
         print(f"Successfully generated {OUTPUT_FILE}")
         print(f"Scanned {len(files_data)} documents, found {len(issues)} issues.")
+        
+        if error_issues:
+            print(f"\n❌ Validation Errors ({len(error_issues)} issues):")
+            for issue in error_issues:
+                print(issue)
 
     # Return only error-level issues for strict mode
     return len(error_issues)
@@ -791,7 +798,14 @@ Examples:
     args = parser.parse_args()
 
     # Default to docs directory if none specified
-    target_dirs = args.dirs if args.dirs else [DOCS_DIR]
+    # Default to docs directory if none specified
+    if args.dirs:
+        target_dirs = args.dirs
+    elif is_ontos_repo():
+        # In contributor mode, scan both internal "brain" and public docs
+        target_dirs = [DOCS_DIR, 'docs']
+    else:
+        target_dirs = [DOCS_DIR]
 
     if args.watch:
         # Note: Watch mode doesn't support strict flag in this implementation yet

@@ -1,3 +1,10 @@
+---
+id: ontos_manual
+type: kernel
+status: active
+depends_on: []
+---
+
 # Ontos Manual v2.0
 
 *The complete reference for Project Ontos*

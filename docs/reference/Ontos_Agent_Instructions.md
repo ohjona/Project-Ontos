@@ -1,3 +1,10 @@
+---
+id: ontos_agent_instructions
+type: kernel
+status: active
+depends_on: [ontos_manual]
+---
+
 # Ontos Agent Instructions
 
 ## Commands

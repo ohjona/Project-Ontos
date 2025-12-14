@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: feature
 concepts: [v2.3, ux, tooling, testing]
-impacts: [ontos_manual, ontos_agent_instructions, ontos_changelog, ontos_lib, ontos_end_session, ontos_query, ontos_consolidate, ontos_maintain]
+impacts: [ontos_manual, ontos_agent_instructions]
 ---
 
 # Session Log: V2 3 Curation Not Ceremony

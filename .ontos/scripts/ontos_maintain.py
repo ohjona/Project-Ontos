@@ -82,6 +82,35 @@ Example:
         print(output)
     all_success = all_success and success
     
+    # Step 3: Consolidate logs (v2.4, mode-aware)
+    try:
+        from ontos_lib import resolve_config
+        auto_consolidate = resolve_config('AUTO_CONSOLIDATE', True)
+    except ImportError:
+        auto_consolidate = True
+    
+    if auto_consolidate:
+        if not args.quiet:
+            print("\nStep 3: Consolidating stale logs...")
+        
+        # Get consolidation threshold days from config
+        try:
+            from ontos_config_defaults import CONSOLIDATION_THRESHOLD_DAYS
+        except ImportError:
+            CONSOLIDATION_THRESHOLD_DAYS = 30
+        
+        consolidate_args = ['--all', '--days', str(CONSOLIDATION_THRESHOLD_DAYS)]
+        success, output = run_script('ontos_consolidate.py', consolidate_args, args.quiet)
+        if not args.quiet and output.strip():
+            print(output)
+        # Consolidation failures are non-critical
+        if not success and not args.quiet:
+            print("   ⚠️  Consolidation had issues (non-critical)")
+    else:
+        if not args.quiet:
+            print("\nStep 3: Consolidation (skipped, AUTO_CONSOLIDATE is False)")
+            print("   Run `python3 .ontos/scripts/ontos_consolidate.py` manually if needed.")
+    
     # Summary
     if not args.quiet:
         if all_success:

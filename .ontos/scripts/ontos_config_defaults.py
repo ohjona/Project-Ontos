@@ -229,3 +229,7 @@ AUTO_CONSOLIDATE = True
 # Operations in pre-push hook will timeout after this many seconds
 HOOK_TIMEOUT_SECONDS = 10
 
+# Consolidation threshold for maintenance (v2.4+)
+# Logs older than this many days are candidates for consolidation
+CONSOLIDATION_THRESHOLD_DAYS = 30
+

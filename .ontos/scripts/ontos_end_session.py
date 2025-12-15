@@ -232,6 +232,9 @@ def get_commits_since_push() -> list:
 def find_enhance_target() -> Optional[str]:
     """Find most recent auto-generated log for current branch.
     
+    v2.4.1: Added branch validation to prevent matching logs from
+    different branches with same slug suffix (per Codex review).
+    
     Returns:
         Path to auto-generated log or None.
     """
@@ -249,12 +252,14 @@ def find_enhance_target() -> Optional[str]:
     for filename in os.listdir(LOGS_DIR):
         if filename.endswith('.md') and branch_slug in filename:
             log_path = os.path.join(LOGS_DIR, filename)
-            # Check if it's auto-generated
+            # Check if it's auto-generated AND belongs to current branch
             try:
                 with open(log_path, 'r', encoding='utf-8') as f:
                     content = f.read(500)  # Only need frontmatter
                 if 'status: auto-generated' in content:
-                    matching_logs.append(log_path)
+                    # v2.4.1: Validate branch to avoid slug collision false positives
+                    if validate_branch_in_log(log_path, branch):
+                        matching_logs.append(log_path)
             except (IOError, OSError):
                 pass
     

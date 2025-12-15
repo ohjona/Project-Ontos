@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-15 02:33:02 UTC
+Generated: 2025-12-15 02:52:02 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-15 11:33:02
+Generated on: 2025-12-15 11:52:02
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -31,7 +31,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_3_ux_improvements** (2.3_ux_improvement_ideas.md) ~1,900 tokens
   - Status: draft
   - Depends On: v2_strategy
-- **v2_4_config_automation_proposal** (v2.4_config_automation_proposal.md) ~9,900 tokens
+- **v2_4_config_automation_proposal** (v2.4_config_automation_proposal.md) ~12,200 tokens
   - Status: draft
   - Depends On: v2_strategy, mission
 - **v2_strategy** (v2_strategy.md) ~2,600 tokens
@@ -77,18 +77,24 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251214_v2_2_implementation** (2025-12-14_v2-2-implementation.md) ~984 tokens
   - Status: active
   - Impacts: common_concepts
-- **log_20251214_v2_3_1_cleanup** (2025-12-14_v2-3-1-cleanup.md) ~203 tokens
+- **log_20251214_v2_3_1_cleanup** (2025-12-14_v2-3-1-cleanup.md) ~200 tokens
   - Status: active
-  - Impacts: ontos_changelog
+  - Impacts: None
 - **log_20251214_v2_3_curation_not_ceremony** (2025-12-14_v2-3-curation-not-ceremony.md) ~461 tokens
   - Status: active
   - Impacts: ontos_manual, ontos_agent_instructions
 - **log_20251214_v2_4_config_design** (2025-12-14_v2-4-config-design.md) ~1,100 tokens
   - Status: active
   - Impacts: v2_strategy
+- **log_20251215_v2_4_proposal_v1_4** (2025-12-15_v2-4-proposal-v1-4.md) ~954 tokens
+  - Status: active
+  - Impacts: v2_4_config_automation_proposal, v2_strategy
 
 
 ## 2. Recent Timeline
+- **2025-12-15** [decision] **V2 4 Proposal V1 4** (`log_20251215_v2_4_proposal_v1_4`)
+  - Impacted: `v2_4_config_automation_proposal`, `v2_strategy`
+  - Concepts: ux, config, tooling, architectural-review
 - **2025-12-14** [decision] **V2 4 Config Design** (`log_20251214_v2_4_config_design`)
   - Impacted: `v2_strategy`
   - Concepts: ux, config, tooling
@@ -96,7 +102,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontos_manual`, `ontos_agent_instructions`
   - Concepts: v2.3, ux, tooling, testing
 - **2025-12-14** [chore] **V2 3 1 Cleanup** (`log_20251214_v2_3_1_cleanup`)
-  - Impacted: `ontos_changelog`
   - Concepts: cleanup, tooling
 - **2025-12-14** [feature] **V2 2 Implementation** (`log_20251214_v2_2_implementation`)
   - Impacted: `common_concepts`
@@ -114,15 +119,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-13** [fix] **Gemini Feedback Fixes** (`log_20251213_gemini_feedback_fixes`)
   - Impacted: `schema`
   - Concepts: gemini-review, installation, ontos-init, documentation-consistency
-- **2025-12-13** [chore] **Documentation Compaction** (`log_20251213_documentation_compaction`)
-  - Impacted: `schema`, `v2_strategy`, `mission`
-  - Concepts: documentation-compaction, archive, token-reduction, minimal-example
 
-*Showing 10 of 13 sessions*
+*Showing 10 of 14 sessions*
 
 ## 3. Dependency Audit
-- [BROKEN LINK] **log_20251214_v2_3_1_cleanup** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-3-1-cleanup.md) impacts non-existent document: `ontos_changelog`
-  Fix: Create `ontos_changelog`, correct the reference, or archive this log
+No issues found.
 
 ## 4. Index
 | ID | Filename | Type |
@@ -142,6 +143,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20251214_v2_3_1_cleanup | [2025-12-14_v2-3-1-cleanup.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-3-1-cleanup.md) | log |
 | log_20251214_v2_3_curation_not_ceremony | [2025-12-14_v2-3-curation-not-ceremony.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-3-curation-not-ceremony.md) | log |
 | log_20251214_v2_4_config_design | [2025-12-14_v2-4-config-design.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-4-config-design.md) | log |
+| log_20251215_v2_4_proposal_v1_4 | [2025-12-15_v2-4-proposal-v1-4.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-15_v2-4-proposal-v1-4.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |

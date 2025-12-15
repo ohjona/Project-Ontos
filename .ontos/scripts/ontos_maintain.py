@@ -93,13 +93,10 @@ Example:
         if not args.quiet:
             print("\nStep 3: Consolidating stale logs...")
         
-        # Get consolidation threshold days from config
-        try:
-            from ontos_config_defaults import CONSOLIDATION_THRESHOLD_DAYS
-        except ImportError:
-            CONSOLIDATION_THRESHOLD_DAYS = 30
+        # Get consolidation threshold days from config (mode/user-aware)
+        threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
         
-        consolidate_args = ['--all', '--days', str(CONSOLIDATION_THRESHOLD_DAYS)]
+        consolidate_args = ['--all', '--days', str(threshold_days)]
         success, output = run_script('ontos_consolidate.py', consolidate_args, args.quiet)
         if not args.quiet and output.strip():
             print(output)

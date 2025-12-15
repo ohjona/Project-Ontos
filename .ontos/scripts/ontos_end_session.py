@@ -295,9 +295,11 @@ def find_active_log_for_branch() -> Optional[str]:
             try:
                 with open(log_path, 'r', encoding='utf-8') as f:
                     content = f.read(500)
-                # Look for active status (already enriched)
+                # Look for active status (already enriched) AND validate branch
                 if 'status: active' in content:
-                    matching_logs.append(log_path)
+                    # v2.4.1: Validate branch to avoid slug collision false positives
+                    if validate_branch_in_log(log_path, branch):
+                        matching_logs.append(log_path)
             except (IOError, OSError):
                 pass
     

@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-15 03:23:29 UTC
+Generated: 2025-12-15 04:22:11 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-15 12:23:29
+Generated on: 2025-12-15 13:22:11
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -86,6 +86,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251214_v2_4_config_design** (2025-12-14_v2-4-config-design.md) ~1,100 tokens
   - Status: active
   - Impacts: v2_strategy
+- **log_20251215_v2_4_config_automation** (2025-12-15_v2-4-config-automation.md) ~145 tokens
+  - Status: active
+  - Impacts: v2_4_config_automation_proposal
 - **log_20251215_v2_4_proposal_v1_4** (2025-12-15_v2-4-proposal-v1-4.md) ~1,000 tokens
   - Status: active
   - Impacts: v2_4_config_automation_proposal, v2_strategy
@@ -95,6 +98,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-15** [decision] **V2 4 Proposal V1 4** (`log_20251215_v2_4_proposal_v1_4`)
   - Impacted: `v2_4_config_automation_proposal`, `v2_strategy`
   - Concepts: ux, config, tooling, architectural-review
+- **2025-12-15** [feature] **V2 4 Config Automation** (`log_20251215_v2_4_config_automation`)
+  - Impacted: `v2_4_config_automation_proposal`
+  - Concepts: config, ux, automation
 - **2025-12-14** [decision] **V2 4 Config Design** (`log_20251214_v2_4_config_design`)
   - Impacted: `v2_strategy`
   - Concepts: ux, config, tooling
@@ -116,11 +122,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Concepts: memory, consolidation
 - **2025-12-13** [fix] **Pr 12 Fixes** (`log_20251213_pr_12_fixes`)
   - Concepts: cleanup, ci, documentation
-- **2025-12-13** [fix] **Gemini Feedback Fixes** (`log_20251213_gemini_feedback_fixes`)
-  - Impacted: `schema`
-  - Concepts: gemini-review, installation, ontos-init, documentation-consistency
 
-*Showing 10 of 14 sessions*
+*Showing 10 of 15 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -143,6 +146,7 @@ No issues found.
 | log_20251214_v2_3_1_cleanup | [2025-12-14_v2-3-1-cleanup.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-3-1-cleanup.md) | log |
 | log_20251214_v2_3_curation_not_ceremony | [2025-12-14_v2-3-curation-not-ceremony.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-3-curation-not-ceremony.md) | log |
 | log_20251214_v2_4_config_design | [2025-12-14_v2-4-config-design.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-14_v2-4-config-design.md) | log |
+| log_20251215_v2_4_config_automation | [2025-12-15_v2-4-config-automation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-15_v2-4-config-automation.md) | log |
 | log_20251215_v2_4_proposal_v1_4 | [2025-12-15_v2-4-proposal-v1-4.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-15_v2-4-proposal-v1-4.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

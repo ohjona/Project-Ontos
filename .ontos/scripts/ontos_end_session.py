@@ -8,14 +8,17 @@ import argparse
 import sys
 from typing import Optional
 
-from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT, REQUIRE_SOURCE_IN_LOGS
+from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT
 
 from ontos_lib import (
     BLOCKED_BRANCH_NAMES,
     find_last_session_date,
     load_common_concepts,
+    resolve_config,
 )
 
+# v2.4: Use resolve_config for mode-aware settings
+REQUIRE_SOURCE_IN_LOGS = resolve_config('REQUIRE_SOURCE_IN_LOGS', True)
 
 # Try to import DEFAULT_SOURCE
 try:
@@ -87,7 +90,7 @@ def find_existing_log_for_today(branch_slug: str, branch_name: str) -> Optional[
         print(f"⚠️  Slug collision: {exact} belongs to different branch")
     
     # 2. Check collision variants (-2, -3, etc.)
-    for i in range(2, 10):
+    for i in range(2, 100):  # v2.4: Extended from 10 to 100 per PR review
         variant = os.path.join(LOGS_DIR, f"{today}_{branch_slug}-{i}.md")
         if os.path.exists(variant):
             if validate_branch_in_log(variant, branch_name):
@@ -259,6 +262,43 @@ def find_enhance_target() -> Optional[str]:
         return None
     
     # Return most recent (sorted by filename which includes date)
+    return sorted(matching_logs, reverse=True)[0]
+
+
+def find_active_log_for_branch() -> Optional[str]:
+    """Find most recent ACTIVE (already enriched) log for current branch.
+    
+    v2.4: Used by --enhance to distinguish between "not found" (exit 1)
+    and "already enriched" (exit 2).
+    
+    Returns:
+        Path to active log or None.
+    """
+    branch = get_current_branch()
+    if not branch:
+        return None
+    
+    branch_slug = slugify(branch)
+    
+    if not os.path.exists(LOGS_DIR):
+        return None
+    
+    matching_logs = []
+    for filename in os.listdir(LOGS_DIR):
+        if filename.endswith('.md') and branch_slug in filename:
+            log_path = os.path.join(LOGS_DIR, filename)
+            try:
+                with open(log_path, 'r', encoding='utf-8') as f:
+                    content = f.read(500)
+                # Look for active status (already enriched)
+                if 'status: active' in content:
+                    matching_logs.append(log_path)
+            except (IOError, OSError):
+                pass
+    
+    if not matching_logs:
+        return None
+    
     return sorted(matching_logs, reverse=True)[0]
 
 
@@ -1181,6 +1221,12 @@ Slug format:
                 print(f"Error reading log: {e}")
             sys.exit(0)
         else:
+            # v2.4: Check if there's an already-active log (exit code 2)
+            active = find_active_log_for_branch()
+            if active:
+                print(f"ℹ️  Log already enriched: {active}")
+                print("   Status is already 'active'. No enhancement needed.")
+                sys.exit(2)
             print("No auto-generated log found for current branch.")
             print("Run normal 'Archive Ontos' flow to create new log.")
             sys.exit(1)

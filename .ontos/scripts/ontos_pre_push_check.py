@@ -20,21 +20,22 @@ from ontos_config import PROJECT_ROOT
 MARKER_FILE = os.path.join(PROJECT_ROOT, '.ontos', 'session_archived')
 
 # Import config with fallbacks
-try:
-    from ontos_config import ENFORCE_ARCHIVE_BEFORE_PUSH
-except ImportError:
-    ENFORCE_ARCHIVE_BEFORE_PUSH = True
-
-try:
-    from ontos_config import SMALL_CHANGE_THRESHOLD
-except ImportError:
-    SMALL_CHANGE_THRESHOLD = 20
-
-# v2.4: Mode-aware imports
+# v2.4: Use resolve_config for mode-aware settings
 try:
     from ontos_lib import resolve_config
+    ENFORCE_ARCHIVE_BEFORE_PUSH = resolve_config('ENFORCE_ARCHIVE_BEFORE_PUSH', True)
     AUTO_ARCHIVE_ON_PUSH = resolve_config('AUTO_ARCHIVE_ON_PUSH', False)
+    SMALL_CHANGE_THRESHOLD = resolve_config('SMALL_CHANGE_THRESHOLD', 20)
 except ImportError:
+    # Fallback if resolve_config not available
+    try:
+        from ontos_config import ENFORCE_ARCHIVE_BEFORE_PUSH
+    except ImportError:
+        ENFORCE_ARCHIVE_BEFORE_PUSH = True
+    try:
+        from ontos_config import SMALL_CHANGE_THRESHOLD
+    except ImportError:
+        SMALL_CHANGE_THRESHOLD = 20
     AUTO_ARCHIVE_ON_PUSH = False
 
 try:

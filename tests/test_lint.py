@@ -137,9 +137,9 @@ class TestLintDataQuality:
         warnings = lint_data_quality(files_data, set())
         assert any('days old' in w for w in warnings)
 
-    @patch('ontos_config.LOG_RETENTION_COUNT', 2)
+    @patch('ontos_config.LOG_WARNING_THRESHOLD', 2)
     def test_lint_exceeds_retention_count(self):
-        """Test that active logs > LOG_RETENTION_COUNT triggers warning."""
+        """Test that active logs > LOG_WARNING_THRESHOLD triggers warning."""
         files_data = {}
         for i in range(5):
             date = datetime.now().strftime('%Y-%m-%d')

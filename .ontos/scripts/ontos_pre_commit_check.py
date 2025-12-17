@@ -71,11 +71,9 @@ def is_special_git_operation() -> bool:
 def should_consolidate() -> bool:
     """Check if consolidation should run.
 
-    Uses DUAL CONDITION (from architectural review):
-    - Count must exceed threshold AND
-    - There must be logs old enough to consolidate
-
-    This prevents confusing "nothing to consolidate" messages.
+    v2.6.2: Simplified to count-based check only.
+    Triggers when log count exceeds LOG_WARNING_THRESHOLD (20).
+    Consolidation keeps newest LOG_RETENTION_COUNT (10) logs.
     """
     mode = get_mode()
 
@@ -99,18 +97,11 @@ def should_consolidate() -> bool:
     if not resolve_config('AUTO_CONSOLIDATE_ON_COMMIT', True):
         return False
 
-    # DUAL CONDITION: Count high AND old logs exist
+    # v2.6.2: Simple count-based check
     log_count = get_log_count()
-    threshold_count = resolve_config('LOG_RETENTION_COUNT', 15)
+    warning_threshold = resolve_config('LOG_WARNING_THRESHOLD', 20)
 
-    if log_count <= threshold_count:
-        return False  # Count is fine
-
-    # Count is high - are there old logs to consolidate?
-    threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
-    old_logs = get_logs_older_than(threshold_days)
-
-    return len(old_logs) > 0
+    return log_count > warning_threshold
 
 
 def run_consolidation() -> tuple:
@@ -231,7 +222,7 @@ def main() -> int:
             return 0
 
         log_count = get_log_count()
-        threshold = resolve_config('LOG_RETENTION_COUNT', 15)
+        threshold = resolve_config('LOG_WARNING_THRESHOLD', 20)
 
         print(f"   Auto-consolidating ({log_count} logs > {threshold} threshold)...")
 
@@ -241,10 +232,10 @@ def main() -> int:
             stage_consolidated_files()
             print("   Consolidated and staged")
         else:
-            # Check if it's a "no work" vs "real error"
-            if "No logs older than" in output or "No logs found" in output:
+            # Check if it's a "no work" vs "real error" (v2.6.2: count-based messages)
+            if "within threshold" in output or "Nothing to consolidate" in output:
                 if verbose:
-                    print("   [Ontos: No old logs to consolidate]")
+                    print("   [Ontos: Log count within threshold]")
             else:
                 # Surface real errors (permission, disk, etc.)
                 print(f"   Warning: Consolidation issue: {output[:200]}")

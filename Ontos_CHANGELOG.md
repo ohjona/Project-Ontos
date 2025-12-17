@@ -26,13 +26,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Theme: "Count-Based Consolidation"
 
-Aligns consolidation threshold with log retention count.
+Simplifies log management with predictable count-based thresholds.
 
 ### Changed
-- **Consolidation now count-based** — Keeps newest N logs (default: 15), consolidates the rest
-  - Aligns with `LOG_RETENTION_COUNT` warning threshold
+- **Consolidation now count-based** — Keeps newest 10 logs (`LOG_RETENTION_COUNT`)
   - `--by-age` flag preserves legacy age-based behavior
   - `--count N` to customize retention count
+- **Warning threshold separated** — Warns at 20 logs (`LOG_WARNING_THRESHOLD`)
+  - Buffer of 10 sessions between warning and consolidation
+  - No more "warning fatigue" after every session
 - **Maintain Ontos help text** — Now shows all 4 steps (was missing Steps 3 and 4)
 
 ---

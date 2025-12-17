@@ -113,40 +113,40 @@ class TestDualCondition:
             
             assert should_consolidate() is False
     
-    def test_skips_when_no_old_logs(self):
+    def test_skips_when_count_at_threshold(self):
+        """v2.6.2: Count-based - skips when count equals threshold."""
         from ontos_pre_commit_check import should_consolidate
-        
+
         with patch('ontos_pre_commit_check.get_mode', return_value='automated'), \
              patch('ontos_pre_commit_check.is_ci_environment', return_value=False), \
              patch('ontos_pre_commit_check.is_special_git_operation', return_value=False), \
              patch('ontos_pre_commit_check.resolve_config') as mock_config, \
-             patch('ontos_pre_commit_check.get_log_count', return_value=20), \
-             patch('ontos_pre_commit_check.get_logs_older_than', return_value=[]):
-            
+             patch('ontos_pre_commit_check.get_log_count', return_value=20):
+
             mock_config.side_effect = lambda key, default=None: {
                 'AUTO_CONSOLIDATE_ON_COMMIT': True,
-                'LOG_RETENTION_COUNT': 15,
-                'CONSOLIDATION_THRESHOLD_DAYS': 30,
+                'LOG_WARNING_THRESHOLD': 20,
             }.get(key, default)
-            
+
+            # 20 logs == 20 threshold, should NOT consolidate
             assert should_consolidate() is False
-    
-    def test_triggers_when_both_conditions_met(self):
+
+    def test_triggers_when_count_exceeds_threshold(self):
+        """v2.6.2: Count-based - triggers when count > threshold."""
         from ontos_pre_commit_check import should_consolidate
-        
+
         with patch('ontos_pre_commit_check.get_mode', return_value='automated'), \
              patch('ontos_pre_commit_check.is_ci_environment', return_value=False), \
              patch('ontos_pre_commit_check.is_special_git_operation', return_value=False), \
              patch('ontos_pre_commit_check.resolve_config') as mock_config, \
-             patch('ontos_pre_commit_check.get_log_count', return_value=20), \
-             patch('ontos_pre_commit_check.get_logs_older_than', return_value=['2025-01-01_old-log.md']):
-            
+             patch('ontos_pre_commit_check.get_log_count', return_value=25):
+
             mock_config.side_effect = lambda key, default=None: {
                 'AUTO_CONSOLIDATE_ON_COMMIT': True,
-                'LOG_RETENTION_COUNT': 15,
-                'CONSOLIDATION_THRESHOLD_DAYS': 30,
+                'LOG_WARNING_THRESHOLD': 20,
             }.get(key, default)
-            
+
+            # 25 logs > 20 threshold, SHOULD consolidate
             assert should_consolidate() is True
     
     def test_skips_non_automated_mode(self):

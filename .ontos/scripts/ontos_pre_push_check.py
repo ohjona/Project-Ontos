@@ -44,9 +44,9 @@ except ImportError:
     HOOK_TIMEOUT_SECONDS = 10
 
 try:
-    from ontos_config_defaults import LOG_RETENTION_COUNT
+    from ontos_config_defaults import LOG_WARNING_THRESHOLD
 except ImportError:
-    LOG_RETENTION_COUNT = 15
+    LOG_WARNING_THRESHOLD = 20
 
 
 def get_change_stats() -> Tuple[int, int, List[str]]:
@@ -323,10 +323,10 @@ def main() -> int:
     # v2.4: Regenerate context map first
     regenerate_context_map()
     
-    # v2.4: Check log retention and warn
+    # v2.4+: Check log count and warn (v2.6.2: uses LOG_WARNING_THRESHOLD)
     log_count = count_active_logs()
-    if log_count > LOG_RETENTION_COUNT:
-        print(f"⚠️  {log_count} logs exceed threshold ({LOG_RETENTION_COUNT}). Run 'Maintain Ontos' to consolidate.")
+    if log_count > LOG_WARNING_THRESHOLD:
+        print(f"⚠️  {log_count} logs exceed threshold ({LOG_WARNING_THRESHOLD}). Run 'Maintain Ontos' to consolidate.")
     
     # v2.6: Version release reminder for contributors
     version_reminders = check_version_reminder()

@@ -88,14 +88,14 @@ def lint_data_quality(files_data: dict[str, dict], common_concepts: set[str]) ->
     2. Unknown concepts not in vocabulary
     3. Excessive concepts per log (>6)
     4. Stale logs (>30 days)
-    5. Too many active logs (exceeds LOG_RETENTION_COUNT)
+    5. Too many active logs (exceeds LOG_WARNING_THRESHOLD)
     """
     from datetime import datetime
-    
+
     try:
-        from ontos_config import LOG_RETENTION_COUNT
+        from ontos_config import LOG_WARNING_THRESHOLD
     except ImportError:
-        LOG_RETENTION_COUNT = 15
+        LOG_WARNING_THRESHOLD = 20
     
     warnings = []
     active_logs = []
@@ -162,13 +162,13 @@ def lint_data_quality(files_data: dict[str, dict], common_concepts: set[str]) ->
             except ValueError:
                 pass
     
-    # Check 5: Too many active logs
+    # Check 5: Too many active logs (v2.6.2: uses LOG_WARNING_THRESHOLD)
     active_count = len(active_logs)
-    if active_count > LOG_RETENTION_COUNT:
-        excess = active_count - LOG_RETENTION_COUNT
+    if active_count > LOG_WARNING_THRESHOLD:
+        excess = active_count - LOG_WARNING_THRESHOLD
         warnings.insert(0,
-            f"- [LINT] **Active log count ({active_count}) exceeds threshold ({LOG_RETENTION_COUNT})**\n"
-            f"  → {excess} logs over limit. Run consolidation ritual to archive oldest logs.\n"
+            f"- [LINT] **Active log count ({active_count}) exceeds threshold ({LOG_WARNING_THRESHOLD})**\n"
+            f"  → {excess} logs over limit. Run 'Maintain Ontos' to consolidate.\n"
             f"  → This directly impacts context window size. See Manual section 3."
         )
     
@@ -973,11 +973,11 @@ def check_consolidation_status() -> None:
     if mode == 'automated':
         return  # Auto-consolidation handles this in pre-commit hook
     
-    # Use shared helpers for config-agnostic paths
+    # Use shared helpers for config-agnostic paths (v2.6.2: uses LOG_WARNING_THRESHOLD)
     log_count = get_log_count()
-    threshold_count = resolve_config('LOG_RETENTION_COUNT', 15)
-    
-    if log_count <= threshold_count:
+    warning_threshold = resolve_config('LOG_WARNING_THRESHOLD', 20)
+
+    if log_count <= warning_threshold:
         return  # Count is fine
     
     # Count old logs using shared helper

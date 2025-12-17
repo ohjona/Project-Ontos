@@ -195,10 +195,14 @@ REQUIRE_SOURCE_IN_LOGS = True
 # Controls the "Working Memory" size - how many logs stay in active scanning.
 # Logs beyond this threshold should be consolidated and archived.
 
-# Recommended threshold for active logs before consolidation
-# - Lower = smaller context maps, more frequent consolidation
-# - Higher = more history in context, less consolidation overhead
-LOG_RETENTION_COUNT = 15
+# Number of logs to KEEP after consolidation (v2.6.2+)
+# Consolidate Ontos will archive all but the newest N logs
+LOG_RETENTION_COUNT = 10
+
+# Threshold for WARNING about too many logs (v2.6.2+)
+# Warning triggers when log count exceeds this value
+# Buffer between warning (20) and retention (10) = 10 sessions of headroom
+LOG_WARNING_THRESHOLD = 20
 
 # =============================================================================
 # UX IMPROVEMENTS (v2.3+)

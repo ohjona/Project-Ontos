@@ -84,6 +84,7 @@ from ontos_config_defaults import (
     ENFORCE_ARCHIVE_BEFORE_PUSH,
     REQUIRE_SOURCE_IN_LOGS,
     LOG_RETENTION_COUNT,
+    LOG_WARNING_THRESHOLD,
 )
 
 # Backward compatibility alias

@@ -2,10 +2,83 @@
 
 import os
 import sys
+import shutil
+import subprocess
 import pytest
 
 # Add scripts directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scripts'))
+
+
+# =============================================================================
+# DUAL-MODE TESTING INFRASTRUCTURE (v2.5.2+)
+# =============================================================================
+
+
+def pytest_addoption(parser):
+    """Add --mode option to pytest CLI."""
+    parser.addoption(
+        "--mode",
+        action="store",
+        default="contributor",
+        choices=["contributor", "user"],
+        help="Run tests in 'contributor' or 'user' mode"
+    )
+
+
+@pytest.fixture
+def project_mode(request):
+    """Get the current test mode."""
+    return request.config.getoption("--mode")
+
+
+@pytest.fixture
+def mode_aware_project(request, tmp_path):
+    """
+    Create a project fixture based on the current mode.
+    - contributor: Uses .ontos-internal/ structure
+    - user: Uses docs/ structure (simulates user installation)
+    """
+    mode = request.config.getoption("--mode")
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    if mode == "contributor":
+        # Contributor mode: copy full project structure
+        shutil.copytree(
+            os.path.join(project_root, '.ontos-internal'),
+            tmp_path / '.ontos-internal'
+        )
+        shutil.copytree(
+            os.path.join(project_root, '.ontos'),
+            tmp_path / '.ontos'
+        )
+    else:
+        # User mode: simulate fresh installation
+        shutil.copytree(
+            os.path.join(project_root, '.ontos'),
+            tmp_path / '.ontos'
+        )
+        shutil.copy(
+            os.path.join(project_root, 'ontos_init.py'),
+            tmp_path
+        )
+        # Run init to create user structure
+        result = subprocess.run(
+            [sys.executable, 'ontos_init.py', '--non-interactive'],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True
+        )
+
+    return tmp_path
+
+
+@pytest.fixture
+def docs_dir(project_mode):
+    """Get the docs directory based on mode."""
+    if project_mode == "contributor":
+        return ".ontos-internal"
+    return "docs"
 
 
 @pytest.fixture

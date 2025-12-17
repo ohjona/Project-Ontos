@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: feature
 concepts: [config, ux, automation]
-impacts: [v2_4_config_automation_proposal]
+impacts: []
 ---
 
 # Session Log: V2 4 Config Automation

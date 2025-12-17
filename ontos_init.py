@@ -218,18 +218,26 @@ def create_directory_structure() -> None:
     """Create complete Ontos directory structure for user mode.
     
     Creates all required directories for a fully functional Ontos installation.
-    Idempotent - safe to run multiple times.
+    Respects DOCS_DIR config setting. Idempotent - safe to run multiple times.
     """
+    # Get docs dir from config (respects custom DOCS_DIR)
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
     # Required directories for user mode
     directories = [
-        'docs',
-        'docs/logs',
-        'docs/strategy',
-        'docs/strategy/proposals',
-        'docs/archive',
-        'docs/archive/logs',
-        'docs/archive/proposals',
-        'docs/reference',
+        docs_dir,
+        f'{docs_dir}/logs',
+        f'{docs_dir}/strategy',
+        f'{docs_dir}/strategy/proposals',
+        f'{docs_dir}/archive',
+        f'{docs_dir}/archive/logs',
+        f'{docs_dir}/archive/proposals',
+        f'{docs_dir}/reference',
     ]
     
     created_any = False
@@ -246,9 +254,17 @@ def create_directory_structure() -> None:
 
 def check_and_warn_old_paths() -> None:
     """Check for files in old locations and warn user."""
+    # Get docs dir from config
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
     old_paths = [
-        ('docs/decision_history.md', 'docs/strategy/decision_history.md'),
-        ('docs/Common_Concepts.md', 'docs/reference/Common_Concepts.md'),
+        (f'{docs_dir}/decision_history.md', f'{docs_dir}/strategy/decision_history.md'),
+        (f'{docs_dir}/Common_Concepts.md', f'{docs_dir}/reference/Common_Concepts.md'),
     ]
     
     for old, new in old_paths:
@@ -265,8 +281,16 @@ def scaffold_starter_docs() -> None:
     
     Uses template files from .ontos/templates/ to ensure consistency
     between user-mode starters and contributor-mode references.
-    Idempotent - safe to run multiple times.
+    Respects DOCS_DIR config setting. Idempotent - safe to run multiple times.
     """
+    # Get docs dir from config
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
     # Import template loader
     templates_dir = os.path.join(PROJECT_ROOT, '.ontos', 'templates')
     sys.path.insert(0, templates_dir)
@@ -279,7 +303,7 @@ def scaffold_starter_docs() -> None:
         get_common_concepts_template = None
     
     # Create decision_history.md (in strategy/, not flat)
-    decision_history_path = os.path.join(PROJECT_ROOT, 'docs', 'strategy', 'decision_history.md')
+    decision_history_path = os.path.join(PROJECT_ROOT, docs_dir, 'strategy', 'decision_history.md')
     if not os.path.exists(decision_history_path):
         os.makedirs(os.path.dirname(decision_history_path), exist_ok=True)
         if get_decision_history_template:
@@ -302,10 +326,10 @@ This document records key decisions made during development.
 """
         with open(decision_history_path, 'w') as f:
             f.write(content)
-        print("   Created docs/strategy/decision_history.md")
+        print(f"   Created {docs_dir}/strategy/decision_history.md")
     
     # Create Common_Concepts.md (in reference/)
-    concepts_path = os.path.join(PROJECT_ROOT, 'docs', 'reference', 'Common_Concepts.md')
+    concepts_path = os.path.join(PROJECT_ROOT, docs_dir, 'reference', 'Common_Concepts.md')
     if not os.path.exists(concepts_path):
         os.makedirs(os.path.dirname(concepts_path), exist_ok=True)
         if get_common_concepts_template:
@@ -335,7 +359,7 @@ Standard vocabulary for tagging logs and documents.
 """
         with open(concepts_path, 'w') as f:
             f.write(content)
-        print("   Created docs/reference/Common_Concepts.md")
+        print(f"   Created {docs_dir}/reference/Common_Concepts.md")
     
     # Check for files in old locations
     check_and_warn_old_paths()
@@ -449,7 +473,7 @@ def main():
         return
     
     print("══════════════════════════════════════════════════════════════")
-    print("             Welcome to Project Ontos v2.5 Setup")
+    print("             Welcome to Project Ontos v2.5.2 Setup")
     print("══════════════════════════════════════════════════════════════")
     
     # 1. Ensure .ontos directory exists

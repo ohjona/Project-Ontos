@@ -69,6 +69,19 @@ def mode_aware_project(request, tmp_path):
             check=True,
             capture_output=True
         )
+        
+        # Explicit assertions on ALL expected directories (per Codex review)
+        assert (tmp_path / 'docs' / 'logs').exists(), "Missing docs/logs/"
+        assert (tmp_path / 'docs' / 'strategy').exists(), "Missing docs/strategy/"
+        assert (tmp_path / 'docs' / 'strategy' / 'proposals').exists(), "Missing docs/strategy/proposals/"
+        assert (tmp_path / 'docs' / 'archive').exists(), "Missing docs/archive/"
+        assert (tmp_path / 'docs' / 'archive' / 'logs').exists(), "Missing docs/archive/logs/"
+        assert (tmp_path / 'docs' / 'archive' / 'proposals').exists(), "Missing docs/archive/proposals/"
+        assert (tmp_path / 'docs' / 'reference').exists(), "Missing docs/reference/"
+        
+        # Assert starter files
+        assert (tmp_path / 'docs' / 'strategy' / 'decision_history.md').exists(), "Missing decision_history.md"
+        assert (tmp_path / 'docs' / 'reference' / 'Common_Concepts.md').exists(), "Missing Common_Concepts.md"
 
     return tmp_path
 
@@ -216,7 +229,8 @@ def log_doc(temp_docs_dir):
     doc = logs_dir / "2025-01-01_session.md"
     doc.write_text("""---
 id: log_20250101_session
-type: atom
+type: log
+status: active
 depends_on: []
 ---
 # Session Log

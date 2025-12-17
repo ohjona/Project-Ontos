@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 05:46:01 UTC
+Generated: 2025-12-17 13:45:09 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-17 14:46:01
+Generated on: 2025-12-17 22:45:09
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -17,38 +17,68 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **mission** (mission.md) ~377 tokens
   - Status: active
   - Depends On: None
-- **ontos_agent_instructions** (Ontos_Agent_Instructions.md) ~1,500 tokens
+- **ontos_agent_instructions** (Ontos_Agent_Instructions.md) ~1,800 tokens
   - Status: active
   - Depends On: ontos_manual
-- **ontos_manual** (Ontos_Manual.md) ~2,200 tokens
+- **ontos_manual** (Ontos_Manual.md) ~2,500 tokens
   - Status: active
   - Depends On: None
 
 ### STRATEGY
+- **codex_2_6_v1_review** [draft] (Codex_2.6_v1.md) ~766 tokens
+  - Status: draft
+  - Depends On: v2_6_proposals_and_tooling
+- **codex_2_6_v2_review** [draft] (Codex_2.6_v2.md) ~995 tokens
+  - Status: draft
+  - Depends On: v2_6_proposals_and_tooling
+- **codex_2_6_v3_review** [draft] (Codex_2.6_v3.md) ~600 tokens
+  - Status: draft
+  - Depends On: v2_6_proposals_and_tooling
 - **decision_history** (decision_history.md) ~424 tokens
   - Status: active
   - Depends On: mission
-- **s3_archive_analysis** (s3-archive-analysis.md) ~2,600 tokens
+- **s3_archive_analysis** [draft] (s3-archive-analysis.md) ~2,600 tokens
   - Status: draft
   - Depends On: v2_strategy
-- **s3_archive_implementation_plan** (s3-archive-implementation-plan.md) ~8,200 tokens
+- **s3_archive_implementation_plan** [draft] (s3-archive-implementation-plan.md) ~8,200 tokens
   - Status: draft
   - Depends On: s3_archive_analysis
-- **v2_5_promises_implementation_plan** (v2.5_promises_implementation_plan.md) ~9,100 tokens
+- **v2_5_promises_implementation_plan** [draft] (v2.5_promises_implementation_plan.md) ~9,100 tokens
   - Status: draft
   - Depends On: v2_strategy, mission
-- **v2_6_proposals_and_tooling** (v2.6_proposals_and_tooling.md) ~4,200 tokens
+- **v2_6_proposals_and_tooling** [draft] (v2.6_proposals_and_tooling.md) ~11,100 tokens
   - Status: draft
-  - Depends On: v2_strategy, s3_archive_implementation_plan
+  - Depends On: v2_strategy
 - **v2_strategy** (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
 
 ### ATOM
+- **claude_2_6_v1_review** (Claude_2.6_v1.md) ~2,400 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling
+- **claude_2_6_v2_review** (Claude_2.6_v2.md) ~1,300 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling, claude_2_6_v1_review
+- **claude_2_6_v3_review** (Claude_2.6_v3.md) ~1,400 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling, claude_2_6_v2_review
 - **common_concepts** (Common_Concepts.md) ~107 tokens
   - Status: active
   - Depends On: None
-- **schema** (schema.md) ~314 tokens
+- **dual_mode_matrix** (Dual_Mode_Matrix.md) ~1,500 tokens
+  - Status: active
+  - Depends On: schema
+- **gemini_2_6_v1_review** (Gemini_2.6_v1.md) ~1,400 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling
+- **gemini_2_6_v2_review** (Gemini_2.6_v2.md) ~1,300 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling
+- **gemini_2_6_v3_review** (Gemini_2.6_v3.md) ~1,200 tokens
+  - Status: complete
+  - Depends On: v2_6_proposals_and_tooling
+- **schema** (schema.md) ~451 tokens
   - Status: active
   - Depends On: v2_strategy
 - **v2_5_architectural_review_claude** (V1_Claude_on_v2.5.md) ~4,600 tokens
@@ -107,9 +137,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251216_v2_5_promises_implementation_plan** (2025-12-16_v2-5-promises-implementation-plan.md) ~621 tokens
   - Status: active
   - Impacts: v2_strategy
-- **log_20251217_ci_orphan_fix** (2025-12-17_ci-orphan-fix.md) ~117 tokens
+- **log_20251217_ci_orphan_fix** (2025-12-17_ci-orphan-fix.md) ~110 tokens
   - Status: active
-  - Impacts: v2_5_2_dual_mode_remediation
+  - Impacts: None
 - **log_20251217_ci_strict_mode_fixes** (2025-12-17_ci-strict-mode-fixes.md) ~122 tokens
   - Status: active
   - Impacts: v2_5_promises_implementation_plan
@@ -119,15 +149,15 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251217_pr_18_staging_fix** (2025-12-17_pr-18-staging-fix.md) ~112 tokens
   - Status: active
   - Impacts: None
-- **log_20251217_pr_19_review_fixes** (2025-12-17_pr-19-review-fixes.md) ~120 tokens
+- **log_20251217_pr_19_review_fixes** (2025-12-17_pr-19-review-fixes.md) ~113 tokens
   - Status: active
-  - Impacts: v2_5_2_dual_mode_remediation
+  - Impacts: None
 - **log_20251217_v2_5_1_proposals_architecture** (2025-12-17_v2-5-1-proposals-architecture.md) ~1,200 tokens
   - Status: active
   - Impacts: v2_strategy, ontos_manual
-- **log_20251217_v2_5_2_dual_mode_implementation** (2025-12-17_v2-5-2-dual-mode-implementation.md) ~142 tokens
+- **log_20251217_v2_5_2_dual_mode_implementation** (2025-12-17_v2-5-2-dual-mode-implementation.md) ~135 tokens
   - Status: active
-  - Impacts: v2_5_2_dual_mode_remediation
+  - Impacts: None
 - **log_20251217_v2_5_2_shipped_cleanup** (2025-12-17_v2-5-2-shipped-cleanup.md) ~352 tokens
   - Status: active
   - Impacts: v2_strategy
@@ -143,9 +173,34 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251217_v2_5_promises_implementation_plan** (2025-12-17_v2-5-promises-implementation-plan.md) ~141 tokens
   - Status: active
   - Impacts: None
+- **log_20251217_v2_6_bugfixes** (2025-12-17_v2-6-bugfixes.md) ~117 tokens
+  - Status: active
+  - Impacts: v2_6_proposals_and_tooling
+- **log_20251217_v2_6_codex_fixes** (2025-12-17_v2-6-codex-fixes.md) ~119 tokens
+  - Status: active
+  - Impacts: v2_6_proposals_and_tooling
+- **log_20251217_v2_6_docs** (2025-12-17_v2-6-docs.md) ~105 tokens
+  - Status: active
+  - Impacts: ontos_manual, ontos_agent_instructions
+- **log_20251217_v2_6_implementation** (2025-12-17_v2-6-implementation.md) ~136 tokens
+  - Status: active
+  - Impacts: v2_6_proposals_and_tooling
+- **log_20251217_v2_6_verification** (2025-12-17_v2-6-verification.md) ~135 tokens
+  - Status: active
+  - Impacts: v2_6_proposals_and_tooling
 
 
 ## 2. Recent Timeline
+- **2025-12-17** [feature] **V2 6 Verification** (`log_20251217_v2_6_verification`)
+  - Impacted: `v2_6_proposals_and_tooling`
+- **2025-12-17** [feature] **V2 6 Implementation** (`log_20251217_v2_6_implementation`)
+  - Impacted: `v2_6_proposals_and_tooling`
+- **2025-12-17** [chore] **V2 6 Docs** (`log_20251217_v2_6_docs`)
+  - Impacted: `ontos_manual`, `ontos_agent_instructions`
+- **2025-12-17** [fix] **V2 6 Codex Fixes** (`log_20251217_v2_6_codex_fixes`)
+  - Impacted: `v2_6_proposals_and_tooling`
+- **2025-12-17** [fix] **V2 6 Bugfixes** (`log_20251217_v2_6_bugfixes`)
+  - Impacted: `v2_6_proposals_and_tooling`
 - **2025-12-17** [feature] **V2 5 Promises Implementation** (`log_20251217_v2_5_promises_implementation`)
   - Impacted: `v2_5_promises_implementation_plan`, `ontos_manual`, `ontos_agent_instructions`
   - Concepts: config, ux, tooling, hooks
@@ -159,31 +214,27 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [chore] **V2 5 2 Shipped Cleanup** (`log_20251217_v2_5_2_shipped_cleanup`)
   - Impacted: `v2_strategy`
   - Concepts: cleanup, release, v2.5.2
-- **2025-12-17** [feature] **V2 5 2 Dual Mode Implementation** (`log_20251217_v2_5_2_dual_mode_implementation`)
-  - Impacted: `v2_5_2_dual_mode_remediation`
-- **2025-12-17** [decision] **V2 5 1 Proposals Architecture** (`log_20251217_v2_5_1_proposals_architecture`)
-  - Impacted: `v2_strategy`, `ontos_manual`
-  - Concepts: architecture, ontology, proposals, workflow
-- **2025-12-17** [fix] **Pr 19 Review Fixes** (`log_20251217_pr_19_review_fixes`)
-  - Impacted: `v2_5_2_dual_mode_remediation`
-- **2025-12-17** [fix] **Pr 18 Staging Fix** (`log_20251217_pr_18_staging_fix`)
-- **2025-12-17** [fix] **Pr 18 Feedback Fixes** (`log_20251217_pr_18_feedback_fixes`)
 
-*Showing 10 of 28 sessions*
+*Showing 10 of 33 sessions*
 
 ## 3. Dependency Audit
-- [BROKEN LINK] **log_20251217_pr_19_review_fixes** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-19-review-fixes.md) impacts non-existent document: `v2_5_2_dual_mode_remediation`
-  Fix: Create `v2_5_2_dual_mode_remediation`, correct the reference, or archive this log
-- [BROKEN LINK] **log_20251217_v2_5_2_dual_mode_implementation** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-2-dual-mode-implementation.md) impacts non-existent document: `v2_5_2_dual_mode_remediation`
-  Fix: Create `v2_5_2_dual_mode_remediation`, correct the reference, or archive this log
-- [BROKEN LINK] **log_20251217_ci_orphan_fix** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_ci-orphan-fix.md) impacts non-existent document: `v2_5_2_dual_mode_remediation`
-  Fix: Create `v2_5_2_dual_mode_remediation`, correct the reference, or archive this log
+No issues found.
 
 ## 4. Index
 | ID | Filename | Type |
 |---|---|---|
+| claude_2_6_v1_review | [Claude_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v1.md) | atom |
+| claude_2_6_v2_review | [Claude_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v2.md) | atom |
+| claude_2_6_v3_review | [Claude_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v3.md) | atom |
+| codex_2_6_v1_review | [Codex_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v1.md) | strategy |
+| codex_2_6_v2_review | [Codex_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v2.md) | strategy |
+| codex_2_6_v3_review | [Codex_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v3.md) | strategy |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
 | decision_history | [decision_history.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/decision_history.md) | strategy |
+| dual_mode_matrix | [Dual_Mode_Matrix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/reference/Dual_Mode_Matrix.md) | atom |
+| gemini_2_6_v1_review | [Gemini_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v1.md) | atom |
+| gemini_2_6_v2_review | [Gemini_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v2.md) | atom |
+| gemini_2_6_v3_review | [Gemini_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v3.md) | atom |
 | log_20251213_agent_no_verify_rule | [2025-12-13_agent-no-verify-rule.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_agent-no-verify-rule.md) | log |
 | log_20251213_cleanup_broken_links | [2025-12-13_cleanup-broken-links.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_cleanup-broken-links.md) | log |
 | log_20251213_context_map_notice | [2025-12-13_context-map-notice.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-13_context-map-notice.md) | log |
@@ -212,6 +263,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20251217_v2_5_plan_finalization | [2025-12-17_v2-5-plan-finalization.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-plan-finalization.md) | log |
 | log_20251217_v2_5_promises_implementation | [2025-12-17_v2-5-promises-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-promises-implementation.md) | log |
 | log_20251217_v2_5_promises_implementation_plan | [2025-12-17_v2-5-promises-implementation-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-promises-implementation-plan.md) | log |
+| log_20251217_v2_6_bugfixes | [2025-12-17_v2-6-bugfixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-bugfixes.md) | log |
+| log_20251217_v2_6_codex_fixes | [2025-12-17_v2-6-codex-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-codex-fixes.md) | log |
+| log_20251217_v2_6_docs | [2025-12-17_v2-6-docs.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-docs.md) | log |
+| log_20251217_v2_6_implementation | [2025-12-17_v2-6-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-implementation.md) | log |
+| log_20251217_v2_6_verification | [2025-12-17_v2-6-verification.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-verification.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
@@ -221,5 +277,5 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | v2_5_architectural_review_claude | [V1_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) | atom |
 | v2_5_architectural_review_claude_v2 | [V2_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) | atom |
 | v2_5_promises_implementation_plan | [v2.5_promises_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/v2.5_promises_implementation_plan.md) | strategy |
-| v2_6_proposals_and_tooling | [v2.6_proposals_and_tooling.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6_proposals_and_tooling.md) | strategy |
+| v2_6_proposals_and_tooling | [v2.6_proposals_and_tooling.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/v2.6_proposals_and_tooling.md) | strategy |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |

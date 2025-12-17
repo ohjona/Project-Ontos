@@ -1,15 +1,15 @@
 ---
-id: log_20251217_pr_19_review_fixes
+id: log_20251217_v2_6_codex_fixes
 type: log
 status: active
 event_type: fix
 concepts: []
-impacts: []
+impacts: [v2_6_proposals_and_tooling]
 ---
 
-# Session Log: Pr 19 Review Fixes
-Date: 2025-12-17 14:14 KST
-Source: Gemini
+# Session Log: V2 6 Codex Fixes
+Date: 2025-12-17 22:41 KST
+Source: Antigravity
 Event Type: fix
 
 ## 1. Goal

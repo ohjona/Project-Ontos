@@ -23,7 +23,7 @@ def is_ontos_repo() -> bool:
     return os.path.exists(os.path.join(PROJECT_ROOT, '.ontos-internal'))
 
 # Version - used by update script to check for newer versions
-ONTOS_VERSION = "2.5.2"
+ONTOS_VERSION = "2.6.0"
 
 # GitHub repository for updates
 ONTOS_REPO_URL = 'https://github.com/ohjona/project-ontos'
@@ -115,6 +115,41 @@ EVENT_TYPES = {
 
 # Valid event type values (for validation)
 VALID_EVENT_TYPES = set(EVENT_TYPES.keys())
+
+
+# =============================================================================
+# STATUS VALUES (v2.6+)
+# =============================================================================
+# Valid status values for document frontmatter
+
+VALID_STATUS = {'draft', 'active', 'deprecated', 'archived', 'rejected', 'complete'}
+
+# Status descriptions - clarifying archived vs rejected
+STATUS_DEFINITIONS = {
+    'draft': 'Work in progress (proposals, incomplete docs)',
+    'active': 'Current truth (approved, in use)',
+    'deprecated': 'Past truth (superseded, kept for reference)',
+    'archived': 'Historical record (completed logs moved to archive)',
+    'rejected': 'Considered but NOT approved (proposals only - never became truth)',
+    'complete': 'Finished work (reviews, completed tasks)',
+}
+
+# Valid (type, status) combinations - prevents semantic nonsense
+# Example: type: log cannot have status: rejected (logs record what happened)
+VALID_TYPE_STATUS = {
+    'kernel': {'active', 'draft', 'deprecated'},
+    'strategy': {'active', 'draft', 'deprecated', 'rejected', 'complete'},  # Reviews can be complete
+    'product': {'active', 'draft', 'deprecated'},
+    'atom': {'active', 'draft', 'deprecated', 'complete'},  # Reviews can be complete
+    'log': {'active', 'archived'},  # Logs cannot be draft or rejected
+}
+
+# Stale proposal detection threshold (days)
+PROPOSAL_STALE_DAYS = 60
+
+# Minimum characters for rejection reason (prevents useless reasons like "No")
+REJECTED_REASON_MIN_LENGTH = 10
+
 
 # Types that are allowed to be orphans (no dependents)
 DEFAULT_ALLOWED_ORPHAN_TYPES = ['product', 'strategy', 'kernel']

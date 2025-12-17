@@ -525,3 +525,84 @@ def get_concepts_path() -> str:
     
     # Return new location for creation
     return new_path
+
+
+# =============================================================================
+# V2.6 VALIDATION HELPERS
+# =============================================================================
+
+
+def get_git_last_modified(filepath: str) -> Optional[datetime]:
+    """Get the last git commit date for a file.
+    
+    Args:
+        filepath: Path to the file to check.
+        
+    Returns:
+        datetime of last modification, or None if not tracked by git.
+    """
+    try:
+        result = subprocess.run(
+            ['git', 'log', '-1', '--format=%ct', filepath],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            timestamp = int(result.stdout.strip())
+            return datetime.fromtimestamp(timestamp)
+    except (subprocess.SubprocessError, ValueError):
+        pass
+    return None
+
+
+def load_decision_history_entries() -> dict:
+    """Load decision_history.md entries for validation.
+    
+    Parses the decision history ledger to enable validation that 
+    rejected/approved proposals are properly recorded.
+    
+    v2.6.1: Improved parsing for deterministic matching by slug and archive path.
+    
+    Returns:
+        Dict with:
+          - 'archive_paths': dict mapping archive_path -> slug
+          - 'slugs': set of all slugs in ledger
+          - 'rejected_slugs': set of slugs with REJECTED in outcome
+          - 'approved_slugs': set of slugs with APPROVED in outcome
+          - 'outcomes': dict mapping slug -> full outcome text
+    """
+    history_path = get_decision_history_path()
+    entries = {
+        'archive_paths': {},  # Now a dict: path -> slug
+        'slugs': set(),
+        'rejected_slugs': set(),
+        'approved_slugs': set(),
+        'outcomes': {}
+    }
+    
+    if os.path.exists(history_path):
+        with open(history_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                # Parse table rows: | date | slug | event | outcome | impacted | archive_path |
+                if line.startswith('|') and not line.startswith('|:') and not line.startswith('| Date'):
+                    parts = [p.strip() for p in line.split('|')]
+                    if len(parts) >= 7:
+                        slug = parts[2]
+                        outcome = parts[4]
+                        archive_path = parts[6].strip('`')  # Remove backticks
+                        
+                        if slug:
+                            entries['slugs'].add(slug)
+                            entries['outcomes'][slug] = outcome
+                            
+                            # Deterministic outcome classification
+                            outcome_upper = outcome.upper()
+                            if 'REJECTED' in outcome_upper:
+                                entries['rejected_slugs'].add(slug)
+                            if 'APPROVED' in outcome_upper:
+                                entries['approved_slugs'].add(slug)
+                        
+                        if archive_path:
+                            entries['archive_paths'][archive_path] = slug
+    return entries
+

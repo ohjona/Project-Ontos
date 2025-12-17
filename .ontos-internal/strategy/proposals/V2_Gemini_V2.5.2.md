@@ -1,10 +1,10 @@
 ---
 id: V2_Gemini_v2.5.2_review
-type: review
+type: atom
 status: complete
+depends_on: [v2_5_2_dual_mode_remediation]
 author: Gemini Architect
 date: 2025-12-17
-reviews: v2_5_2_dual_mode_remediation
 concepts: [review, final-review, architecture, v2.5.2]
 ---
 

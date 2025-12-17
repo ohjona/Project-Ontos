@@ -3,7 +3,7 @@
 Safety features (from architectural review):
 - CI detection: Skips in automated environments
 - Rebase detection: Skips during rebase/cherry-pick
-- Explicit staging: Only stages Ontos files, never user files
+- Explicit staging: Only stages tracked files touched by consolidation
 - Try/except wrapper: Guarantees return 0
 - Dual condition: Count AND old_logs must both be true
 """
@@ -11,56 +11,23 @@ Safety features (from architectural review):
 import os
 import sys
 import subprocess
-import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from ontos_lib import resolve_config
-from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
-
-
-def get_logs_dir() -> str:
-    """Get the logs directory path based on mode (contributor vs user)."""
-    if is_ontos_repo():
-        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'logs')
-    else:
-        return os.path.join(PROJECT_ROOT, 'docs', 'logs')
+from ontos_lib import (
+    resolve_config,
+    get_logs_dir,
+    get_log_count,
+    get_logs_older_than,
+    get_archive_dir,
+    get_decision_history_path,
+)
+from ontos_config_defaults import PROJECT_ROOT
 
 
 def get_mode() -> str:
     """Get current Ontos mode."""
     return resolve_config('ONTOS_MODE', 'prompted')
-
-
-def get_log_count() -> int:
-    """Count active logs in logs directory."""
-    logs_dir = get_logs_dir()
-    if not os.path.exists(logs_dir):
-        return 0
-    return len([f for f in os.listdir(logs_dir)
-                if f.endswith('.md') and f[0].isdigit()])
-
-
-def get_logs_older_than(days: int) -> list:
-    """Get list of log filenames older than N days."""
-    logs_dir = get_logs_dir()
-    if not os.path.exists(logs_dir):
-        return []
-
-    cutoff = datetime.datetime.now() - datetime.timedelta(days=days)
-    old_logs = []
-
-    for filename in os.listdir(logs_dir):
-        if not filename.endswith('.md') or not filename[0].isdigit():
-            continue
-        try:
-            log_date = datetime.datetime.strptime(filename[:10], '%Y-%m-%d')
-            if log_date < cutoff:
-                old_logs.append(filename)
-        except ValueError:
-            continue
-
-    return old_logs
 
 
 def is_ci_environment() -> bool:
@@ -150,7 +117,8 @@ def run_consolidation() -> tuple:
     """Run consolidation in quiet, auto mode.
 
     Returns:
-        (success, output) tuple
+        (success, output, consolidated_files) tuple where consolidated_files
+        is a list of file paths that were modified by consolidation.
     """
     script = os.path.join(PROJECT_ROOT, '.ontos', 'scripts', 'ontos_consolidate.py')
     threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
@@ -163,32 +131,61 @@ def run_consolidation() -> tuple:
     return result.returncode == 0, result.stdout + result.stderr
 
 
-def stage_consolidated_files() -> None:
-    """Stage ONLY files modified by consolidation.
-
-    CRITICAL: Do NOT use 'git add -u' which stages ALL tracked files.
-    Only stage specific Ontos-managed paths.
+def get_tracked_modified_files(directory: str) -> list:
+    """Get list of tracked files in a directory that have been modified.
+    
+    Only returns files that:
+    1. Are tracked by git
+    2. Have modifications (staged or unstaged)
+    
+    This prevents staging untracked WIP files.
     """
-    # Determine paths based on mode (contributor vs user)
-    if is_ontos_repo():
-        decision_history = os.path.join(PROJECT_ROOT, '.ontos-internal', 'strategy', 'decision_history.md')
-        archive_dir = os.path.join(PROJECT_ROOT, '.ontos-internal', 'archive')
-        logs_dir = os.path.join(PROJECT_ROOT, '.ontos-internal', 'logs')
-    else:
-        decision_history = os.path.join(PROJECT_ROOT, 'docs', 'decision_history.md')
-        archive_dir = os.path.join(PROJECT_ROOT, 'docs', 'archive')
-        logs_dir = os.path.join(PROJECT_ROOT, 'docs', 'logs')
+    if not os.path.exists(directory):
+        return []
+    
+    result = subprocess.run(
+        ['git', 'diff', '--name-only', 'HEAD', '--', directory],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return []
+    
+    files = [f.strip() for f in result.stdout.strip().split('\n') if f.strip()]
+    return files
 
-    # Stage ONLY Ontos-managed files
+
+def stage_consolidated_files() -> None:
+    """Stage ONLY tracked files modified by consolidation.
+
+    CRITICAL: Do NOT stage untracked files or entire directories.
+    Only stage specific files that were modified during consolidation.
+    """
+    # Use config-aware path resolution
+    decision_history = get_decision_history_path()
+    archive_dir = get_archive_dir()
+    logs_dir = get_logs_dir()
+
+    # Stage decision_history.md if it was modified and is tracked
     if os.path.exists(decision_history):
-        subprocess.run(['git', 'add', decision_history], capture_output=True)
+        # Check if file is tracked
+        result = subprocess.run(
+            ['git', 'ls-files', decision_history],
+            capture_output=True, text=True
+        )
+        if result.stdout.strip():
+            subprocess.run(['git', 'add', decision_history], capture_output=True)
 
-    if os.path.exists(archive_dir):
-        subprocess.run(['git', 'add', archive_dir], capture_output=True)
+    # Stage only tracked modified files in archive directory
+    modified_archive = get_tracked_modified_files(archive_dir)
+    for filepath in modified_archive:
+        full_path = os.path.join(PROJECT_ROOT, filepath) if not os.path.isabs(filepath) else filepath
+        subprocess.run(['git', 'add', full_path], capture_output=True)
 
-    # Stage logs directory (captures moved/deleted logs)
-    if os.path.exists(logs_dir):
-        subprocess.run(['git', 'add', logs_dir], capture_output=True)
+    # Stage only tracked modified files in logs directory (deleted logs)
+    modified_logs = get_tracked_modified_files(logs_dir)
+    for filepath in modified_logs:
+        full_path = os.path.join(PROJECT_ROOT, filepath) if not os.path.isabs(filepath) else filepath
+        subprocess.run(['git', 'add', full_path], capture_output=True)
 
 
 def main() -> int:

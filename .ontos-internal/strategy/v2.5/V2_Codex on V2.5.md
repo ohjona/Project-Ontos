@@ -1,3 +1,11 @@
+---
+id: codex_2_5_v2_review
+type: atom
+status: complete
+depends_on: [v2_5_promises_implementation_plan, codex_2_5_v1_review]
+concepts: [architecture, review, ux, hooks]
+---
+
 # Review: Ontos v2.5 "Promises" Implementation Plan (V2)
 
 ## Findings

@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 13:45:09 UTC
+Generated: 2025-12-17 14:51:09 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-17 22:45:09
+Generated on: 2025-12-17 23:51:09
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -63,12 +63,24 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **claude_2_6_v3_review** (Claude_2.6_v3.md) ~1,400 tokens
   - Status: complete
   - Depends On: v2_6_proposals_and_tooling, claude_2_6_v2_review
+- **codex_2_5_v1_review** (V1_Codex on v2.5.md) ~621 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan
+- **codex_2_5_v2_review** (V2_Codex on V2.5.md) ~340 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan, codex_2_5_v1_review
 - **common_concepts** (Common_Concepts.md) ~107 tokens
   - Status: active
   - Depends On: None
 - **dual_mode_matrix** (Dual_Mode_Matrix.md) ~1,500 tokens
   - Status: active
   - Depends On: schema
+- **gemini_2_5_v1_review** (V1_Gemini on v2.5.md) ~941 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan
+- **gemini_2_5_v2_review** (V2_Gemini on v2.5.md) ~619 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan, gemini_2_5_v1_review
 - **gemini_2_6_v1_review** (Gemini_2.6_v1.md) ~1,400 tokens
   - Status: complete
   - Depends On: v2_6_proposals_and_tooling
@@ -176,6 +188,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251217_v2_6_bugfixes** (2025-12-17_v2-6-bugfixes.md) ~117 tokens
   - Status: active
   - Impacts: v2_6_proposals_and_tooling
+- **log_20251217_v2_6_changelog** (2025-12-17_v2-6-changelog.md) ~99 tokens
+  - Status: active
+  - Impacts: None
 - **log_20251217_v2_6_codex_fixes** (2025-12-17_v2-6-codex-fixes.md) ~119 tokens
   - Status: active
   - Impacts: v2_6_proposals_and_tooling
@@ -199,6 +214,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontos_manual`, `ontos_agent_instructions`
 - **2025-12-17** [fix] **V2 6 Codex Fixes** (`log_20251217_v2_6_codex_fixes`)
   - Impacted: `v2_6_proposals_and_tooling`
+- **2025-12-17** [chore] **V2 6 Changelog** (`log_20251217_v2_6_changelog`)
 - **2025-12-17** [fix] **V2 6 Bugfixes** (`log_20251217_v2_6_bugfixes`)
   - Impacted: `v2_6_proposals_and_tooling`
 - **2025-12-17** [feature] **V2 5 Promises Implementation** (`log_20251217_v2_5_promises_implementation`)
@@ -211,11 +227,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [decision] **V2 5 Architectural Review** (`log_20251217_v2_5_architectural_review`)
   - Impacted: `v2_5_promises_implementation_plan`
   - Concepts: architecture, review, ux
-- **2025-12-17** [chore] **V2 5 2 Shipped Cleanup** (`log_20251217_v2_5_2_shipped_cleanup`)
-  - Impacted: `v2_strategy`
-  - Concepts: cleanup, release, v2.5.2
 
-*Showing 10 of 33 sessions*
+*Showing 10 of 34 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -226,12 +239,16 @@ No issues found.
 | claude_2_6_v1_review | [Claude_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v1.md) | atom |
 | claude_2_6_v2_review | [Claude_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v2.md) | atom |
 | claude_2_6_v3_review | [Claude_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Claude_2.6_v3.md) | atom |
+| codex_2_5_v1_review | [V1_Codex on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Codex on v2.5.md) | atom |
+| codex_2_5_v2_review | [V2_Codex on V2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Codex on V2.5.md) | atom |
 | codex_2_6_v1_review | [Codex_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v1.md) | strategy |
 | codex_2_6_v2_review | [Codex_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v2.md) | strategy |
 | codex_2_6_v3_review | [Codex_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Codex_2.6_v3.md) | strategy |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
 | decision_history | [decision_history.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/decision_history.md) | strategy |
 | dual_mode_matrix | [Dual_Mode_Matrix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/reference/Dual_Mode_Matrix.md) | atom |
+| gemini_2_5_v1_review | [V1_Gemini on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Gemini on v2.5.md) | atom |
+| gemini_2_5_v2_review | [V2_Gemini on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Gemini on v2.5.md) | atom |
 | gemini_2_6_v1_review | [Gemini_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v1.md) | atom |
 | gemini_2_6_v2_review | [Gemini_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v2.md) | atom |
 | gemini_2_6_v3_review | [Gemini_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.6/Gemini_2.6_v3.md) | atom |
@@ -264,6 +281,7 @@ No issues found.
 | log_20251217_v2_5_promises_implementation | [2025-12-17_v2-5-promises-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-promises-implementation.md) | log |
 | log_20251217_v2_5_promises_implementation_plan | [2025-12-17_v2-5-promises-implementation-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-promises-implementation-plan.md) | log |
 | log_20251217_v2_6_bugfixes | [2025-12-17_v2-6-bugfixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-bugfixes.md) | log |
+| log_20251217_v2_6_changelog | [2025-12-17_v2-6-changelog.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-changelog.md) | log |
 | log_20251217_v2_6_codex_fixes | [2025-12-17_v2-6-codex-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-codex-fixes.md) | log |
 | log_20251217_v2_6_docs | [2025-12-17_v2-6-docs.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-docs.md) | log |
 | log_20251217_v2_6_implementation | [2025-12-17_v2-6-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-implementation.md) | log |

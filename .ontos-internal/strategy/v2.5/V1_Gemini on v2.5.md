@@ -1,3 +1,11 @@
+---
+id: gemini_2_5_v1_review
+type: atom
+status: complete
+depends_on: [v2_5_promises_implementation_plan]
+concepts: [architecture, review, ux, hooks]
+---
+
 ### Architectural Review: Ontos v2.5 "The Promises"
 
 This is a well-structured and thorough implementation plan. It clearly identifies a user experience problem and proposes a logical, well-reasoned solution. The "pre-commit vs. pre-push" analysis is excellent and the decision to use a pre-commit hook is the correct one to avoid the "dirty push paradox."

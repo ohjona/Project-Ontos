@@ -1,9 +1,9 @@
 ---
 id: v2_5_architectural_review_claude_v2
-type: review
+type: atom
 status: complete
+depends_on: [v2_5_promises_implementation_plan]
 reviewer: Claude Opus 4.5
-reviewed_doc: v2_5_promises_implementation_plan (revised)
 date: 2025-12-17
 round: 2
 ---

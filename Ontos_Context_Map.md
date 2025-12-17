@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 02:09:02 UTC
+Generated: 2025-12-17 02:31:52 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-17 11:09:02
+Generated on: 2025-12-17 11:31:52
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -42,6 +42,12 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **schema** (schema.md) ~314 tokens
   - Status: active
   - Depends On: v2_strategy
+- **v2_5_architectural_review_claude** (V1_Claude_on_v2.5.md) ~4,600 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan
+- **v2_5_architectural_review_claude_v2** (V2_Claude_on_v2.5.md) ~1,900 tokens
+  - Status: complete
+  - Depends On: v2_5_promises_implementation_plan
 
 ### LOG
 - **log_20251213_agent_no_verify_rule** (2025-12-13_agent-no-verify-rule.md) ~248 tokens
@@ -92,9 +98,12 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251216_v2_5_promises_implementation_plan** (2025-12-16_v2-5-promises-implementation-plan.md) ~621 tokens
   - Status: active
   - Impacts: v2_strategy
-- **log_20251217_pr_18_feedback_fixes** (2025-12-17_pr-18-feedback-fixes.md) ~129 tokens
+- **log_20251217_pr_18_feedback_fixes** (2025-12-17_pr-18-feedback-fixes.md) ~114 tokens
   - Status: active
-  - Impacts: ontos_lib, ontos_pre_commit_check, ontos_generate_context_map
+  - Impacts: None
+- **log_20251217_pr_18_staging_fix** (2025-12-17_pr-18-staging-fix.md) ~112 tokens
+  - Status: active
+  - Impacts: None
 - **log_20251217_v2_5_architectural_review** (2025-12-17_v2-5-architectural-review.md) ~533 tokens
   - Status: active
   - Impacts: v2_5_promises_implementation_plan
@@ -108,14 +117,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Status: active
   - Impacts: None
 
-### UNKNOWN
-- **v2_5_architectural_review_claude** (V1_Claude_on_v2.5.md) ~4,600 tokens
-  - Status: complete
-  - Depends On: None
-- **v2_5_architectural_review_claude_v2** (V2_Claude_on_v2.5.md) ~1,900 tokens
-  - Status: complete
-  - Depends On: None
-
 
 ## 2. Recent Timeline
 - **2025-12-17** [feature] **V2 5 Promises Implementation** (`log_20251217_v2_5_promises_implementation`)
@@ -128,8 +129,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [decision] **V2 5 Architectural Review** (`log_20251217_v2_5_architectural_review`)
   - Impacted: `v2_5_promises_implementation_plan`
   - Concepts: architecture, review, ux
+- **2025-12-17** [fix] **Pr 18 Staging Fix** (`log_20251217_pr_18_staging_fix`)
 - **2025-12-17** [fix] **Pr 18 Feedback Fixes** (`log_20251217_pr_18_feedback_fixes`)
-  - Impacted: `ontos_lib`, `ontos_pre_commit_check`, `ontos_generate_context_map`
 - **2025-12-16** [decision] **V2 5 Promises Implementation Plan** (`log_20251216_v2_5_promises_implementation_plan`)
   - Impacted: `v2_strategy`
   - Concepts: ux, config, consolidation, workflow
@@ -141,23 +142,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-14** [decision] **V2 4 Config Design** (`log_20251214_v2_4_config_design`)
   - Impacted: `v2_strategy`
   - Concepts: ux, config, tooling
-- **2025-12-14** [feature] **V2 3 Curation Not Ceremony** (`log_20251214_v2_3_curation_not_ceremony`)
-  - Impacted: `ontos_manual`, `ontos_agent_instructions`
-  - Concepts: v2.3, ux, tooling, testing
 
-*Showing 10 of 21 sessions*
+*Showing 10 of 22 sessions*
 
 ## 3. Dependency Audit
-- [ORPHAN] **v2_5_architectural_review_claude_v2** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) has no dependents
-  Fix: Add `v2_5_architectural_review_claude_v2` to another document's depends_on, or delete if unused
-- [ORPHAN] **v2_5_architectural_review_claude** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) has no dependents
-  Fix: Add `v2_5_architectural_review_claude` to another document's depends_on, or delete if unused
-- [BROKEN LINK] **log_20251217_pr_18_feedback_fixes** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-18-feedback-fixes.md) impacts non-existent document: `ontos_lib`
-  Fix: Create `ontos_lib`, correct the reference, or archive this log
-- [BROKEN LINK] **log_20251217_pr_18_feedback_fixes** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-18-feedback-fixes.md) impacts non-existent document: `ontos_pre_commit_check`
-  Fix: Create `ontos_pre_commit_check`, correct the reference, or archive this log
-- [BROKEN LINK] **log_20251217_pr_18_feedback_fixes** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-18-feedback-fixes.md) impacts non-existent document: `ontos_generate_context_map`
-  Fix: Create `ontos_generate_context_map`, correct the reference, or archive this log
+No issues found.
 
 ## 4. Index
 | ID | Filename | Type |
@@ -181,6 +170,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20251215_v2_4_proposal_v1_4 | [2025-12-15_v2-4-proposal-v1-4.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-15_v2-4-proposal-v1-4.md) | log |
 | log_20251216_v2_5_promises_implementation_plan | [2025-12-16_v2-5-promises-implementation-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-16_v2-5-promises-implementation-plan.md) | log |
 | log_20251217_pr_18_feedback_fixes | [2025-12-17_pr-18-feedback-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-18-feedback-fixes.md) | log |
+| log_20251217_pr_18_staging_fix | [2025-12-17_pr-18-staging-fix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_pr-18-staging-fix.md) | log |
 | log_20251217_v2_5_architectural_review | [2025-12-17_v2-5-architectural-review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-architectural-review.md) | log |
 | log_20251217_v2_5_plan_finalization | [2025-12-17_v2-5-plan-finalization.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-plan-finalization.md) | log |
 | log_20251217_v2_5_promises_implementation | [2025-12-17_v2-5-promises-implementation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-5-promises-implementation.md) | log |
@@ -189,7 +179,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
-| v2_5_architectural_review_claude | [V1_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) | review |
-| v2_5_architectural_review_claude_v2 | [V2_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) | review |
+| v2_5_architectural_review_claude | [V1_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) | atom |
+| v2_5_architectural_review_claude_v2 | [V2_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) | atom |
 | v2_5_promises_implementation_plan | [v2.5_promises_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/v2.5_promises_implementation_plan.md) | strategy |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |

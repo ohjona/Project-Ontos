@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: fix
 concepts: []
-impacts: [ontos_pre_commit_check]
+impacts: []
 ---
 
 # Session Log: Pr 18 Staging Fix

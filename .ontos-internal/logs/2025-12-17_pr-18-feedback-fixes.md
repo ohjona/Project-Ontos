@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: fix
 concepts: []
-impacts: [ontos_lib, ontos_pre_commit_check, ontos_generate_context_map]
+impacts: []
 ---
 
 # Session Log: Pr 18 Feedback Fixes

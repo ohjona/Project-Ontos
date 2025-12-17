@@ -99,6 +99,38 @@ To understand rationale behind past decisions:
 2. **Locate** the relevant entry by date, slug, or impacted document
 3. **Retrieve** — You are authorized to read the file at the Archive Path, even though it's not in the Context Map
 
+
+## Proposal Awareness (v2.6+)
+
+### Finding Proposals
+Proposals live in `strategy/proposals/`. Check for:
+- **Draft proposals** — In progress, may be discussed in context
+- **Active proposals** — Approved, should be in `strategy/` (not `proposals/`)
+
+### Reviewing a Proposal
+When user asks to review a proposal:
+1. Read the proposal document
+2. Identify the problems it solves
+3. Evaluate against existing architecture
+4. Suggest improvements or identify risks
+
+### Recalling Rejected Ideas
+Rejected proposals are **excluded by default** to save tokens. To recall:
+```bash
+python3 .ontos/scripts/ontos_generate_context_map.py --include-rejected
+```
+
+**Why rejected proposals matter:**
+- Avoid re-analyzing the same ideas
+- Understand why something wasn't done
+- Revisit if circumstances change
+
+### Creating New Proposals
+When user wants to propose something:
+1. Create in `strategy/proposals/` with `status: draft`
+2. Link to relevant strategy docs via `depends_on`
+3. Include clear problem statement and proposed solution
+
 **Example:**
 ```
 User: "Why did we choose OAuth2?"

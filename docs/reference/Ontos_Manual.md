@@ -139,8 +139,51 @@ Use `--lint` to check for data quality issues.
 
 ---
 
+## 3. Proposal Workflow (v2.6+)
 
-## 3. Monthly Consolidation
+Proposals live in `strategy/proposals/` until approved or rejected.
+
+### Creating a Proposal
+1. Create file in `strategy/proposals/` with `status: draft`
+2. Review and iterate
+3. When ready, either **approve** or **reject**
+
+### Approving a Proposal
+1. Change `status: draft` → `status: active`
+2. **Move file** from `proposals/` to `strategy/` (graduate up)
+3. Add entry to `decision_history.md` with APPROVED outcome
+
+### Rejecting a Proposal
+1. Change `status: draft` → `status: rejected`
+2. Add required metadata:
+   ```yaml
+   status: rejected
+   rejected_reason: "Detailed explanation of why"  # Required, min 10 chars
+   rejected_date: 2025-12-17                       # Recommended
+   ```
+3. **Move file** from `proposals/` to `archive/proposals/`
+4. Add entry to `decision_history.md` with REJECTED outcome
+
+### Status Values (v2.6)
+| Status | Meaning |
+|--------|---------|
+| `draft` | Work in progress |
+| `active` | Current truth (approved, in use) |
+| `deprecated` | Past truth (superseded) |
+| `archived` | Historical record (logs) |
+| `rejected` | Considered but NOT approved |
+| `complete` | Finished work (reviews) |
+
+### Viewing Rejected Proposals
+By default, rejected docs are excluded from context map. To recall:
+```bash
+python3 .ontos/scripts/ontos_generate_context_map.py --include-rejected
+```
+
+---
+
+
+## 4. Monthly Consolidation
 
 When `logs/` exceeds ~15 files, perform consolidation to keep context lean.
 

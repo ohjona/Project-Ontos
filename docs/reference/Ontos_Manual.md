@@ -5,7 +5,7 @@ status: active
 depends_on: []
 ---
 
-# Ontos Manual v2.4
+# Ontos Manual v2.5
 
 *The complete reference for Project Ontos*
 
@@ -34,17 +34,17 @@ python3 ontos_init.py
 
 ## 1. Core Concepts
 
-### Configuration Modes (v2.4)
+### Configuration Modes (v2.5)
 
-Ontos offers three workflow modes to match your preferences:
+Ontos offers three workflow modes, each with a clear promise:
 
-| Mode | Behavior | Best For |
-|------|----------|----------|
-| **automated** | Auto-archives on push, no blocking | Solo devs, rapid prototyping |
-| **prompted** | Blocks push until archived | Teams, audit trails |
-| **advisory** | Reminders only, no blocking | Maximum flexibility |
+| Mode | Promise | Archiving | Consolidation |
+|------|---------|-----------|---------------|
+| **automated** | "Zero friction — just works" | Auto on push | Auto on commit |
+| **prompted** | "Keep me in the loop" | Blocks push | Agent reminder |
+| **advisory** | "Maximum flexibility" | Warning only | Manual only |
 
-**Choosing Your Mode:** During installation, `ontos_init.py` asks for your preference. Change later with:
+**Choosing Your Mode:** During installation, `ontos_init.py` shows each mode's promise. Change later with:
 ```bash
 python3 ontos_init.py --reconfig
 ```

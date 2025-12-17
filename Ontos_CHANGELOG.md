@@ -22,6 +22,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.5.0] - 2025-12-17
+
+### Theme: "The Promises"
+
+Clear, honest communication about what each mode delivers.
+
+### Added
+- **Mode Promises** — Redesigned setup flow showing clear promises for each mode
+  - `automated`: "Zero friction — just works" (auto-archive, auto-consolidate)
+  - `prompted`: "Keep me in the loop" (blocked push, consolidation reminders)
+  - `advisory`: "Maximum flexibility" (warnings only)
+- **Pre-commit hook** — Auto-consolidation for automated mode
+- **`AUTO_CONSOLIDATE_ON_COMMIT`** — New config setting for pre-commit consolidation
+- **Agent consolidation reminders** — Context map generation shows warning when logs exceed threshold
+- **Hook conflict detection** — Detects Husky, pre-commit framework, and existing hooks
+
+### Changed
+- `ontos_init.py` — Visually distinct mode selection with promise messaging (ASCII-only)
+- `ontos_init.py` — Now installs both pre-push and pre-commit hooks
+- `MODE_PRESETS` — Added consolidation-on-commit settings per mode
+- `Ontos_Agent_Instructions.md` — Updated activation flow with consolidation check
+- `Ontos_Manual.md` — Updated mode table with promises and consolidation behavior
+
+### Technical
+- Pre-commit hook stages consolidated files automatically (explicit paths only)
+- Consolidation never blocks commit (graceful degradation with try/except)
+- CI environments detected and skipped automatically
+- Rebase/cherry-pick operations detected and skipped
+- Dual condition for consolidation: count > threshold AND old logs exist
+
 ## [2.4.0] - 2025-12-15
 
 ### Added (Configuration Automation & UX Overhaul)

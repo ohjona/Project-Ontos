@@ -27,30 +27,47 @@ HOOKS_DIR = os.path.join(PROJECT_ROOT, '.git', 'hooks')
 
 
 def prompt_for_mode() -> str:
-    """Interactive mode selection.
+    """Interactive mode selection with promises.
     
     Returns:
         Selected mode string: 'automated', 'prompted', or 'advisory'
     """
     print("""
-1. How should Ontos handle session archiving?
++================================================================+
+|                    Choose Your Workflow                        |
++================================================================+
 
-   [1] Fully Automatic (recommended for solo devs)
-       - Auto-archives session on git push
-       - One log per branch per day (appends on subsequent pushes)
-       - Zero friction, best practices enforced silently
+   [1] Automated (recommended for solo devs)
+
+       "Zero friction - just works."
+
+       - Sessions auto-archived on push
+       - Old logs auto-consolidated on commit
+       - Nothing left behind, you focus on building
+
+   ----------------------------------------------------------------
 
    [2] Prompted (recommended for teams) [DEFAULT]
-       - Push blocked until you archive
-       - You choose event type, slug, and details
-       - More control, ensures quality
 
-   [3] Advisory (minimal)
-       - Push shows reminder only
+       "Keep me in the loop."
+
+       - Push blocked until you archive
+       - Consolidation warning shown at activation
+       - Full control with gentle guidance
+
+   ----------------------------------------------------------------
+
+   [3] Advisory (for power users)
+
+       "Maximum flexibility."
+
+       - Warnings only, never blocks
        - You decide if/when to archive
-       - Maximum flexibility, risk of forgetting
+       - Run consolidation on your schedule
+
++================================================================+
 """)
-    
+
     while True:
         choice = input("Enter choice [1-3, default=2]: ").strip()
         if choice == '' or choice == '2':
@@ -228,6 +245,80 @@ Standard vocabulary for tagging logs and documents.
         print("  Created docs/reference/Common_Concepts.md")
 
 
+def install_pre_commit_hook() -> bool:
+    """Install pre-commit hook with conflict detection.
+
+    Detects:
+    - Husky (.husky/ directory)
+    - pre-commit framework (.pre-commit-config.yaml)
+    - Existing non-Ontos hooks
+
+    Provides integration instructions instead of breaking user workflows.
+    
+    Returns:
+        True if hook was installed, False otherwise.
+    """
+    pre_commit_src = os.path.join(PROJECT_ROOT, '.ontos', 'hooks', 'pre-commit')
+    pre_commit_dst = os.path.join(HOOKS_DIR, 'pre-commit')
+
+    if not os.path.exists(pre_commit_src):
+        print("   ⚠ Warning: Pre-commit hook source not found")
+        return False
+
+    # Detect Husky
+    husky_dir = os.path.join(PROJECT_ROOT, '.husky')
+    if os.path.exists(husky_dir):
+        print("\n   ⚠ Husky detected. Manual integration required:")
+        print("   Add to .husky/pre-commit:")
+        print("   python3 .ontos/scripts/ontos_pre_commit_check.py")
+        return False
+
+    # Detect pre-commit framework
+    pre_commit_config = os.path.join(PROJECT_ROOT, '.pre-commit-config.yaml')
+    if os.path.exists(pre_commit_config):
+        print("\n   ⚠ pre-commit framework detected. Manual integration required:")
+        print("   Add to .pre-commit-config.yaml:")
+        print("""
+   - repo: local
+     hooks:
+       - id: ontos-consolidate
+         name: Ontos Auto-Consolidation
+         entry: python3 .ontos/scripts/ontos_pre_commit_check.py
+         language: system
+         always_run: true
+         pass_filenames: false
+        """)
+        return False
+
+    # Check for existing non-Ontos hook
+    if os.path.exists(pre_commit_dst):
+        with open(pre_commit_dst, 'r') as f:
+            content = f.read()
+            if 'ontos' not in content.lower():
+                print("\n   ⚠ Existing pre-commit hook detected")
+                print("   Add this line to your existing hook:")
+                print("   python3 .ontos/scripts/ontos_pre_commit_check.py")
+
+                response = input("   Overwrite existing hook? [y/N]: ").strip().lower()
+                if response != 'y':
+                    # Create backup and skip
+                    backup = pre_commit_dst + '.backup'
+                    shutil.copy2(pre_commit_dst, backup)
+                    print(f"   ℹ Existing hook backed up to {backup}")
+                    return False
+
+    # Safe to install
+    try:
+        shutil.copy2(pre_commit_src, pre_commit_dst)
+        st = os.stat(pre_commit_dst)
+        os.chmod(pre_commit_dst, st.st_mode | 0o111)  # Make executable
+        print("   ✓ Installed pre-commit hook")
+        return True
+    except Exception as e:
+        print(f"   ⚠ Warning: Failed to install pre-commit hook: {e}")
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Initialize or reconfigure Project Ontos'
@@ -262,7 +353,7 @@ def main():
         return
     
     print("══════════════════════════════════════════════════════════════")
-    print("             Welcome to Project Ontos v2.4 Setup")
+    print("             Welcome to Project Ontos v2.5 Setup")
     print("══════════════════════════════════════════════════════════════")
     
     # 1. Ensure .ontos directory exists
@@ -318,6 +409,7 @@ def main():
         except OSError:
             pass
             
+    # Install pre-push hook
     bash_hook_src = os.path.join(PROJECT_ROOT, '.ontos', 'hooks', 'pre-push')
     bash_hook_dst = os.path.join(HOOKS_DIR, 'pre-push')
     
@@ -331,6 +423,9 @@ def main():
             print(f"   ⚠ Warning: Failed to install pre-push hook: {e}")
     else:
         print("   ⚠ Warning: Pre-push hook source not found")
+    
+    # Install pre-commit hook (v2.5+)
+    install_pre_commit_hook()
 
     # 5. Create starter documentation
     print("\n4. Creating starter documentation...")

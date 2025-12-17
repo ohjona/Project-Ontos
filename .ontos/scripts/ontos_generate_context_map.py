@@ -783,6 +783,61 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
     observer.join()
 
 
+def check_consolidation_status() -> None:
+    """Print warning if consolidation needed (prompted/advisory modes only).
+
+    Called at end of context map generation to honor the "prompted" promise.
+    Agents always activate (read context map) before work, so this warning
+    is reliable without requiring a separate script.
+    
+    v2.5: This implements the "Keep me in the loop" promise for prompted mode.
+    """
+    from ontos_lib import resolve_config
+    
+    mode = resolve_config('ONTOS_MODE', 'prompted')
+    if mode == 'automated':
+        return  # Auto-consolidation handles this in pre-commit hook
+    
+    # Get logs directory
+    if is_ontos_repo():
+        from ontos_config import PROJECT_ROOT
+        logs_dir = os.path.join(PROJECT_ROOT, '.ontos-internal', 'logs')
+    else:
+        logs_dir = DOCS_DIR.replace('docs', 'docs/logs') if DOCS_DIR else 'docs/logs'
+    
+    if not os.path.exists(logs_dir):
+        return
+    
+    # Count active logs
+    log_count = len([f for f in os.listdir(logs_dir) 
+                     if f.endswith('.md') and f[0].isdigit()])
+    
+    threshold_count = resolve_config('LOG_RETENTION_COUNT', 15)
+    
+    if log_count <= threshold_count:
+        return  # Count is fine
+    
+    # Count old logs
+    threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
+    cutoff = datetime.datetime.now() - datetime.timedelta(days=threshold_days)
+    old_logs = []
+    
+    for filename in os.listdir(logs_dir):
+        if not filename.endswith('.md') or not filename[0].isdigit():
+            continue
+        try:
+            log_date = datetime.datetime.strptime(filename[:10], '%Y-%m-%d')
+            if log_date < cutoff:
+                old_logs.append(filename)
+        except ValueError:
+            continue
+    
+    if len(old_logs) > 0:
+        print(f"\n⚠️  {log_count} active logs (threshold: {threshold_count})")
+        print(f"   {len(old_logs)} logs are older than {threshold_days} days")
+        print(f"   Run: python3 .ontos/scripts/ontos_consolidate.py")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Generate Ontos Context Map',
@@ -805,7 +860,6 @@ Examples:
     args = parser.parse_args()
 
     # Default to docs directory if none specified
-    # Default to docs directory if none specified
     if args.dirs:
         target_dirs = args.dirs
     elif is_ontos_repo():
@@ -819,7 +873,12 @@ Examples:
         watch_mode(target_dirs, args.quiet)
     else:
         issue_count = generate_context_map(target_dirs, args.quiet, args.strict, args.lint)
+        
+        # v2.5: Check consolidation status for prompted/advisory modes
+        if not args.quiet:
+            check_consolidation_status()
 
         if args.strict and issue_count > 0:
             print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
             sys.exit(1)
+

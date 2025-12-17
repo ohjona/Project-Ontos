@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 01:17:03 UTC
+Generated: 2025-12-17 01:29:36 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-17 10:17:03
+Generated on: 2025-12-17 10:29:36
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -140,10 +140,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 *Showing 10 of 18 sessions*
 
 ## 3. Dependency Audit
-- [ORPHAN] **v2_5_architectural_review_claude** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) has no dependents
-  Fix: Add `v2_5_architectural_review_claude` to another document's depends_on, or delete if unused
 - [ORPHAN] **v2_5_architectural_review_claude_v2** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) has no dependents
   Fix: Add `v2_5_architectural_review_claude_v2` to another document's depends_on, or delete if unused
+- [ORPHAN] **v2_5_architectural_review_claude** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Claude_on_v2.5.md) has no dependents
+  Fix: Add `v2_5_architectural_review_claude` to another document's depends_on, or delete if unused
 
 ## 4. Index
 | ID | Filename | Type |

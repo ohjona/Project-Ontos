@@ -16,7 +16,6 @@ from ontos_config import (
     TYPE_HIERARCHY,
     MAX_DEPENDENCY_DEPTH,
     ALLOWED_ORPHAN_TYPES,
-    ALLOWED_ORPHAN_TYPES,
     SKIP_PATTERNS,
     is_ontos_repo
 )
@@ -26,6 +25,10 @@ from ontos_lib import (
     normalize_depends_on,
     normalize_type,
     load_common_concepts,
+    resolve_config,
+    get_logs_dir,
+    get_log_count,
+    get_logs_older_than,
 )
 
 OUTPUT_FILE = CONTEXT_MAP_FILE
@@ -783,6 +786,38 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
     observer.join()
 
 
+def check_consolidation_status() -> None:
+    """Print warning if consolidation needed (prompted/advisory modes only).
+
+    Called at end of context map generation to honor the "prompted" promise.
+    Agents always activate (read context map) before work, so this warning
+    is reliable without requiring a separate script.
+    
+    v2.5: This implements the "Keep me in the loop" promise for prompted mode.
+    Uses shared helpers from ontos_lib for config-agnostic path resolution.
+    """
+    mode = resolve_config('ONTOS_MODE', 'prompted')
+    if mode == 'automated':
+        return  # Auto-consolidation handles this in pre-commit hook
+    
+    # Use shared helpers for config-agnostic paths
+    log_count = get_log_count()
+    threshold_count = resolve_config('LOG_RETENTION_COUNT', 15)
+    
+    if log_count <= threshold_count:
+        return  # Count is fine
+    
+    # Count old logs using shared helper
+    threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
+    old_logs = get_logs_older_than(threshold_days)
+    
+    if len(old_logs) > 0:
+        # Use ASCII text instead of emoji for terminal compatibility
+        print(f"\n[WARNING] {log_count} active logs (threshold: {threshold_count})")
+        print(f"          {len(old_logs)} logs are older than {threshold_days} days")
+        print(f"          Run: python3 .ontos/scripts/ontos_consolidate.py")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Generate Ontos Context Map',
@@ -805,7 +840,6 @@ Examples:
     args = parser.parse_args()
 
     # Default to docs directory if none specified
-    # Default to docs directory if none specified
     if args.dirs:
         target_dirs = args.dirs
     elif is_ontos_repo():
@@ -819,7 +853,12 @@ Examples:
         watch_mode(target_dirs, args.quiet)
     else:
         issue_count = generate_context_map(target_dirs, args.quiet, args.strict, args.lint)
+        
+        # v2.5: Check consolidation status for prompted/advisory modes
+        if not args.quiet:
+            check_consolidation_status()
 
         if args.strict and issue_count > 0:
             print(f"\n❌ Strict mode: {issue_count} issues detected. Exiting with error.")
             sys.exit(1)
+

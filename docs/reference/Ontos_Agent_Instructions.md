@@ -13,8 +13,11 @@ depends_on: [ontos_manual]
 1. Check for `Ontos_Context_Map.md`
 2. If missing: `python3 .ontos/scripts/ontos_generate_context_map.py`
 3. Read map, identify relevant IDs for user's request
-4. Read ONLY those files
-5.    print("Loaded: [id1, id2]")
+4. **Check consolidation status (prompted/advisory modes only):**
+   - Context map generation now shows consolidation warning when needed
+   - In automated mode, consolidation happens automatically on commit
+5. Read ONLY those files
+6. print("Loaded: [id1, id2]")
 
 ### "Query Ontos"
 1. `python3 .ontos/scripts/ontos_query.py --depends-on [id]` (Check dependencies)

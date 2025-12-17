@@ -260,3 +260,125 @@ def get_source() -> Optional[str]:
 
 # Branch names that should not be used as auto-slugs
 BLOCKED_BRANCH_NAMES = {'main', 'master', 'dev', 'develop', 'HEAD'}
+
+
+# =============================================================================
+# LOG DISCOVERY HELPERS (v2.5+)
+# =============================================================================
+# Centralized functions for log path resolution, counting, and age detection.
+# Used by: ontos_pre_commit_check.py, ontos_generate_context_map.py
+
+
+def get_logs_dir() -> str:
+    """Get the logs directory path based on config.
+    
+    Respects LOGS_DIR config setting if set, otherwise derives from DOCS_DIR.
+    Handles both contributor mode (.ontos-internal) and user mode (docs/logs).
+    
+    Returns:
+        Absolute path to logs directory.
+    """
+    # Try LOGS_DIR first (most explicit)
+    logs_dir = resolve_config('LOGS_DIR', None)
+    if logs_dir and os.path.isabs(logs_dir):
+        return logs_dir
+    
+    # Get PROJECT_ROOT for relative path resolution
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        # Fallback if config not available
+        return 'docs/logs'
+    
+    # Contributor mode uses .ontos-internal/logs
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'logs')
+    
+    # User mode: derive from LOGS_DIR or DOCS_DIR
+    if logs_dir:
+        return os.path.join(PROJECT_ROOT, logs_dir)
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    return os.path.join(PROJECT_ROOT, docs_dir, 'logs')
+
+
+def get_log_count() -> int:
+    """Count active session logs in logs directory.
+    
+    Only counts markdown files starting with a digit (date-prefixed logs).
+    
+    Returns:
+        Number of active log files.
+    """
+    logs_dir = get_logs_dir()
+    if not os.path.exists(logs_dir):
+        return 0
+    
+    return len([f for f in os.listdir(logs_dir)
+                if f.endswith('.md') and f[0].isdigit()])
+
+
+def get_logs_older_than(days: int) -> list[str]:
+    """Get list of log filenames older than N days.
+    
+    Args:
+        days: Age threshold in days.
+        
+    Returns:
+        List of log filenames (not full paths) older than threshold.
+    """
+    logs_dir = get_logs_dir()
+    if not os.path.exists(logs_dir):
+        return []
+    
+    cutoff = datetime.now() - __import__('datetime').timedelta(days=days)
+    old_logs = []
+    
+    for filename in os.listdir(logs_dir):
+        if not filename.endswith('.md') or not filename[0].isdigit():
+            continue
+        try:
+            log_date = datetime.strptime(filename[:10], '%Y-%m-%d')
+            if log_date < cutoff:
+                old_logs.append(filename)
+        except ValueError:
+            continue
+    
+    return old_logs
+
+
+def get_archive_dir() -> str:
+    """Get the archive directory path based on config.
+    
+    Returns:
+        Absolute path to archive directory.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/archive'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'archive')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    return os.path.join(PROJECT_ROOT, docs_dir, 'archive')
+
+
+def get_decision_history_path() -> str:
+    """Get the decision_history.md path based on config.
+    
+    Returns:
+        Absolute path to decision_history.md.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/decision_history.md'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'strategy', 'decision_history.md')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    return os.path.join(PROJECT_ROOT, docs_dir, 'decision_history.md')
+

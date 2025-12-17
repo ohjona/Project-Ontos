@@ -23,7 +23,7 @@ def is_ontos_repo() -> bool:
     return os.path.exists(os.path.join(PROJECT_ROOT, '.ontos-internal'))
 
 # Version - used by update script to check for newer versions
-ONTOS_VERSION = "2.4.0"
+ONTOS_VERSION = "2.5.0"
 
 # GitHub repository for updates
 ONTOS_REPO_URL = 'https://github.com/ohjona/project-ontos'
@@ -197,18 +197,21 @@ MODE_PRESETS = {
         'ENFORCE_ARCHIVE_BEFORE_PUSH': False,
         'REQUIRE_SOURCE_IN_LOGS': False,
         'AUTO_CONSOLIDATE': True,
+        'AUTO_CONSOLIDATE_ON_COMMIT': True,  # v2.5: Pre-commit hook consolidation
     },
     'prompted': {
         'AUTO_ARCHIVE_ON_PUSH': False,
         'ENFORCE_ARCHIVE_BEFORE_PUSH': True,
         'REQUIRE_SOURCE_IN_LOGS': True,
         'AUTO_CONSOLIDATE': True,
+        'AUTO_CONSOLIDATE_ON_COMMIT': False,  # v2.5: Manual consolidation, agent reminder
     },
     'advisory': {
         'AUTO_ARCHIVE_ON_PUSH': False,
         'ENFORCE_ARCHIVE_BEFORE_PUSH': False,
         'REQUIRE_SOURCE_IN_LOGS': False,
         'AUTO_CONSOLIDATE': False,
+        'AUTO_CONSOLIDATE_ON_COMMIT': False,  # v2.5: Manual consolidation only
     },
 }
 
@@ -225,6 +228,12 @@ AUTO_ARCHIVE_ON_PUSH = False
 # - False: Manual consolidation only
 AUTO_CONSOLIDATE = True
 
+# Auto-consolidate on commit (v2.5+)
+# - True: Pre-commit hook consolidates old logs automatically
+# - False: Manual consolidation only (or agent reminder in prompted mode)
+# Only applies to 'automated' mode by default
+AUTO_CONSOLIDATE_ON_COMMIT = False
+
 # Hook timeout to prevent slow hooks from frustrating users (v2.4+)
 # Operations in pre-push hook will timeout after this many seconds
 HOOK_TIMEOUT_SECONDS = 10
@@ -232,4 +241,3 @@ HOOK_TIMEOUT_SECONDS = 10
 # Consolidation threshold for maintenance (v2.4+)
 # Logs older than this many days are candidates for consolidation
 CONSOLIDATION_THRESHOLD_DAYS = 30
-

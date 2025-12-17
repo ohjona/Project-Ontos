@@ -2,10 +2,96 @@
 
 import os
 import sys
+import shutil
+import subprocess
 import pytest
 
 # Add scripts directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scripts'))
+
+
+# =============================================================================
+# DUAL-MODE TESTING INFRASTRUCTURE (v2.5.2+)
+# =============================================================================
+
+
+def pytest_addoption(parser):
+    """Add --mode option to pytest CLI."""
+    parser.addoption(
+        "--mode",
+        action="store",
+        default="contributor",
+        choices=["contributor", "user"],
+        help="Run tests in 'contributor' or 'user' mode"
+    )
+
+
+@pytest.fixture
+def project_mode(request):
+    """Get the current test mode."""
+    return request.config.getoption("--mode")
+
+
+@pytest.fixture
+def mode_aware_project(request, tmp_path):
+    """
+    Create a project fixture based on the current mode.
+    - contributor: Uses .ontos-internal/ structure
+    - user: Uses docs/ structure (simulates user installation)
+    """
+    mode = request.config.getoption("--mode")
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    if mode == "contributor":
+        # Contributor mode: copy full project structure
+        shutil.copytree(
+            os.path.join(project_root, '.ontos-internal'),
+            tmp_path / '.ontos-internal'
+        )
+        shutil.copytree(
+            os.path.join(project_root, '.ontos'),
+            tmp_path / '.ontos'
+        )
+    else:
+        # User mode: simulate fresh installation
+        shutil.copytree(
+            os.path.join(project_root, '.ontos'),
+            tmp_path / '.ontos'
+        )
+        shutil.copy(
+            os.path.join(project_root, 'ontos_init.py'),
+            tmp_path
+        )
+        # Run init to create user structure
+        result = subprocess.run(
+            [sys.executable, 'ontos_init.py', '--non-interactive'],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True
+        )
+        
+        # Explicit assertions on ALL expected directories (per Codex review)
+        assert (tmp_path / 'docs' / 'logs').exists(), "Missing docs/logs/"
+        assert (tmp_path / 'docs' / 'strategy').exists(), "Missing docs/strategy/"
+        assert (tmp_path / 'docs' / 'strategy' / 'proposals').exists(), "Missing docs/strategy/proposals/"
+        assert (tmp_path / 'docs' / 'archive').exists(), "Missing docs/archive/"
+        assert (tmp_path / 'docs' / 'archive' / 'logs').exists(), "Missing docs/archive/logs/"
+        assert (tmp_path / 'docs' / 'archive' / 'proposals').exists(), "Missing docs/archive/proposals/"
+        assert (tmp_path / 'docs' / 'reference').exists(), "Missing docs/reference/"
+        
+        # Assert starter files
+        assert (tmp_path / 'docs' / 'strategy' / 'decision_history.md').exists(), "Missing decision_history.md"
+        assert (tmp_path / 'docs' / 'reference' / 'Common_Concepts.md').exists(), "Missing Common_Concepts.md"
+
+    return tmp_path
+
+
+@pytest.fixture
+def docs_dir(project_mode):
+    """Get the docs directory based on mode."""
+    if project_mode == "contributor":
+        return ".ontos-internal"
+    return "docs"
 
 
 @pytest.fixture
@@ -143,7 +229,8 @@ def log_doc(temp_docs_dir):
     doc = logs_dir / "2025-01-01_session.md"
     doc.write_text("""---
 id: log_20250101_session
-type: atom
+type: log
+status: active
 depends_on: []
 ---
 # Session Log

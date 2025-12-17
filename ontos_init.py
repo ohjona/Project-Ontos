@@ -214,14 +214,128 @@ def reconfig() -> None:
     print("══════════════════════════════════════════════════════════════\n")
 
 
+def create_directory_structure() -> None:
+    """Create complete Ontos directory structure for user mode.
+    
+    Creates all required directories for a fully functional Ontos installation.
+    Respects DOCS_DIR config setting. Idempotent - safe to run multiple times.
+    """
+    # Get docs dir from config (respects custom DOCS_DIR)
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
+    # Required directories for user mode
+    directories = [
+        docs_dir,
+        f'{docs_dir}/logs',
+        f'{docs_dir}/strategy',
+        f'{docs_dir}/strategy/proposals',
+        f'{docs_dir}/archive',
+        f'{docs_dir}/archive/logs',
+        f'{docs_dir}/archive/proposals',
+        f'{docs_dir}/reference',
+    ]
+    
+    created_any = False
+    for directory in directories:
+        path = os.path.join(PROJECT_ROOT, directory)
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"   Created {directory}/")
+            created_any = True
+    
+    if not created_any:
+        print("   All directories already exist")
+
+
+def check_and_warn_old_paths() -> None:
+    """Check for files in old locations and warn user."""
+    # Get docs dir from config
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
+    old_paths = [
+        (f'{docs_dir}/decision_history.md', f'{docs_dir}/strategy/decision_history.md'),
+        (f'{docs_dir}/Common_Concepts.md', f'{docs_dir}/reference/Common_Concepts.md'),
+    ]
+    
+    for old, new in old_paths:
+        old_full = os.path.join(PROJECT_ROOT, old)
+        new_full = os.path.join(PROJECT_ROOT, new)
+        if os.path.exists(old_full) and not os.path.exists(new_full):
+            print(f"   [DEPRECATION WARNING] Found '{old}' in old location.")
+            print(f"   Recommended: mv {old} {new}")
+            print("   This file will be auto-migrated in v2.6.0")
+
+
 def scaffold_starter_docs() -> None:
-    """Create starter documentation templates if they don't exist."""
-    # Create Common_Concepts.md if it doesn't exist
-    concepts_path = 'docs/reference/Common_Concepts.md'
+    """Create starter documentation using canonical templates.
+    
+    Uses template files from .ontos/templates/ to ensure consistency
+    between user-mode starters and contributor-mode references.
+    Respects DOCS_DIR config setting. Idempotent - safe to run multiple times.
+    """
+    # Get docs dir from config
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_ROOT, '.ontos', 'scripts'))
+        from ontos_lib import resolve_config
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+    except ImportError:
+        docs_dir = 'docs'
+    
+    # Import template loader
+    templates_dir = os.path.join(PROJECT_ROOT, '.ontos', 'templates')
+    sys.path.insert(0, templates_dir)
+    
+    try:
+        from templates import get_decision_history_template, get_common_concepts_template
+    except ImportError:
+        print("   Warning: Template loader not found, using inline templates")
+        get_decision_history_template = None
+        get_common_concepts_template = None
+    
+    # Create decision_history.md (in strategy/, not flat)
+    decision_history_path = os.path.join(PROJECT_ROOT, docs_dir, 'strategy', 'decision_history.md')
+    if not os.path.exists(decision_history_path):
+        os.makedirs(os.path.dirname(decision_history_path), exist_ok=True)
+        if get_decision_history_template:
+            content = get_decision_history_template()
+        else:
+            content = """---
+id: decision_history
+type: strategy
+status: active
+depends_on: []
+---
+
+# Decision History
+
+This document records key decisions made during development.
+
+| Date | Slug | Decision | Outcome | Archive Path |
+|------|------|----------|---------|--------------|
+| | | | | |
+"""
+        with open(decision_history_path, 'w') as f:
+            f.write(content)
+        print(f"   Created {docs_dir}/strategy/decision_history.md")
+    
+    # Create Common_Concepts.md (in reference/)
+    concepts_path = os.path.join(PROJECT_ROOT, docs_dir, 'reference', 'Common_Concepts.md')
     if not os.path.exists(concepts_path):
         os.makedirs(os.path.dirname(concepts_path), exist_ok=True)
-        with open(concepts_path, 'w') as f:
-            f.write("""---
+        if get_common_concepts_template:
+            content = get_common_concepts_template()
+        else:
+            content = """---
 id: common_concepts
 type: atom
 status: active
@@ -234,15 +348,21 @@ Standard vocabulary for tagging logs and documents.
 
 | Concept | Description |
 |---------|-------------|
-| `api` | API design or implementation |
-| `auth` | Authentication and authorization |
-| `ci` | Continuous integration |
+| `architecture` | System design and structure |
+| `bugfix` | Bug fixes and corrections |
 | `config` | Configuration management |
 | `docs` | Documentation |
+| `feature` | New features |
+| `refactor` | Code refactoring |
 | `test` | Testing |
 | `ux` | User experience |
-""")
-        print("  Created docs/reference/Common_Concepts.md")
+"""
+        with open(concepts_path, 'w') as f:
+            f.write(content)
+        print(f"   Created {docs_dir}/reference/Common_Concepts.md")
+    
+    # Check for files in old locations
+    check_and_warn_old_paths()
 
 
 def install_pre_commit_hook() -> bool:
@@ -353,7 +473,7 @@ def main():
         return
     
     print("══════════════════════════════════════════════════════════════")
-    print("             Welcome to Project Ontos v2.5 Setup")
+    print("             Welcome to Project Ontos v2.5.2 Setup")
     print("══════════════════════════════════════════════════════════════")
     
     # 1. Ensure .ontos directory exists
@@ -385,20 +505,9 @@ def main():
         generate_config(mode, source)
         print(f"\n   ✓ Created ontos_config.py (mode: {mode})")
     
-    # 3. Set up directories
+    # 3. Set up directories (complete structure for user mode)
     print("\n2. Setting up directories...")
-    dirs = [
-        'docs',
-        'docs/reference',
-        'docs/logs'
-    ]
-    
-    for d in dirs:
-        if not os.path.exists(d):
-            os.makedirs(d)
-            print(f"   Created {d}/")
-        else:
-            print(f"   {d}/ already exists")
+    create_directory_structure()
 
     # 4. Install git hooks
     print("\n3. Installing git hooks...")

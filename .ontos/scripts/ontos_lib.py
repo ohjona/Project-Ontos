@@ -365,8 +365,33 @@ def get_archive_dir() -> str:
     return os.path.join(PROJECT_ROOT, docs_dir, 'archive')
 
 
+# =============================================================================
+# DEPRECATION WARNING HELPER (v2.5.2+)
+# =============================================================================
+
+_deprecation_warned = set()  # Track warnings to avoid spam
+
+
+def _warn_deprecated(old_path: str, new_path: str) -> None:
+    """Issue deprecation warning (once per path per session)."""
+    if old_path in _deprecation_warned:
+        return
+    _deprecation_warned.add(old_path)
+    print(f"[DEPRECATION WARNING] Using old path '{old_path}'.")
+    print(f"   Expected: '{new_path}'")
+    print("   Run 'python3 ontos_init.py' to update your project structure.")
+
+
+# =============================================================================
+# PATH HELPERS WITH BACKWARD COMPATIBILITY (v2.5.2+)
+# =============================================================================
+
+
 def get_decision_history_path() -> str:
-    """Get the decision_history.md path based on config.
+    """Get decision_history.md path with backward compatibility.
+    
+    v2.5.2: Uses nested structure (docs/strategy/decision_history.md)
+    Pre-v2.5.2: Falls back to flat structure (docs/decision_history.md)
     
     Returns:
         Absolute path to decision_history.md.
@@ -374,11 +399,129 @@ def get_decision_history_path() -> str:
     try:
         from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
-        return 'docs/decision_history.md'
+        return 'docs/strategy/decision_history.md'
     
     if is_ontos_repo():
         return os.path.join(PROJECT_ROOT, '.ontos-internal', 'strategy', 'decision_history.md')
     
     docs_dir = resolve_config('DOCS_DIR', 'docs')
-    return os.path.join(PROJECT_ROOT, docs_dir, 'decision_history.md')
+    
+    # Try new location first (v2.5.2+)
+    new_path = os.path.join(PROJECT_ROOT, docs_dir, 'strategy', 'decision_history.md')
+    if os.path.exists(new_path):
+        return new_path
+    
+    # Fall back to old location (pre-v2.5.2)
+    old_path = os.path.join(PROJECT_ROOT, docs_dir, 'decision_history.md')
+    if os.path.exists(old_path):
+        _warn_deprecated(f'{docs_dir}/decision_history.md', f'{docs_dir}/strategy/decision_history.md')
+        return old_path
+    
+    # Return new location for creation
+    return new_path
 
+
+def get_proposals_dir() -> str:
+    """Get proposals directory path (mode-aware).
+    
+    Returns:
+        Absolute path to proposals directory.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/strategy/proposals'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'strategy', 'proposals')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    return os.path.join(PROJECT_ROOT, docs_dir, 'strategy', 'proposals')
+
+
+def get_archive_logs_dir() -> str:
+    """Get archive/logs directory path with backward compatibility.
+    
+    v2.5.2: Uses nested structure (docs/archive/logs/)
+    Pre-v2.5.2: Falls back to flat structure (docs/archive/)
+    
+    Returns:
+        Absolute path to archive/logs directory.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/archive/logs'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'archive', 'logs')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    
+    # Try new location first (v2.5.2+)
+    new_path = os.path.join(PROJECT_ROOT, docs_dir, 'archive', 'logs')
+    if os.path.exists(new_path):
+        return new_path
+    
+    # Fall back to old location (pre-v2.5.2: logs directly in archive/)
+    old_path = os.path.join(PROJECT_ROOT, docs_dir, 'archive')
+    if os.path.exists(old_path):
+        _warn_deprecated(f'{docs_dir}/archive/', f'{docs_dir}/archive/logs/')
+        return old_path
+    
+    # Return new location for creation
+    return new_path
+
+
+def get_archive_proposals_dir() -> str:
+    """Get archive/proposals directory path (mode-aware).
+    
+    New in v2.5.2 - no backward compatibility needed.
+    
+    Returns:
+        Absolute path to archive/proposals directory.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/archive/proposals'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'archive', 'proposals')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    return os.path.join(PROJECT_ROOT, docs_dir, 'archive', 'proposals')
+
+
+def get_concepts_path() -> str:
+    """Get Common_Concepts.md path with backward compatibility.
+    
+    v2.5.2: Uses nested structure (docs/reference/Common_Concepts.md)
+    Pre-v2.5.2: Falls back to flat structure (docs/Common_Concepts.md)
+    
+    Returns:
+        Absolute path to Common_Concepts.md.
+    """
+    try:
+        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+    except ImportError:
+        return 'docs/reference/Common_Concepts.md'
+    
+    if is_ontos_repo():
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'reference', 'Common_Concepts.md')
+    
+    docs_dir = resolve_config('DOCS_DIR', 'docs')
+    
+    # Try new location first (v2.5.2+)
+    new_path = os.path.join(PROJECT_ROOT, docs_dir, 'reference', 'Common_Concepts.md')
+    if os.path.exists(new_path):
+        return new_path
+    
+    # Fall back to old location (pre-v2.5.2)
+    old_path = os.path.join(PROJECT_ROOT, docs_dir, 'Common_Concepts.md')
+    if os.path.exists(old_path):
+        _warn_deprecated(f'{docs_dir}/Common_Concepts.md', f'{docs_dir}/reference/Common_Concepts.md')
+        return old_path
+    
+    # Return new location for creation
+    return new_path

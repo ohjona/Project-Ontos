@@ -198,6 +198,8 @@ def main():
 This command runs:
 1. ontos_migrate_frontmatter.py - Find untagged files
 2. ontos_generate_context_map.py - Rebuild graph and validate
+3. ontos_consolidate.py - Consolidate logs exceeding retention count
+4. Review proposals - Prompt to graduate implemented proposals
 
 Example:
   python3 ontos_maintain.py          # Run maintenance
@@ -245,21 +247,21 @@ Example:
         print(output)
     all_success = all_success and success
     
-    # Step 3: Consolidate logs (v2.4, mode-aware)
+    # Step 3: Consolidate logs (v2.4+, count-based since v2.6.2)
     try:
         from ontos_lib import resolve_config
         auto_consolidate = resolve_config('AUTO_CONSOLIDATE', True)
     except ImportError:
         auto_consolidate = True
-    
+
     if auto_consolidate:
         if not args.quiet:
-            print("\nStep 3: Consolidating stale logs...")
-        
-        # Get consolidation threshold days from config (mode/user-aware)
-        threshold_days = resolve_config('CONSOLIDATION_THRESHOLD_DAYS', 30)
-        
-        consolidate_args = ['--all', '--days', str(threshold_days)]
+            print("\nStep 3: Consolidating excess logs...")
+
+        # Get retention count from config (mode/user-aware)
+        retention_count = resolve_config('LOG_RETENTION_COUNT', 15)
+
+        consolidate_args = ['--all', '--count', str(retention_count)]
         success, output = run_script('ontos_consolidate.py', consolidate_args, args.quiet)
         if not args.quiet and output.strip():
             print(output)

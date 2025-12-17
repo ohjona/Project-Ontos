@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 15:15:58 UTC
+Generated: 2025-12-17 16:17:33 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-18 00:15:58
+Generated on: 2025-12-18 01:17:33
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -49,6 +49,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_6_proposals_and_tooling** (v2.6_proposals_and_tooling.md) ~11,100 tokens
   - Status: active
   - Depends On: v2_strategy
+- **v2_7_documentation_ontology** [draft] (v2.7_documentation_ontology.md) ~3,800 tokens
+  - Status: draft
+  - Depends On: v2_strategy, mission
 - **v2_strategy** (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
@@ -206,12 +209,18 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251217_v2_6_verification** (2025-12-17_v2-6-verification.md) ~135 tokens
   - Status: active
   - Impacts: v2_6_proposals_and_tooling
-- **log_20251218_v2_6_1_graduation** (2025-12-18_v2-6-1-graduation.md) ~961 tokens
+- **log_20251218_v2_6_1_graduation** (2025-12-18_v2-6-1-graduation.md) ~971 tokens
   - Status: active
   - Impacts: ontos_agent_instructions, ontos_manual
+- **log_20251218_v2_7_philosophy_proposal** (2025-12-18_v2-7-philosophy-proposal.md) ~762 tokens
+  - Status: active
+  - Impacts: v2_strategy, v2_7_documentation_ontology
 
 
 ## 2. Recent Timeline
+- **2025-12-18** [feature] **V2 7 Philosophy Proposal** (`log_20251218_v2_7_philosophy_proposal`)
+  - Impacted: `v2_strategy`, `v2_7_documentation_ontology`
+  - Concepts: ontology, bidirectional, documentation
 - **2025-12-18** [feature] **V2 6 1 Graduation** (`log_20251218_v2_6_1_graduation`)
   - Impacted: `ontos_agent_instructions`, `ontos_manual`
 - **2025-12-17** [feature] **V2 6 Verification** (`log_20251217_v2_6_verification`)
@@ -229,9 +238,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [feature] **V2 5 Promises Implementation** (`log_20251217_v2_5_promises_implementation`)
   - Impacted: `v2_5_promises_implementation_plan`, `ontos_manual`, `ontos_agent_instructions`
   - Concepts: config, ux, tooling, hooks
-- **2025-12-17** [refactor] **V2 5 Promises Implementation Plan** (`log_20251217_v2_5_promises_implementation_plan`)
 
-*Showing 10 of 36 sessions*
+*Showing 10 of 37 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -291,6 +299,7 @@ No issues found.
 | log_20251217_v2_6_maintenance | [2025-12-17_v2-6-maintenance.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-maintenance.md) | log |
 | log_20251217_v2_6_verification | [2025-12-17_v2-6-verification.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-verification.md) | log |
 | log_20251218_v2_6_1_graduation | [2025-12-18_v2-6-1-graduation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-6-1-graduation.md) | log |
+| log_20251218_v2_7_philosophy_proposal | [2025-12-18_v2-7-philosophy-proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-7-philosophy-proposal.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
@@ -301,4 +310,5 @@ No issues found.
 | v2_5_architectural_review_claude_v2 | [V2_Claude_on_v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Claude_on_v2.5.md) | atom |
 | v2_5_promises_implementation_plan | [v2.5_promises_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/v2.5_promises_implementation_plan.md) | strategy |
 | v2_6_proposals_and_tooling | [v2.6_proposals_and_tooling.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/v2.6_proposals_and_tooling.md) | strategy |
+| v2_7_documentation_ontology | [v2.7_documentation_ontology.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_documentation_ontology.md) | strategy |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |

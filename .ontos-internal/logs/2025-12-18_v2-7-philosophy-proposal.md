@@ -39,6 +39,7 @@ This is a philosophy proposal (not implementation) per Johnny's explicit request
 
 ## 3. Changes Made
 
+### v2.7 Philosophy Proposal
 - Created v2.7 proposal directory: `.ontos-internal/strategy/proposals/v2.7/`
 - Created philosophy proposal: `v2.7_documentation_ontology.md`
   - Preamble explaining why philosophy proposal precedes implementation
@@ -49,6 +50,15 @@ This is a philosophy proposal (not implementation) per Johnny's explicit request
   - Part V: Open questions requiring resolution
   - Part VI: Why this matters (ontological completeness, trust, mission alignment)
   - Executive summary at top with synthesis and key decisions table
+
+### v2.6.2 Count-Based Consolidation (bonus fix)
+- `ontos_consolidate.py`: Changed from age-based (30 days) to count-based (keep newest 15)
+  - Added `find_excess_logs()` function
+  - `--count N` flag to customize retention
+  - `--by-age` flag for legacy behavior
+- `ontos_maintain.py`: Updated to use `--count` instead of `--days`
+- Updated help text to show all 4 maintenance steps
+- Version bump to 2.6.2, changelog updated
 
 ## 4. Next Steps
 
@@ -75,4 +85,6 @@ Johnny on doc independence:
 ```text
 93ea4c4 - docs: add v2.7 philosophical framework proposal
 7d413e5 - docs: add executive summary to v2.7 philosophy proposal
+aeb9fc9 - docs: add session log for v2.7 philosophy proposal
+34a749a - feat(v2.6.2): count-based consolidation
 ```

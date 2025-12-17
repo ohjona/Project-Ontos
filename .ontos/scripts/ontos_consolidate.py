@@ -29,37 +29,74 @@ HISTORY_LEDGER_HEADER = '| Date | Slug | Event | Decision / Outcome |'
 
 
 def find_old_logs(threshold_days: int = 30) -> List[Tuple[str, str, dict]]:
-    """Find logs older than threshold.
-    
+    """Find logs older than threshold (age-based).
+
     Returns:
         List of (filepath, doc_id, frontmatter) tuples, oldest first.
     """
     if not os.path.exists(LOGS_DIR):
         return []
-    
+
     old_logs = []
     today = datetime.datetime.now()
-    
+
     for filename in sorted(os.listdir(LOGS_DIR)):
         if not filename.endswith('.md'):
             continue
         if not re.match(r'^\d{4}-\d{2}-\d{2}', filename):
             continue
-        
+
         filepath = os.path.join(LOGS_DIR, filename)
-        
+
         try:
             log_date = datetime.datetime.strptime(filename[:10], '%Y-%m-%d')
             age_days = (today - log_date).days
-            
+
             if age_days > threshold_days:
                 frontmatter = parse_frontmatter(filepath)
                 if frontmatter:
                     old_logs.append((filepath, frontmatter.get('id', filename), frontmatter))
         except ValueError:
             continue
-    
+
     return old_logs
+
+
+def find_excess_logs(retention_count: int = 15) -> List[Tuple[str, str, dict]]:
+    """Find logs exceeding retention count (count-based).
+
+    Keeps the newest N logs, returns the rest for consolidation.
+
+    Args:
+        retention_count: Number of newest logs to keep.
+
+    Returns:
+        List of (filepath, doc_id, frontmatter) tuples, oldest first.
+    """
+    if not os.path.exists(LOGS_DIR):
+        return []
+
+    all_logs = []
+
+    for filename in sorted(os.listdir(LOGS_DIR)):
+        if not filename.endswith('.md'):
+            continue
+        if not re.match(r'^\d{4}-\d{2}-\d{2}', filename):
+            continue
+
+        filepath = os.path.join(LOGS_DIR, filename)
+        frontmatter = parse_frontmatter(filepath)
+        if frontmatter:
+            all_logs.append((filepath, frontmatter.get('id', filename), frontmatter))
+
+    # Sort by filename (date-based), oldest first
+    all_logs.sort(key=lambda x: os.path.basename(x[0]))
+
+    # Keep newest N, return the rest
+    if len(all_logs) <= retention_count:
+        return []
+
+    return all_logs[:-retention_count]
 
 
 def extract_summary(filepath: str) -> Optional[str]:
@@ -293,50 +330,63 @@ def main():
     parser = argparse.ArgumentParser(
         description='Consolidate old session logs into decision history.',
         epilog="""
-This script helps with the monthly consolidation ritual:
-1. Finds logs older than threshold
+This script consolidates logs that exceed the retention threshold:
+1. Finds logs exceeding retention count (default: keep newest 15)
 2. Shows summary for each
 3. Prompts for confirmation
 4. Archives log and updates decision_history.md (History Ledger table)
 
 Example:
-  python3 ontos_consolidate.py              # Interactive consolidation
+  python3 ontos_consolidate.py              # Keep newest 15, consolidate rest
   python3 ontos_consolidate.py --dry-run    # Preview what would happen
-  python3 ontos_consolidate.py --days 60    # Logs older than 60 days
+  python3 ontos_consolidate.py --count 10   # Keep newest 10 logs
+  python3 ontos_consolidate.py --by-age     # Use age-based (legacy, 30 days)
   python3 ontos_consolidate.py --all        # Process all without prompting
 """
     )
     parser.add_argument('--version', '-V', action='version', version=f'%(prog)s {__version__}')
+    parser.add_argument('--count', type=int, default=15,
+                        help='Number of newest logs to keep (default: 15)')
+    parser.add_argument('--by-age', action='store_true',
+                        help='Use age-based instead of count-based (legacy)')
     parser.add_argument('--days', type=int, default=30,
-                        help='Age threshold in days (default: 30)')
+                        help='Age threshold in days, requires --by-age (default: 30)')
     parser.add_argument('--dry-run', '-n', action='store_true',
                         help='Preview without making changes')
     parser.add_argument('--quiet', '-q', action='store_true',
                         help='Suppress output')
     parser.add_argument('--all', '-a', action='store_true',
-                        help='Process all old logs without prompting')
-    
+                        help='Process all logs without prompting')
+
     args = parser.parse_args()
-    
+
     # Validate setup
     if not args.dry_run and not validate_decision_history():
         sys.exit(1)
-    
-    old_logs = find_old_logs(args.days)
-    
-    if not old_logs:
+
+    # Find logs to consolidate (count-based by default, age-based with --by-age)
+    if args.by_age:
+        logs_to_consolidate = find_old_logs(args.days)
+        threshold_msg = f"older than {args.days} days"
+        empty_msg = f"✅ No logs older than {args.days} days. Nothing to consolidate."
+    else:
+        logs_to_consolidate = find_excess_logs(args.count)
+        threshold_msg = f"exceeding retention count ({args.count})"
+        empty_msg = f"✅ Log count within threshold ({args.count}). Nothing to consolidate."
+
+    if not logs_to_consolidate:
         if not args.quiet:
-            print(f"✅ No logs older than {args.days} days. Nothing to consolidate.")
+            print(empty_msg)
         return
-    
+
     if not args.quiet:
-        print(f"Found {len(old_logs)} log(s) older than {args.days} days:")
-    
+        print(f"Found {len(logs_to_consolidate)} log(s) {threshold_msg}:")
+
     consolidated = 0
-    for filepath, doc_id, frontmatter in old_logs:
+    for filepath, doc_id, frontmatter in logs_to_consolidate:
         if consolidate_log(filepath, doc_id, frontmatter, args.dry_run, args.quiet, args.all):
             consolidated += 1
-    
+
     if not args.quiet:
         action = 'Would consolidate' if args.dry_run else 'Consolidated'
         print(f"\n{action} {consolidated} log(s).")

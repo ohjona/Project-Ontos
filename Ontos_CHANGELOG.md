@@ -22,6 +22,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.6.2] - 2025-12-18
+
+### Theme: "Count-Based Consolidation"
+
+Aligns consolidation threshold with log retention count.
+
+### Changed
+- **Consolidation now count-based** — Keeps newest N logs (default: 15), consolidates the rest
+  - Aligns with `LOG_RETENTION_COUNT` warning threshold
+  - `--by-age` flag preserves legacy age-based behavior
+  - `--count N` to customize retention count
+- **Maintain Ontos help text** — Now shows all 4 steps (was missing Steps 3 and 4)
+
+---
+
 ## [2.6.1] - 2025-12-18
 
 ### Theme: "Automated Graduation"

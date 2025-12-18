@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-17 16:31:03 UTC
+Generated: 2025-12-18 02:03:14 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-18 01:31:03
+Generated on: 2025-12-18 11:03:14
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -25,6 +25,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: None
 
 ### STRATEGY
+- **architect_v2_7_phil_synthesis** [draft] (Architect_V2.7Phil_Synthesis.md) ~3,500 tokens
+  - Status: draft
+  - Depends On: v2_7_documentation_ontology, codex_v2_7_phil_review_v1, claude_2_7_phil_v1_review, gemini_v2_7_phil_v1
 - **codex_2_6_v1_review** [draft] (Codex_2.6_v1.md) ~766 tokens
   - Status: draft
   - Depends On: v2_6_proposals_and_tooling
@@ -34,6 +37,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **codex_2_6_v3_review** [draft] (Codex_2.6_v3.md) ~600 tokens
   - Status: draft
   - Depends On: v2_6_proposals_and_tooling
+- **codex_v2_7_phil_review_v1** [draft] (Codex_V2.7Phil_v1.md) ~1,100 tokens
+  - Status: draft
+  - Depends On: v2_7_documentation_ontology, v2_strategy, mission
 - **decision_history** (decision_history.md) ~483 tokens
   - Status: active
   - Depends On: mission
@@ -66,6 +72,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **claude_2_6_v3_review** (Claude_2.6_v3.md) ~1,400 tokens
   - Status: complete
   - Depends On: v2_6_proposals_and_tooling, claude_2_6_v2_review
+- **claude_2_7_phil_v1_review** (Claude_V2.7Phil_v1.md) ~2,400 tokens
+  - Status: complete
+  - Depends On: v2_7_documentation_ontology
 - **codex_2_5_v1_review** (V1_Codex on v2.5.md) ~621 tokens
   - Status: complete
   - Depends On: v2_5_promises_implementation_plan
@@ -212,6 +221,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251218_v2_6_1_graduation** (2025-12-18_v2-6-1-graduation.md) ~971 tokens
   - Status: active
   - Impacts: ontos_agent_instructions, ontos_manual
+- **log_20251218_v2_7_documentation_ontology** (2025-12-18_v2-7-documentation-ontology.md) ~572 tokens
+  - Status: active
+  - Impacts: v2_7_documentation_ontology
 - **log_20251218_v2_7_philosophy_proposal** (2025-12-18_v2-7-philosophy-proposal.md) ~904 tokens
   - Status: active
   - Impacts: v2_strategy, v2_7_documentation_ontology
@@ -221,6 +233,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-18** [feature] **V2 7 Philosophy Proposal** (`log_20251218_v2_7_philosophy_proposal`)
   - Impacted: `v2_strategy`, `v2_7_documentation_ontology`
   - Concepts: ontology, bidirectional, documentation
+- **2025-12-18** [feature] **V2 7 Documentation Ontology** (`log_20251218_v2_7_documentation_ontology`)
+  - Impacted: `v2_7_documentation_ontology`
+  - Concepts: ontology, documentation, synthesis, architecture
 - **2025-12-18** [feature] **V2 6 1 Graduation** (`log_20251218_v2_6_1_graduation`)
   - Impacted: `ontos_agent_instructions`, `ontos_manual`
 - **2025-12-17** [feature] **V2 6 Verification** (`log_20251217_v2_6_verification`)
@@ -235,26 +250,29 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [chore] **V2 6 Changelog** (`log_20251217_v2_6_changelog`)
 - **2025-12-17** [fix] **V2 6 Bugfixes** (`log_20251217_v2_6_bugfixes`)
   - Impacted: `v2_6_proposals_and_tooling`
-- **2025-12-17** [feature] **V2 5 Promises Implementation** (`log_20251217_v2_5_promises_implementation`)
-  - Impacted: `v2_5_promises_implementation_plan`, `ontos_manual`, `ontos_agent_instructions`
-  - Concepts: config, ux, tooling, hooks
 
-*Showing 10 of 37 sessions*
+*Showing 10 of 38 sessions*
 
 ## 3. Dependency Audit
-No issues found.
+- [BROKEN LINK] **architect_v2_7_phil_synthesis** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Architect_V2.7Phil_Synthesis.md) references missing ID: `gemini_v2_7_phil_v1`
+  Fix: Add a document with `id: gemini_v2_7_phil_v1` or remove it from depends_on
+- [ARCHITECTURE] **architect_v2_7_phil_synthesis** (strategy) depends on **claude_2_7_phil_v1_review** (atom)
+  Fix: strategy should not depend on atom. Invert the dependency or change document types
 
 ## 4. Index
 | ID | Filename | Type |
 |---|---|---|
+| architect_v2_7_phil_synthesis | [Architect_V2.7Phil_Synthesis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Architect_V2.7Phil_Synthesis.md) | strategy |
 | claude_2_6_v1_review | [Claude_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Claude_2.6_v1.md) | atom |
 | claude_2_6_v2_review | [Claude_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Claude_2.6_v2.md) | atom |
 | claude_2_6_v3_review | [Claude_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Claude_2.6_v3.md) | atom |
+| claude_2_7_phil_v1_review | [Claude_V2.7Phil_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Claude_V2.7Phil_v1.md) | atom |
 | codex_2_5_v1_review | [V1_Codex on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Codex on v2.5.md) | atom |
 | codex_2_5_v2_review | [V2_Codex on V2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Codex on V2.5.md) | atom |
 | codex_2_6_v1_review | [Codex_2.6_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Codex_2.6_v1.md) | strategy |
 | codex_2_6_v2_review | [Codex_2.6_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Codex_2.6_v2.md) | strategy |
 | codex_2_6_v3_review | [Codex_2.6_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.6/Codex_2.6_v3.md) | strategy |
+| codex_v2_7_phil_review_v1 | [Codex_V2.7Phil_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Codex_V2.7Phil_v1.md) | strategy |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
 | decision_history | [decision_history.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/decision_history.md) | strategy |
 | dual_mode_matrix | [Dual_Mode_Matrix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/reference/Dual_Mode_Matrix.md) | atom |
@@ -299,6 +317,7 @@ No issues found.
 | log_20251217_v2_6_maintenance | [2025-12-17_v2-6-maintenance.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-maintenance.md) | log |
 | log_20251217_v2_6_verification | [2025-12-17_v2-6-verification.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-17_v2-6-verification.md) | log |
 | log_20251218_v2_6_1_graduation | [2025-12-18_v2-6-1-graduation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-6-1-graduation.md) | log |
+| log_20251218_v2_7_documentation_ontology | [2025-12-18_v2-7-documentation-ontology.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-7-documentation-ontology.md) | log |
 | log_20251218_v2_7_philosophy_proposal | [2025-12-18_v2-7-philosophy-proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-7-philosophy-proposal.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 08:16:01 UTC
+Generated: 2025-12-19 08:17:07 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-19 17:16:01
+Generated on: 2025-12-19 17:17:07
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -212,6 +212,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251218_v2_7_philosophy_proposal** (2025-12-18_v2-7-philosophy-proposal.md) ~904 tokens
   - Status: active
   - Impacts: v2_strategy, v2_7_documentation_ontology
+- **log_20251219_chore_maintenance_consolidate_logs_add_frontma** (2025-12-19_chore-maintenance-consolidate-logs-add-frontma.md) ~337 tokens
+  - Status: active
+  - Impacts: decision_history, schema
 - **log_20251219_docs_graduate_master_plan_to_strategy_reorganize** (2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) ~558 tokens
   - Status: active
   - Impacts: master_plan_v4, v2_strategy
@@ -227,6 +230,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-19** [chore] **Docs Graduate Master Plan To Strategy Reorganize** (`log_20251219_docs_graduate_master_plan_to_strategy_reorganize`)
   - Impacted: `master_plan_v4`, `v2_strategy`
   - Concepts: governance, proposals, graduation
+- **2025-12-19** [chore] **Chore Maintenance Consolidate Logs Add Frontma** (`log_20251219_chore_maintenance_consolidate_logs_add_frontma`)
+  - Impacted: `decision_history`, `schema`
+  - Concepts: maintenance, consolidation, frontmatter, type-hierarchy
 - **2025-12-18** [feature] **V2 7 Philosophy Proposal** (`log_20251218_v2_7_philosophy_proposal`)
   - Impacted: `v2_strategy`, `v2_7_documentation_ontology`
   - Concepts: ontology, bidirectional, documentation
@@ -242,10 +248,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `v2_6_proposals_and_tooling`
 - **2025-12-17** [chore] **V2 6 Docs** (`log_20251217_v2_6_docs`)
   - Impacted: `ontos_manual`, `ontos_agent_instructions`
-- **2025-12-17** [fix] **V2 6 Codex Fixes** (`log_20251217_v2_6_codex_fixes`)
-  - Impacted: `v2_6_proposals_and_tooling`
 
-*Showing 10 of 15 sessions*
+*Showing 10 of 16 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -299,6 +303,7 @@ No issues found.
 | log_20251218_v2_6_1_graduation | [2025-12-18_v2-6-1-graduation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-6-1-graduation.md) | log |
 | log_20251218_v2_7_documentation_ontology | [2025-12-18_v2-7-documentation-ontology.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-7-documentation-ontology.md) | log |
 | log_20251218_v2_7_philosophy_proposal | [2025-12-18_v2-7-philosophy-proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-18_v2-7-philosophy-proposal.md) | log |
+| log_20251219_chore_maintenance_consolidate_logs_add_frontma | [2025-12-19_chore-maintenance-consolidate-logs-add-frontma.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_chore-maintenance-consolidate-logs-add-frontma.md) | log |
 | log_20251219_docs_graduate_master_plan_to_strategy_reorganize | [2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) | log |
 | log_20251219_fix_resolve_all_context_map_validation_errors | [2025-12-19_fix-resolve-all-context-map-validation-errors.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_fix-resolve-all-context-map-validation-errors.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |

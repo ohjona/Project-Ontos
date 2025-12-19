@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 13:00:27 UTC
+Generated: 2025-12-19 13:28:47 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-19 22:00:27
+Generated on: 2025-12-19 22:28:47
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -58,8 +58,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_6_proposals_and_tooling** (v2.6_proposals_and_tooling.md) ~11,100 tokens
   - Status: complete
   - Depends On: v2_strategy
-- **v2_7_1_implementation_plan** [draft] (v2.7.1_implementation_plan.md) ~2,100 tokens
-  - Status: draft
+- **v2_7_1_implementation_plan** (v2.7.1_implementation_plan.md) ~2,600 tokens
+  - Status: active
   - Depends On: v2_7_implementation_plan, v2_7_1_patch_plan
 - **v2_7_1_patch_plan** (v2.7.1_patch_plan.md) ~994 tokens
   - Status: complete
@@ -245,12 +245,18 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251219_v2_7** (2025-12-19_v2-7.md) ~599 tokens
   - Status: active
   - Impacts: v2_7_documentation_ontology, master_plan_v4, schema
+- **log_20251219_v2_7_1_plan** (2025-12-19_v2-7-1-plan.md) ~297 tokens
+  - Status: active
+  - Impacts: master_plan, v2_7_1_implementation_plan
 
 
 ## 2. Recent Timeline
 - **2025-12-19** [feature] **V2 7** (`log_20251219_v2_7`)
   - Impacted: `v2_7_documentation_ontology`, `master_plan_v4`, `schema`
   - Concepts: describes, staleness, immutable-history, implementation-plan, llm-review
+- **2025-12-19** [chore] **V2 7 1 Plan** (`log_20251219_v2_7_1_plan`)
+  - Impacted: `master_plan`, `v2_7_1_implementation_plan`
+  - Concepts: testing, documentation
 - **2025-12-19** [fix] **Fix Resolve All Context Map Validation Errors** (`log_20251219_fix_resolve_all_context_map_validation_errors`)
   - Impacted: `schema`, `architect_v2_7_phil_synthesis`, `architect_synthesis_install_ux`
   - Concepts: validation, schema, type-hierarchy
@@ -271,13 +277,13 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-17** [feature] **V2 6 Verification** (`log_20251217_v2_6_verification`)
   - Impacted: `v2_6_proposals_and_tooling`
 - **2025-12-17** [chore] **V2 6 Maintenance** (`log_20251217_v2_6_maintenance`)
-- **2025-12-17** [feature] **V2 6 Implementation** (`log_20251217_v2_6_implementation`)
-  - Impacted: `v2_6_proposals_and_tooling`
 
-*Showing 10 of 17 sessions*
+*Showing 10 of 18 sessions*
 
 ## 3. Dependency Audit
-No issues found.
+- [BROKEN LINK] **log_20251219_v2_7_1_plan** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1-plan.md) impacts non-existent document: `master_plan`
+  Fix: Create `master_plan`, correct the reference, or archive this log
+- [LINT] **v2_7_1_implementation_plan**: Active document in proposals/. Graduate to strategy/.
 
 ## 4. Index
 | ID | Filename | Type |
@@ -332,6 +338,7 @@ No issues found.
 | log_20251219_docs_graduate_master_plan_to_strategy_reorganize | [2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) | log |
 | log_20251219_fix_resolve_all_context_map_validation_errors | [2025-12-19_fix-resolve-all-context-map-validation-errors.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_fix-resolve-all-context-map-validation-errors.md) | log |
 | log_20251219_v2_7 | [2025-12-19_v2-7.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7.md) | log |
+| log_20251219_v2_7_1_plan | [2025-12-19_v2-7-1-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1-plan.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

@@ -399,6 +399,7 @@ python3 .ontos/scripts/ontos_update.py
 | `ontos_update.py` | Pull latest from GitHub |
 | `ontos_pre_push_check.py` | Pre-push hook logic |
 | `ontos_remove_frontmatter.py` | Strip YAML headers |
+| `ontos_verify.py` | Mark documentation as current (v2.7) |
 
 ### Common flags
 - `--strict` — Exit 1 on any issue

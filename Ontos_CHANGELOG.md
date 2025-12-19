@@ -22,6 +22,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.7.0] - 2025-12-19
+
+### Theme: "Documentation Staleness Tracking"
+
+Track when documentation becomes outdated after code changes.
+
+### Added
+- **`describes` field** — Documents can declare which atoms they describe
+  - Type constraint: only `atom` documents can be described
+  - Circular reference detection prevents infinite loops
+- **`describes_verified` field** — Date when document was last verified accurate
+- **Staleness detection** — Compares verification date against atom modification dates
+  - Uses git commit dates (reliable) with mtime fallback
+  - In-memory caching for performance
+- **Section 5: Documentation Staleness Audit** — New context map section
+  - Shows stale docs with `[STALE]` prefix
+  - Lists which atoms changed and when
+- **`[STALE]` error flag** — Added to validation errors in Agent Instructions
+- **`ontos_verify.py`** — Helper script to update `describes_verified` date
+  - Single file: `ontos_verify.py <path>`
+  - Interactive: `ontos_verify.py --all`
+  - Backdating: `ontos_verify.py <path> --date 2025-12-01`
+- **Staleness warning in Archive Ontos** — Warns about stale docs after archiving
+- **Immutable history generation** — `decision_history.md` regenerated deterministically
+  - Sorted by date (desc), event type (alpha), ID (alpha)
+  - `--skip-history` flag to opt out of regeneration
+  - GENERATED header indicates machine-managed file
+- **Self-hosting** — `Ontos_Manual.md` now uses `describes` field
+
+### Changed
+- Renamed `get_git_last_modified_v27()` → `get_file_modification_date()`
+- Fixed event type extraction in history (`event` → `event_type` field)
+- Default event type changed from `log` to `chore`
+
+### Tests
+- 43 new v2.7 tests (`test_describes.py`, `test_immutable_history.py`)
+- Fixed `test_lint_exceeds_retention_count` (was using wrong config variable)
+- All 225 tests pass
+
+---
+
 ## [2.6.2] - 2025-12-18
 
 ### Theme: "Count-Based Consolidation"

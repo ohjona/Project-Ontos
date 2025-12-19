@@ -17,6 +17,11 @@ from ontos_lib import (
     resolve_config,
     get_proposals_dir,
     get_decision_history_path,
+    # v2.7 imports for staleness check
+    check_staleness,
+    normalize_describes,
+    parse_describes_verified,
+    parse_frontmatter,
 )
 
 # v2.4: Use resolve_config for mode-aware settings
@@ -1360,6 +1365,64 @@ def _create_archive_marker(log_filepath: str) -> None:
         pass
 
 
+# =============================================================================
+# V2.7 STALENESS WARNING
+# =============================================================================
+
+
+def check_stale_docs_warning() -> None:
+    """Check for stale documentation and warn the user.
+    
+    v2.7: Runs after session archiving to alert users about potentially
+    outdated documentation that may need review.
+    """
+    from ontos_config import DOCS_DIR, is_ontos_repo
+    
+    try:
+        # Import scan_docs dynamically to avoid circular imports
+        from ontos_generate_context_map import scan_docs
+        
+        # Determine scan directories
+        if is_ontos_repo():
+            target_dirs = [DOCS_DIR, 'docs']
+        else:
+            target_dirs = [DOCS_DIR]
+        
+        files_data = scan_docs(target_dirs)
+        
+        # Build ID to path mapping
+        id_to_path = {doc_id: data['filepath'] for doc_id, data in files_data.items()}
+        
+        stale_docs = []
+        for doc_id, data in files_data.items():
+            describes = data.get('describes', [])
+            if not describes:
+                continue
+            
+            staleness = check_staleness(
+                doc_id=doc_id,
+                doc_path=data['filepath'],
+                describes=describes,
+                describes_verified=data.get('describes_verified'),
+                id_to_path=id_to_path
+            )
+            
+            if staleness and staleness.is_stale:
+                stale_docs.append(staleness)
+        
+        if stale_docs:
+            print(f"\n⚠️  {len(stale_docs)} document(s) may be stale:")
+            for doc in stale_docs[:3]:  # Show max 3
+                stale_str = ", ".join([f"{a}" for a, _ in doc.stale_atoms[:2]])
+                print(f"   - {doc.doc_id}: describes {stale_str} (modified after {doc.verified_date})")
+            if len(stale_docs) > 3:
+                print(f"   ... and {len(stale_docs) - 3} more")
+            print("   Run: python3 .ontos/scripts/ontos_verify.py --all")
+    except Exception:
+        # Non-fatal: staleness check failure shouldn't block archive
+        pass
+
+
 def main() -> None:
     """Main entry point."""
     parser = argparse.ArgumentParser(
@@ -1608,6 +1671,10 @@ Slug format:
         proposal = detect_implemented_proposal(branch, impacts)
         if proposal:
             prompt_graduation(proposal, args.quiet)
+    
+    # v2.7: Check for stale documentation
+    if not args.quiet:
+        check_stale_docs_warning()
 
     # Handle changelog integration
     if args.changelog or args.changelog_category or args.changelog_message:

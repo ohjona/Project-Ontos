@@ -68,6 +68,16 @@ Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`, `decision`
 ### "Update Ontos"
 1. `python3 .ontos/scripts/ontos_update.py`
 
+### "Verify Ontos" (v2.7)
+Mark documentation as current after reviewing described atoms:
+1. `python3 .ontos/scripts/ontos_verify.py <path>` — Single file
+2. `python3 .ontos/scripts/ontos_verify.py --all` — Interactive: all stale docs
+
+**When to verify:**
+- After updating code that a document describes
+- When Archive Ontos shows staleness warnings
+- When context map Section 5 shows stale documents
+
 ## Type Hierarchy
 
 | Type | Rank | Depends On |
@@ -88,6 +98,7 @@ Rule: Dependencies flow DOWN (atom → product → strategy → kernel).
 | `[CYCLE]` | Remove one dependency in the loop |
 | `[ORPHAN]` | Add to another doc's depends_on |
 | `[ARCHITECTURE]` | Lower-rank can't depend on higher-rank |
+| `[STALE]` | Document's `describes` targets were modified after `describes_verified` date. Run `ontos_verify.py` |
 
 
 ## Historical Recall

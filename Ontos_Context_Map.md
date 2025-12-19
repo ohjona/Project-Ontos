@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 10:31:39 UTC
+Generated: 2025-12-19 10:39:09 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-19 19:31:39
+Generated on: 2025-12-19 19:39:09
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -37,9 +37,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **codex_v2_7_phil_review_v1** [draft] (Codex_V2.7Phil_v1.md) ~1,100 tokens
   - Status: draft
   - Depends On: v2_7_documentation_ontology, v2_strategy, mission
-- **decision_history** (decision_history.md) ~1,700 tokens
-  - Status: active
-  - Depends On: mission
 - **installation_ux_proposal** [draft] (Installation_UX_Proposal.md) ~7,100 tokens
   - Status: draft
   - Depends On: v2_strategy, mission, ontos_manual
@@ -270,11 +267,17 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 ## 3. Dependency Audit
 - [BROKEN LINK] **v2_7_implementation_synthesis** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_implementation_synthesis.md) references missing ID: `v2_7_implementation_plan_review_gemini`
   Fix: Add a document with `id: v2_7_implementation_plan_review_gemini` or remove it from depends_on
-- [CYCLE] Circular dependency: v2_7_implementation_plan -> v2_7_implementation_synthesis -> v2_7_implementation_plan
+- [CYCLE] Circular dependency: v2_7_implementation_synthesis -> v2_7_implementation_plan -> v2_7_implementation_synthesis
+  Fix: Remove one of the depends_on links to break the cycle
+- [CYCLE] Circular dependency: claude_v2_7_implementation_review -> v2_7_implementation_plan
   Fix: Remove one of the depends_on links to break the cycle
 - [CYCLE] Circular dependency: v2_7_implementation_plan_review_codex -> v2_7_implementation_plan
   Fix: Remove one of the depends_on links to break the cycle
+- [DEPTH] **v2_7_implementation_synthesis** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **claude_v2_7_implementation_review** has dependency depth 6 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v2_7_implementation_plan_review_codex** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [ARCHITECTURE] **v2_7_implementation_plan** (strategy) depends on **architect_v2_7_phil_synthesis** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
@@ -282,6 +285,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   Fix: strategy should not depend on atom. Invert the dependency or change document types
 - [ARCHITECTURE] **v2_7_implementation_synthesis** (strategy) depends on **claude_v2_7_implementation_review** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
+- [BROKEN LINK] **log_20251219_chore_maintenance_consolidate_logs_add_frontma** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_chore-maintenance-consolidate-logs-add-frontma.md) impacts non-existent document: `decision_history`
+  Fix: Create `decision_history`, correct the reference, or archive this log
+- [LINT] **v2_6_proposals_and_tooling**: Graduated proposal may not be in decision_history.md.
 - [LINT] **v2_7_implementation_plan**: Active document in proposals/. Graduate to strategy/.
 
 ## 4. Index
@@ -306,7 +312,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | codex_v2_7_phil_review_v1 | [Codex_V2.7Phil_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Codex_V2.7Phil_v1.md) | strategy |
 | codex_v2_7_phil_review_v2 | [Codex_V2.7Phil_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Codex_V2.7Phil_v2.md) | atom |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
-| decision_history | [decision_history.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/decision_history.md) | strategy |
 | dual_mode_matrix | [Dual_Mode_Matrix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/reference/Dual_Mode_Matrix.md) | atom |
 | gemini_2_5_v1_review | [V1_Gemini on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V1_Gemini on v2.5.md) | atom |
 | gemini_2_5_v2_review | [V2_Gemini on v2.5.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.5/V2_Gemini on v2.5.md) | atom |

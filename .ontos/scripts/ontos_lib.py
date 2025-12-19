@@ -40,10 +40,11 @@ def clear_git_cache() -> None:
     _git_date_cache = {}
 
 
-def get_git_last_modified_v27(filepath: str) -> Tuple[Optional[date], ModifiedSource]:
+def get_file_modification_date(filepath: str) -> Tuple[Optional[date], ModifiedSource]:
     """Get last modification date for a file with source tracking.
     
-    v2.7: Enhanced version with ModifiedSource enum and caching.
+    Returns both the date and the source of that date (git, mtime, etc.)
+    to indicate reliability. Uses caching for performance.
     
     Args:
         filepath: Path to the file.
@@ -346,7 +347,7 @@ def check_staleness(
             continue  # Skip unknown (validation error caught elsewhere)
         
         atom_path = id_to_path[atom_id]
-        atom_modified, source = get_git_last_modified_v27(atom_path)
+        atom_modified, source = get_file_modification_date(atom_path)
         
         if atom_modified is None:
             continue  # Can't determine, skip
@@ -452,10 +453,10 @@ def parse_log_for_history(log_path: str) -> Optional[ParsedLog]:
         if not log_date:
             return None
         
-        # Get event type (default to 'log')
-        event_type = frontmatter.get('event', 'log')
+        # Get event type (default to 'chore' if missing)
+        event_type = frontmatter.get('event_type', frontmatter.get('event', 'chore'))
         if isinstance(event_type, list):
-            event_type = event_type[0] if event_type else 'log'
+            event_type = event_type[0] if event_type else 'chore'
         
         # Get impacts and concepts
         impacts = normalize_depends_on(frontmatter.get('impacts', []))

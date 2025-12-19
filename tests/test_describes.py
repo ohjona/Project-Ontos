@@ -2,7 +2,7 @@
 
 Tests the staleness detection features:
 - ModifiedSource enum
-- get_git_last_modified_v27() with caching
+- get_file_modification_date() with caching
 - normalize_describes() and parse_describes_verified()
 - validate_describes_field()
 - detect_describes_cycles()
@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scri
 from ontos_lib import (
     ModifiedSource,
     clear_git_cache,
-    get_git_last_modified_v27,
+    get_file_modification_date,
     normalize_describes,
     parse_describes_verified,
     DescribesValidationError,
@@ -270,7 +270,7 @@ class TestCheckStaleness:
         )
         assert result is None
     
-    @patch('ontos_lib.get_git_last_modified_v27')
+    @patch('ontos_lib.get_file_modification_date')
     def test_stale_when_atom_newer(self, mock_git):
         """Doc is stale when described atom was modified after verification."""
         mock_git.return_value = (date(2025, 12, 18), ModifiedSource.GIT)
@@ -288,7 +288,7 @@ class TestCheckStaleness:
         assert len(result.stale_atoms) == 1
         assert result.stale_atoms[0][0] == "atom_a"
     
-    @patch('ontos_lib.get_git_last_modified_v27')
+    @patch('ontos_lib.get_file_modification_date')
     def test_current_when_atom_older(self, mock_git):
         """Doc is current when described atom was modified before verification."""
         mock_git.return_value = (date(2025, 12, 10), ModifiedSource.GIT)
@@ -317,8 +317,8 @@ class TestGitCaching:
         mock_fetch.return_value = (date(2025, 12, 19), ModifiedSource.GIT)
         
         # Call twice
-        result1 = get_git_last_modified_v27("/path/to/file.md")
-        result2 = get_git_last_modified_v27("/path/to/file.md")
+        result1 = get_file_modification_date("/path/to/file.md")
+        result2 = get_file_modification_date("/path/to/file.md")
         
         # Should only call _fetch_last_modified once
         assert mock_fetch.call_count == 1

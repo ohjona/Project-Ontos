@@ -1,8 +1,8 @@
 ---
 id: architect_v2_7_phil_synthesis
-type: strategy
+type: atom
 status: draft
-depends_on: [v2_7_documentation_ontology, codex_v2_7_phil_review_v1, claude_2_7_phil_v1_review, gemini_v2_7_phil_v1]
+depends_on: [v2_7_documentation_ontology, codex_v2_7_phil_review_v1, claude_2_7_phil_v1_review]
 concepts: [ontology, documentation, synthesis, architecture]
 ---
 

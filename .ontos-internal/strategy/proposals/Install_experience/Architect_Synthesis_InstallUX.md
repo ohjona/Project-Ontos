@@ -1,6 +1,6 @@
 ---
 id: architect_synthesis_install_ux
-type: strategy
+type: atom
 status: draft
 depends_on: [installation_ux_proposal, claude_install_ux_review]
 concepts: [ux, installation, dx, architecture-review, synthesis]

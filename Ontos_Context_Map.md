@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 15:04:43 UTC
+Generated: 2025-12-19 15:45:55 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 00:04:43
+Generated on: 2025-12-20 00:45:55
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -251,14 +251,13 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251219_v2_7_1_plan** (2025-12-19_v2-7-1-plan.md) ~385 tokens
   - Status: active
   - Impacts: v2_7_1_implementation_plan
-- **log_20251220_v2_7_1** (2025-12-20_v2-7-1.md) ~386 tokens
+- **log_20251220_v2_7_1** (2025-12-20_v2-7-1.md) ~383 tokens
   - Status: active
-  - Impacts: ontos_config
+  - Impacts: None
 
 
 ## 2. Recent Timeline
 - **2025-12-20** [chore] **V2 7 1** (`log_20251220_v2_7_1`)
-  - Impacted: `ontos_config`
 - **2025-12-19** [feature] **V2 7** (`log_20251219_v2_7`)
   - Impacted: `v2_7_documentation_ontology`, `master_plan_v4`, `schema`
   - Concepts: describes, staleness, immutable-history, implementation-plan, llm-review
@@ -287,8 +286,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 *Showing 10 of 20 sessions*
 
 ## 3. Dependency Audit
-- [BROKEN LINK] **log_20251220_v2_7_1** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-7-1.md) impacts non-existent document: `ontos_config`
-  Fix: Create `ontos_config`, correct the reference, or archive this log
+No issues found.
 
 ## 4. Index
 | ID | Filename | Type |

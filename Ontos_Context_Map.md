@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 15:45:55 UTC
+Generated: 2025-12-19 16:23:08 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 00:45:55
+Generated on: 2025-12-20 01:23:08
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -73,6 +73,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_7_implementation_plan_review_codex** (v2.7_implementation_plan_review_codex.md) ~1,000 tokens
   - Status: complete
   - Depends On: None
+- **v2_8_implementation_plan** [draft] (v2.8_implementation_plan.md) ~6,200 tokens
+  - Status: draft
+  - Depends On: master_plan_v4, v2_7_1_implementation_plan
 - **v2_strategy** (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
@@ -365,6 +368,7 @@ No issues found.
 | v2_7_implementation_plan | [v2.7_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_implementation_plan.md) | strategy |
 | v2_7_implementation_plan_review_codex | [v2.7_implementation_plan_review_codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_implementation_plan_review_codex.md) | strategy |
 | v2_7_implementation_synthesis | [v2.7_implementation_synthesis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_implementation_synthesis.md) | atom |
+| v2_8_implementation_plan | [v2.8_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.8/v2.8_implementation_plan.md) | strategy |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |
 | v3_master_plan_context_kernel_review_codex | [v3_master_plan_context_kernel_review_codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_context_kernel_review_codex.md) | strategy |
 | v3_master_plan_context_kernel_review_codex_v2 | [v3_master_plan_context_kernel_review_codex_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_context_kernel_review_codex_v2.md) | strategy |

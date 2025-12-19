@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-19 13:28:47 UTC
+Generated: 2025-12-19 15:04:00 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-19 22:28:47
+Generated on: 2025-12-20 00:04:00
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -20,7 +20,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **ontos_agent_instructions** (Ontos_Agent_Instructions.md) ~2,100 tokens
   - Status: active
   - Depends On: ontos_manual
-- **ontos_manual** (Ontos_Manual.md) ~2,700 tokens
+- **ontos_manual** (Ontos_Manual.md) ~2,900 tokens
   - Status: active
   - Depends On: None
 
@@ -59,8 +59,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Status: complete
   - Depends On: v2_strategy
 - **v2_7_1_implementation_plan** (v2.7.1_implementation_plan.md) ~2,600 tokens
-  - Status: active
-  - Depends On: v2_7_implementation_plan, v2_7_1_patch_plan
+  - Status: complete
+  - Depends On: None
 - **v2_7_1_patch_plan** (v2.7.1_patch_plan.md) ~994 tokens
   - Status: complete
   - Depends On: None
@@ -245,17 +245,21 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251219_v2_7** (2025-12-19_v2-7.md) ~599 tokens
   - Status: active
   - Impacts: v2_7_documentation_ontology, master_plan_v4, schema
-- **log_20251219_v2_7_1_plan** (2025-12-19_v2-7-1-plan.md) ~297 tokens
+- **log_20251219_v2_7_1** (2025-12-19_v2-7-1.md) ~128 tokens
   - Status: active
-  - Impacts: master_plan, v2_7_1_implementation_plan
+  - Impacts: None
+- **log_20251219_v2_7_1_plan** (2025-12-19_v2-7-1-plan.md) ~385 tokens
+  - Status: active
+  - Impacts: v2_7_1_implementation_plan
 
 
 ## 2. Recent Timeline
 - **2025-12-19** [feature] **V2 7** (`log_20251219_v2_7`)
   - Impacted: `v2_7_documentation_ontology`, `master_plan_v4`, `schema`
   - Concepts: describes, staleness, immutable-history, implementation-plan, llm-review
+- **2025-12-19** [chore] **V2 7 1** (`log_20251219_v2_7_1`)
 - **2025-12-19** [chore] **V2 7 1 Plan** (`log_20251219_v2_7_1_plan`)
-  - Impacted: `master_plan`, `v2_7_1_implementation_plan`
+  - Impacted: `v2_7_1_implementation_plan`
   - Concepts: testing, documentation
 - **2025-12-19** [fix] **Fix Resolve All Context Map Validation Errors** (`log_20251219_fix_resolve_all_context_map_validation_errors`)
   - Impacted: `schema`, `architect_v2_7_phil_synthesis`, `architect_synthesis_install_ux`
@@ -276,14 +280,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontos_agent_instructions`, `ontos_manual`
 - **2025-12-17** [feature] **V2 6 Verification** (`log_20251217_v2_6_verification`)
   - Impacted: `v2_6_proposals_and_tooling`
-- **2025-12-17** [chore] **V2 6 Maintenance** (`log_20251217_v2_6_maintenance`)
 
-*Showing 10 of 18 sessions*
+*Showing 10 of 19 sessions*
 
 ## 3. Dependency Audit
-- [BROKEN LINK] **log_20251219_v2_7_1_plan** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1-plan.md) impacts non-existent document: `master_plan`
-  Fix: Create `master_plan`, correct the reference, or archive this log
-- [LINT] **v2_7_1_implementation_plan**: Active document in proposals/. Graduate to strategy/.
+No issues found.
 
 ## 4. Index
 | ID | Filename | Type |
@@ -338,6 +339,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20251219_docs_graduate_master_plan_to_strategy_reorganize | [2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) | log |
 | log_20251219_fix_resolve_all_context_map_validation_errors | [2025-12-19_fix-resolve-all-context-map-validation-errors.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_fix-resolve-all-context-map-validation-errors.md) | log |
 | log_20251219_v2_7 | [2025-12-19_v2-7.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7.md) | log |
+| log_20251219_v2_7_1 | [2025-12-19_v2-7-1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1.md) | log |
 | log_20251219_v2_7_1_plan | [2025-12-19_v2-7-1-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1-plan.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |

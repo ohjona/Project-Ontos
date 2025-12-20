@@ -220,23 +220,26 @@ def validate_describes_field(
     if not describes:
         return errors, warnings
     
-    # Rule: Only strategy and product can have describes
-    if doc_type not in ('strategy', 'product'):
+    # Rule: Cannot describe yourself (self-reference)
+    if doc_id in describes:
         errors.append(DescribesValidationError(
             filepath=doc_path,
-            error_type="type_constraint",
-            message=f"Type '{doc_type}' cannot use 'describes'. Only strategy and product allowed.",
-            field_value=f"describes: {describes}",
-            suggestion="Remove the describes field or change document type."
+            error_type="self_reference",
+            message=f"Document cannot describe itself: '{doc_id}'",
+            field_value=f"describes: [..., {doc_id}, ...]",
+            suggestion="Remove self-reference from describes field."
         ))
         return errors, warnings
+    
+    # Note: v2.7 decision - any document type can use describes
+    # (removed type constraint check)
     
     # Validate each referenced atom
     for target_id in describes:
         if target_id not in all_docs:
             errors.append(DescribesValidationError(
                 filepath=doc_path,
-                error_type="broken_reference",
+                error_type="unknown_id",
                 message=f"Describes references unknown document: {target_id}",
                 field_value=f"describes: [..., {target_id}, ...]",
                 suggestion=f"Create the document or remove '{target_id}' from describes."

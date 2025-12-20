@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-20 13:50:29 UTC
+Generated: 2025-12-20 14:27:12 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 22:50:29
+Generated on: 2025-12-20 23:27:12
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -263,12 +263,18 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251220_v2_7_1** (2025-12-20_v2-7-1.md) ~383 tokens
   - Status: active
   - Impacts: None
+- **log_20251220_v2_8** (2025-12-20_v2-8.md) ~565 tokens
+  - Status: active
+  - Impacts: v2_8_implementation_plan
 - **log_20251220_v2_8_plan_creation** (2025-12-20_v2-8-plan-creation.md) ~476 tokens
   - Status: active
   - Impacts: v2_8_implementation_plan
 
 
 ## 2. Recent Timeline
+- **2025-12-20** [feature] **V2 8** (`log_20251220_v2_8`)
+  - Impacted: `v2_8_implementation_plan`
+  - Concepts: architecture, refactor, context-object
 - **2025-12-20** [decision] **V2 8 Plan Creation** (`log_20251220_v2_8_plan_creation`)
   - Impacted: `v2_8_implementation_plan`
 - **2025-12-20** [chore] **V2 7 1** (`log_20251220_v2_7_1`)
@@ -291,11 +297,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-18** [feature] **V2 7 Philosophy Proposal** (`log_20251218_v2_7_philosophy_proposal`)
   - Impacted: `v2_strategy`, `v2_7_documentation_ontology`
   - Concepts: ontology, bidirectional, documentation
-- **2025-12-18** [feature] **V2 7 Documentation Ontology** (`log_20251218_v2_7_documentation_ontology`)
-  - Impacted: `v2_7_documentation_ontology`
-  - Concepts: ontology, documentation, synthesis, architecture
 
-*Showing 10 of 21 sessions*
+*Showing 10 of 22 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -357,6 +360,7 @@ No issues found.
 | log_20251219_v2_7_1 | [2025-12-19_v2-7-1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1.md) | log |
 | log_20251219_v2_7_1_plan | [2025-12-19_v2-7-1-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-19_v2-7-1-plan.md) | log |
 | log_20251220_v2_7_1 | [2025-12-20_v2-7-1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-7-1.md) | log |
+| log_20251220_v2_8 | [2025-12-20_v2-8.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8.md) | log |
 | log_20251220_v2_8_plan_creation | [2025-12-20_v2-8-plan-creation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-plan-creation.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |

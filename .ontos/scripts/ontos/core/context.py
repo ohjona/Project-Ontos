@@ -73,9 +73,6 @@ class SessionContext:
         Returns:
             SessionContext instance with loaded configuration.
         """
-        # Lazy import to avoid circular dependencies
-        from ontos_config import resolve_config as load_config_dict
-        
         # Build a config dict from the resolved settings
         config = {}
         config_keys = [

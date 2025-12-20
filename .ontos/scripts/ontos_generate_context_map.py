@@ -191,19 +191,20 @@ def lint_data_quality(files_data: dict[str, dict], common_concepts: set[str]) ->
     return warnings
 
 
-def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
+def scan_docs(root_dirs: list[str]) -> tuple[dict[str, dict], list[str]]:
     """Scans directories for markdown files and parses their metadata.
 
     Args:
         root_dirs: List of directories to scan.
 
     Returns:
-        Dictionary mapping doc IDs to their metadata.
+        Tuple of (files_data dict, list of warning messages).
     """
     files_data = {}
+    warnings = []
     for root_dir in root_dirs:
         if not os.path.isdir(root_dir):
-            print(f"Warning: Directory not found: {root_dir}")
+            warnings.append(f"Directory not found: {root_dir}")
             continue
         for subdir, dirs, files in os.walk(root_dir):
             # Prune directories matching skip patterns (e.g., 'archive/')
@@ -262,7 +263,7 @@ def scan_docs(root_dirs: list[str]) -> dict[str, dict]:
                             'describes': normalize_describes(frontmatter.get('describes')),
                             'describes_verified': parse_describes_verified(frontmatter.get('describes_verified')),
                         }
-    return files_data
+    return files_data, warnings
 
 
 def generate_tree(files_data: dict[str, dict]) -> str:
@@ -924,7 +925,11 @@ def generate_context_map(target_dirs: list[str], quiet: bool = False, strict: bo
     
     dirs_str = ", ".join(target_dirs)
     output.info(f"Scanning {dirs_str}...")
-    files_data = scan_docs(target_dirs)
+    files_data, scan_warnings = scan_docs(target_dirs)
+    
+    # Display any scan warnings via OutputHandler
+    for warning in scan_warnings:
+        output.warning(warning)
     
     # v2.6: Filter out rejected documents unless --include-rejected
     if not include_rejected:
@@ -1096,12 +1101,14 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
         target_dirs: List of directories to watch.
         quiet: Suppress output if True.
     """
+    output = OutputHandler(quiet=quiet)
+    
     try:
         from watchdog.observers import Observer
         from watchdog.events import FileSystemEventHandler
     except ImportError:
-        print("Error: watchdog not installed. Install with: pip install watchdog")
-        print("Or add watchdog to requirements.txt")
+        output.error("watchdog not installed. Install with: pip install watchdog")
+        output.error("Or add watchdog to requirements.txt")
         sys.exit(1)
 
     class ChangeHandler(FileSystemEventHandler):
@@ -1114,7 +1121,7 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
                 current_time = time.time()
                 if current_time - self.last_run > self.debounce_seconds:
                     self.last_run = current_time
-                    print(f"\n🔄 Change detected: {event.src_path}")
+                    output.info(f"Change detected: {event.src_path}")
                     generate_context_map(target_dirs, quiet)
 
     observer = Observer()
@@ -1126,7 +1133,7 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
 
     observer.start()
     dirs_str = ", ".join(target_dirs)
-    print(f"👀 Watching {dirs_str} for changes... (Ctrl+C to stop)")
+    output.info(f"Watching {dirs_str} for changes... (Ctrl+C to stop)")
 
     # Generate initial map
     generate_context_map(target_dirs, quiet)
@@ -1136,11 +1143,11 @@ def watch_mode(target_dirs: list[str], quiet: bool = False) -> None:
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        print("\n✅ Watch mode stopped.")
+        output.success("Watch mode stopped.")
     observer.join()
 
 
-def check_consolidation_status() -> None:
+def check_consolidation_status(output: OutputHandler = None) -> None:
     """Print warning if consolidation needed (prompted/advisory modes only).
 
     Called at end of context map generation to honor the "prompted" promise.
@@ -1149,7 +1156,13 @@ def check_consolidation_status() -> None:
     
     v2.5: This implements the "Keep me in the loop" promise for prompted mode.
     Uses shared helpers from ontos_lib for config-agnostic path resolution.
+    
+    Args:
+        output: OutputHandler instance (creates default if None).
     """
+    if output is None:
+        output = OutputHandler(quiet=False)
+    
     mode = resolve_config('ONTOS_MODE', 'prompted')
     if mode == 'automated':
         return  # Auto-consolidation handles this in pre-commit hook
@@ -1166,10 +1179,9 @@ def check_consolidation_status() -> None:
     old_logs = get_logs_older_than(threshold_days)
     
     if len(old_logs) > 0:
-        # Use ASCII text instead of emoji for terminal compatibility
-        print(f"\n[WARNING] {log_count} active logs (threshold: {threshold_count})")
-        print(f"          {len(old_logs)} logs are older than {threshold_days} days")
-        print(f"          Run: python3 .ontos/scripts/ontos_consolidate.py")
+        output.warning(f"{log_count} active logs (threshold: {threshold_count})")
+        output.warning(f"{len(old_logs)} logs are older than {threshold_days} days")
+        output.warning("Run: python3 .ontos/scripts/ontos_consolidate.py")
 
 
 if __name__ == "__main__":

@@ -22,6 +22,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.8.0] - 2025-12-20
+
+### Theme: "Clean Architecture Refactor"
+
+Unified package structure for better testability and maintainability.
+
+### Added
+- **`ontos/` package structure** — New modular architecture
+  - `ontos/core/` — Pure logic layer (context, frontmatter, staleness, history)
+  - `ontos/ui/` — I/O layer (OutputHandler for display)
+- **`SessionContext` class** — Transactional file operations
+  - Two-phase commit (temp-then-rename for atomicity)
+  - File locking with stale lock detection
+  - `from_repo()` factory method
+- **Core modules**:
+  - `context.py` — Session state and file operations
+  - `frontmatter.py` — Pure parsing functions
+  - `staleness.py` — Describes validation with impure marking
+  - `history.py` — Decision history generation
+  - `paths.py` — Path helpers with mode-awareness
+  - `config.py` — Configuration helpers
+  - `proposals.py` — Proposal management
+- **`OutputHandler` class** — Centralized output formatting
+- **18 new tests** — SessionContext + backwards compatibility identity checks
+
+### Changed
+- **`ontos_lib.py` is now a pure re-export shim** (1,323→95 lines)
+  - All functions re-exported from `ontos.core.*` and `ontos.ui.*`
+  - `from ontos_lib import X` and `from ontos.core.X import Y` reference same objects
+- **Impure function marking** — Docstrings document all subprocess calls with mock guidance
+
+### Deprecated
+- **`ontos_lib.py` direct usage** — Import from `ontos.core.*` instead
+  - v2.8: Silent operation (no warnings)
+  - v2.9: DeprecationWarning on import
+  - v3.0: Module removed
+
+### Tests
+- All 243 tests pass (225 original + 18 new)
+
+---
+
 ## [2.7.1] - 2025-12-20
 
 ### Theme: "Polish Release"

@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-20 14:27:42 UTC
+Generated: 2025-12-20 14:52:35 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 23:27:42
+Generated on: 2025-12-20 23:52:35
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -269,12 +269,18 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251220_v2_8_plan_creation** (2025-12-20_v2-8-plan-creation.md) ~476 tokens
   - Status: active
   - Impacts: v2_8_implementation_plan
+- **log_20251220_v2_8_pr24_fixes** (2025-12-20_v2-8-pr24-fixes.md) ~438 tokens
+  - Status: active
+  - Impacts: v2_8_implementation_plan
 
 
 ## 2. Recent Timeline
 - **2025-12-20** [feature] **V2 8** (`log_20251220_v2_8`)
   - Impacted: `v2_8_implementation_plan`
   - Concepts: architecture, refactor, context-object
+- **2025-12-20** [fix] **V2 8 Pr24 Fixes** (`log_20251220_v2_8_pr24_fixes`)
+  - Impacted: `v2_8_implementation_plan`
+  - Concepts: architecture, refactor, testing
 - **2025-12-20** [decision] **V2 8 Plan Creation** (`log_20251220_v2_8_plan_creation`)
   - Impacted: `v2_8_implementation_plan`
 - **2025-12-20** [chore] **V2 7 1** (`log_20251220_v2_7_1`)
@@ -294,11 +300,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-19** [chore] **Chore Maintenance Consolidate Logs Add Frontma** (`log_20251219_chore_maintenance_consolidate_logs_add_frontma`)
   - Impacted: `schema`
   - Concepts: maintenance, consolidation, frontmatter, type-hierarchy
-- **2025-12-18** [feature] **V2 7 Philosophy Proposal** (`log_20251218_v2_7_philosophy_proposal`)
-  - Impacted: `v2_strategy`, `v2_7_documentation_ontology`
-  - Concepts: ontology, bidirectional, documentation
 
-*Showing 10 of 22 sessions*
+*Showing 10 of 23 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -362,6 +365,7 @@ No issues found.
 | log_20251220_v2_7_1 | [2025-12-20_v2-7-1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-7-1.md) | log |
 | log_20251220_v2_8 | [2025-12-20_v2-8.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8.md) | log |
 | log_20251220_v2_8_plan_creation | [2025-12-20_v2-8-plan-creation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-plan-creation.md) | log |
+| log_20251220_v2_8_pr24_fixes | [2025-12-20_v2-8-pr24-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-pr24-fixes.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

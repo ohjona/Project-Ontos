@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-20 14:52:50 UTC
+Generated: 2025-12-20 15:05:39 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 23:52:50
+Generated on: 2025-12-21 00:05:39
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -272,12 +272,16 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251220_v2_8_pr24_fixes** (2025-12-20_v2-8-pr24-fixes.md) ~438 tokens
   - Status: active
   - Impacts: v2_8_implementation_plan
+- **log_20251220_v2_8_version_bump** (2025-12-20_v2-8-version-bump.md) ~100 tokens
+  - Status: active
+  - Impacts: None
 
 
 ## 2. Recent Timeline
 - **2025-12-20** [feature] **V2 8** (`log_20251220_v2_8`)
   - Impacted: `v2_8_implementation_plan`
   - Concepts: architecture, refactor, context-object
+- **2025-12-20** [chore] **V2 8 Version Bump** (`log_20251220_v2_8_version_bump`)
 - **2025-12-20** [fix] **V2 8 Pr24 Fixes** (`log_20251220_v2_8_pr24_fixes`)
   - Impacted: `v2_8_implementation_plan`
   - Concepts: architecture, refactor, testing
@@ -297,11 +301,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2025-12-19** [chore] **Docs Graduate Master Plan To Strategy Reorganize** (`log_20251219_docs_graduate_master_plan_to_strategy_reorganize`)
   - Impacted: `master_plan_v4`, `v2_strategy`
   - Concepts: governance, proposals, graduation
-- **2025-12-19** [chore] **Chore Maintenance Consolidate Logs Add Frontma** (`log_20251219_chore_maintenance_consolidate_logs_add_frontma`)
-  - Impacted: `schema`
-  - Concepts: maintenance, consolidation, frontmatter, type-hierarchy
 
-*Showing 10 of 23 sessions*
+*Showing 10 of 24 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -366,6 +367,7 @@ No issues found.
 | log_20251220_v2_8 | [2025-12-20_v2-8.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8.md) | log |
 | log_20251220_v2_8_plan_creation | [2025-12-20_v2-8-plan-creation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-plan-creation.md) | log |
 | log_20251220_v2_8_pr24_fixes | [2025-12-20_v2-8-pr24-fixes.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-pr24-fixes.md) | log |
+| log_20251220_v2_8_version_bump | [2025-12-20_v2-8-version-bump.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-20_v2-8-version-bump.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

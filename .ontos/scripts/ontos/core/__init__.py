@@ -1,27 +1,15 @@
-"""Shared utilities for Ontos scripts.
+"""Core module - Pure logic layer.
 
-DEPRECATED: Import from ontos.core instead.
-============================================
-This module re-exports functions from their new locations in the ontos package.
+This module contains pure functions and classes that do NOT perform I/O,
+except for functions explicitly marked as IMPURE in their docstrings.
 
-    # OLD (still works via this shim)
-    from ontos_lib import parse_frontmatter, SessionContext
-
-    # NEW (preferred for new code)
-    from ontos.core.frontmatter import parse_frontmatter
-    from ontos.core.context import SessionContext
-
-DEPRECATION TIMELINE:
-- v2.8: Silent operation (no warnings) - YOU ARE HERE
-- v2.9: DeprecationWarning on import
-- v3.0: Module removed, use ontos package directly
+IMPURE functions:
+    - staleness.get_file_modification_date() - calls git subprocess
+    - staleness.check_staleness() - uses get_file_modification_date()
+    - config.get_source() - calls git subprocess
+    - config.get_git_last_modified() - calls git subprocess
+    - paths.* - most functions use os.path.exists()
 """
-
-# =============================================================================
-# RE-EXPORTS FROM NEW PACKAGE STRUCTURE
-# =============================================================================
-# These are the ONLY imports needed - all function definitions have been moved
-# to their respective modules in ontos/core/
 
 # Context
 from ontos.core.context import SessionContext, FileOperation, PendingWrite
@@ -71,7 +59,6 @@ from ontos.core.paths import (
     get_archive_proposals_dir,
     get_concepts_path,
     find_last_session_date,
-    _warn_deprecated,
 )
 
 # Config helpers
@@ -86,9 +73,3 @@ from ontos.core.proposals import (
     load_decision_history_entries,
     find_draft_proposals,
 )
-
-# UI
-from ontos.ui.output import OutputHandler
-
-# Version
-from ontos import __version__

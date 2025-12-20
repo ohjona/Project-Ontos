@@ -16,7 +16,7 @@ Run `python3 ontos_init.py --reconfig` to reconfigure via prompts.
 ONTOS_MODE = "prompted"
 
 # Your name for log attribution (can override with ONTOS_SOURCE env var)
-DEFAULT_SOURCE = "Johnny"  # e.g., "Claude Code" or None
+DEFAULT_SOURCE = None  # e.g., "Claude Code" or None
 
 # =============================================================================
 # ADVANCED: Individual settings (override mode defaults)

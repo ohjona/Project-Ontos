@@ -269,7 +269,7 @@ class TestCheckStaleness:
         )
         assert result is None
     
-    @patch('ontos_lib.get_file_modification_date')
+    @patch('ontos.core.staleness.get_file_modification_date')
     def test_stale_when_atom_newer(self, mock_git):
         """Doc is stale when described atom was modified after verification."""
         mock_git.return_value = (date(2025, 12, 18), ModifiedSource.GIT)
@@ -287,7 +287,7 @@ class TestCheckStaleness:
         assert len(result.stale_atoms) == 1
         assert result.stale_atoms[0][0] == "atom_a"
     
-    @patch('ontos_lib.get_file_modification_date')
+    @patch('ontos.core.staleness.get_file_modification_date')
     def test_current_when_atom_older(self, mock_git):
         """Doc is current when described atom was modified before verification."""
         mock_git.return_value = (date(2025, 12, 10), ModifiedSource.GIT)
@@ -310,7 +310,7 @@ class TestGitCaching:
         """Clear cache before each test."""
         clear_git_cache()
     
-    @patch('ontos_lib._fetch_last_modified')
+    @patch('ontos.core.staleness._fetch_last_modified')
     def test_cache_prevents_duplicate_calls(self, mock_fetch):
         """Cache should prevent duplicate git calls for same file."""
         mock_fetch.return_value = (date(2025, 12, 19), ModifiedSource.GIT)

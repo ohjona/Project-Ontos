@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-20 13:43:42 UTC
+Generated: 2025-12-20 13:50:29 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-20 22:43:42
+Generated on: 2025-12-20 22:50:29
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree

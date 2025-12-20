@@ -1,8 +1,44 @@
 """Shared utilities for Ontos scripts.
 
+BACKWARDS COMPATIBILITY SHIM (v2.8)
+====================================
+This module re-exports functions from their new locations in the ontos package.
+Import from this module continues to work, but new code should import directly:
+
+    # OLD (still works via this shim)
+    from ontos_lib import parse_frontmatter, SessionContext
+
+    # NEW (preferred for new code)
+    from ontos.core.frontmatter import parse_frontmatter
+    from ontos.core.context import SessionContext
+
+DEPRECATION TIMELINE:
+- v2.8: Silent operation (no warnings) - YOU ARE HERE
+- v2.9: DeprecationWarning on import
+- v3.0: Module removed, use ontos package directly
+
 This module contains common functions used across multiple Ontos scripts.
 Centralizing them here ensures consistency and simplifies maintenance.
 """
+
+# =============================================================================
+# V2.8 RE-EXPORTS FROM NEW PACKAGE STRUCTURE
+# =============================================================================
+# These imports allow existing code to continue working unchanged.
+# New code should import directly from ontos.core.* or ontos.ui.*
+
+# Import new SessionContext for export (but don't override existing code yet)
+# This will be the primary export in v2.9+
+try:
+    from ontos.core.context import SessionContext, FileOperation, PendingWrite
+    from ontos.ui.output import OutputHandler
+    _V28_AVAILABLE = True
+except ImportError:
+    _V28_AVAILABLE = False
+
+# =============================================================================
+# ORIGINAL IMPORTS (retained for backwards compatibility)
+# =============================================================================
 
 import os
 import re

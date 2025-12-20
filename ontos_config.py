@@ -69,9 +69,3 @@ del _importlib_util, _scripts_config_path, _spec, _scripts_config, _name
 # Override the DOCS_DIR and LOGS_DIR if needed
 # DOCS_DIR = 'docs'
 # LOGS_DIR = 'docs/logs'
-
-# Preserved custom settings
-_scripts_dir = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '.ontos', 'scripts')
-_scripts_config_path = _os.path.join(_scripts_dir, 'ontos_config.py')
-_spec = _importlib_util.spec_from_file_location("_ontos_scripts_config", _scripts_config_path)
-_scripts_config = _importlib_util.module_from_spec(_spec)

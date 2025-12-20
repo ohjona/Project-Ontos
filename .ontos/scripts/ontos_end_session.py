@@ -6,7 +6,12 @@ import datetime
 import subprocess
 import argparse
 import sys
+from pathlib import Path
 from typing import Optional
+
+# v2.8: Import transactional context and output handler
+from ontos.core.context import SessionContext
+from ontos.ui.output import OutputHandler
 
 from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT
 
@@ -1260,7 +1265,8 @@ def create_log_file(
     source: str = "",
     event_type: str = "chore",
     concepts: list[str] = None,
-    impacts: list[str] = None
+    impacts: list[str] = None,
+    output: OutputHandler = None
 ) -> str:
     """Creates a new session log file with v2.0 schema.
     
@@ -1271,10 +1277,15 @@ def create_log_file(
         event_type: Type of work (feature/fix/refactor/exploration/chore).
         concepts: List of concept tags for searchability.
         impacts: List of document IDs affected by this session.
+        output: OutputHandler instance (creates default if None).
         
     Returns:
         Path to the created log file, or empty string on error.
     """
+    # v2.8: Use OutputHandler for all messages
+    if output is None:
+        output = OutputHandler(quiet=quiet)
+    
     # Normalize inputs
     topic_slug = topic_slug.lower()
     concepts = concepts or []
@@ -1283,10 +1294,9 @@ def create_log_file(
     try:
         if not os.path.exists(LOGS_DIR):
             os.makedirs(LOGS_DIR)
-            if not quiet:
-                print(f"Created directory: {LOGS_DIR}")
+            output.info(f"Created directory: {LOGS_DIR}")
     except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to create directory {LOGS_DIR}: {e}")
+        output.error(f"Failed to create directory {LOGS_DIR}: {e}")
         return ""
 
     now = datetime.datetime.now().astimezone()
@@ -1296,8 +1306,7 @@ def create_log_file(
     filepath = os.path.join(LOGS_DIR, filename)
 
     if os.path.exists(filepath):
-        if not quiet:
-            print(f"Log file already exists: {filepath}")
+        output.warning(f"Log file already exists: {filepath}")
         _create_archive_marker(filepath)
         return filepath
 
@@ -1332,11 +1341,10 @@ Event Type: {event_type}
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(content)
     except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to write log file: {e}")
+        output.error(f"Failed to write log file: {e}")
         return ""
 
-    if not quiet:
-        print(f"Created session log: {filepath}")
+    output.success(f"Created session log: {filepath}")
 
     # Create marker file for pre-push hook
     _create_archive_marker(filepath)

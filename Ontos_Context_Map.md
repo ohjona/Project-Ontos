@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-21 15:25:50 UTC
+Generated: 2025-12-21 15:46:16 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-22 00:25:50
+Generated on: 2025-12-22 00:46:16
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -20,7 +20,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **ontos_agent_instructions** (Ontos_Agent_Instructions.md) ~2,100 tokens
   - Status: active
   - Depends On: ontos_manual
-- **ontos_manual** (Ontos_Manual.md) ~2,900 tokens
+- **ontos_manual** (Ontos_Manual.md) ~3,400 tokens
   - Status: active
   - Depends On: None
 
@@ -73,7 +73,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_7_implementation_plan_review_codex** (v2.7_implementation_plan_review_codex.md) ~1,000 tokens
   - Status: complete
   - Depends On: None
-- **v2_8_implementation_plan** (v2.8_implementation_plan.md) ~11,200 tokens
+- **v2_8_implementation_plan** (v2.8_implementation_plan.md) ~12,600 tokens
   - Status: active
   - Depends On: master_plan_v4, v2_7_1_implementation_plan
 - **v2_8_implementation_plan_review_codex** [draft] (v2.8_implementation_plan_review_codex.md) ~789 tokens

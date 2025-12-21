@@ -71,7 +71,11 @@ def test_auto_slug_returns_none_when_all_fail():
         assert slug is None
 
 def test_create_log_file_creates_file():
-    """Test that create_log_file buffers a write via SessionContext."""
+    """Test that create_log_file buffers a write via SessionContext.
+    
+    v2.8.3: With _owns_ctx pattern, commit should NOT be called when ctx is passed.
+    The caller (main()) is responsible for committing.
+    """
     mock_ctx = MagicMock()
     mock_ctx.buffer_write = MagicMock()
     mock_ctx.commit = MagicMock()
@@ -84,7 +88,8 @@ def test_create_log_file_creates_file():
         filepath = create_log_file("test-slug", quiet=True, source="test", ctx=mock_ctx)
         assert filepath.endswith("_test-slug.md")
         mock_ctx.buffer_write.assert_called_once()
-        mock_ctx.commit.assert_called_once() 
+        # v2.8.3: With _owns_ctx pattern, commit should NOT be called when ctx is passed
+        mock_ctx.commit.assert_not_called() 
 
 def test_concept_validation_warns_unknown():
     with patch("ontos_end_session.load_common_concepts", return_value={"valid"}), \

@@ -125,13 +125,19 @@ def detect_implemented_proposal(branch: str, impacts: list) -> Optional[dict]:
     return draft_proposals[0] if draft_proposals else None
 
 
-def graduate_proposal(proposal: dict, quiet: bool = False, output: OutputHandler = None) -> bool:
+def graduate_proposal(
+    proposal: dict, 
+    quiet: bool = False, 
+    output: OutputHandler = None,
+    ctx: SessionContext = None
+) -> bool:
     """Graduate a proposal from proposals/ to strategy/.
 
     Args:
         proposal: Dict with 'id', 'filepath', 'version'
         quiet: Suppress output
         output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
 
     Returns:
         True if graduation succeeded.
@@ -140,6 +146,11 @@ def graduate_proposal(proposal: dict, quiet: bool = False, output: OutputHandler
     
     if output is None:
         output = OutputHandler(quiet=quiet)
+    
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
 
     filepath = proposal['filepath']
     proposals_dir = get_proposals_dir()
@@ -169,38 +180,56 @@ def graduate_proposal(proposal: dict, quiet: bool = False, output: OutputHandler
             flags=re.MULTILINE
         )
 
-        # Write to new location
-        with open(dest_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # v2.8.3: Use buffer_write for transactional write to new location
+        ctx.buffer_write(Path(dest_path), content)
+        
+        # v2.8.3: Use buffer_delete for transactional removal of original
+        ctx.buffer_delete(Path(filepath))
 
-        # Remove original
-        os.remove(filepath)
-
-        # Try to remove empty parent directories
-        try:
-            parent = os.path.dirname(filepath)
-            if os.path.isdir(parent) and not os.listdir(parent):
-                os.rmdir(parent)
-        except OSError:
-            pass
-
-        # Add entry to decision_history.md
-        add_graduation_to_ledger(proposal, dest_path)
+        # Try to remove empty parent directories (after commit)
+        # Note: This happens outside transaction since it's cleanup
+        
+        # Add entry to decision_history.md (pass ctx for atomic commit)
+        add_graduation_to_ledger(proposal, dest_path, ctx=ctx)
 
         output.success(f"Graduated: {os.path.basename(filepath)}")
         output.info(f"   From: proposals/{rel_path}")
         output.info(f"   To: strategy/{rel_path}")
         output.info(f"   Status: draft → active")
 
+        # v2.8.3: Only commit if we own the context
+        if _owns_ctx:
+            ctx.commit()
+            # Clean up empty dirs after commit
+            try:
+                parent = os.path.dirname(filepath)
+                if os.path.isdir(parent) and not os.listdir(parent):
+                    os.rmdir(parent)
+            except OSError:
+                pass
+
         return True
 
     except (IOError, OSError, shutil.Error) as e:
+        if _owns_ctx:
+            ctx.rollback()
         output.error(f"Graduation failed: {e}")
         return False
 
 
-def add_graduation_to_ledger(proposal: dict, new_path: str) -> None:
-    """Add APPROVED entry to decision_history.md."""
+def add_graduation_to_ledger(proposal: dict, new_path: str, ctx: SessionContext = None) -> None:
+    """Add APPROVED entry to decision_history.md.
+    
+    Args:
+        proposal: Dict with 'id', 'version' keys
+        new_path: Path to graduated file
+        ctx: SessionContext for transactional writes (creates default if None).
+    """
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
+    
     history_path = get_decision_history_path()
     if not history_path or not os.path.exists(history_path):
         return
@@ -231,10 +260,16 @@ def add_graduation_to_ledger(proposal: dict, new_path: str) -> None:
                 lines.insert(i, new_entry.strip())
                 break
 
-        with open(history_path, 'w', encoding='utf-8') as f:
-            f.write('\n'.join(lines))
+        # v2.8.3: Use buffer_write for transactional write
+        ctx.buffer_write(Path(history_path), '\n'.join(lines))
+        
+        # v2.8.3: Only commit if we own the context
+        if _owns_ctx:
+            ctx.commit()
 
     except (IOError, OSError):
+        if _owns_ctx and ctx:
+            ctx.rollback()
         pass  # Non-fatal
 
 
@@ -359,7 +394,7 @@ def validate_branch_in_log(log_path: str, expected_branch: str) -> bool:
         return False
 
 
-def append_to_log(log_path: str, new_commits: list, output: OutputHandler = None) -> bool:
+def append_to_log(log_path: str, new_commits: list, output: OutputHandler = None, ctx: SessionContext = None) -> bool:
     """Append new commits to existing log's Raw Session History.
     
     v1.2: Deduplicates commits to handle amend+push scenarios.
@@ -370,12 +405,18 @@ def append_to_log(log_path: str, new_commits: list, output: OutputHandler = None
         log_path: Path to log file
         new_commits: List of commit strings (format: "hash - message")
         output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
     
     Returns:
         True if append succeeded, False if fallback needed.
     """
     if output is None:
         output = OutputHandler()
+    
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
     
     try:
         with open(log_path, 'r', encoding='utf-8') as f:
@@ -433,11 +474,18 @@ def append_to_log(log_path: str, new_commits: list, output: OutputHandler = None
         return False  # Signal caller to create new log
     
     try:
-        with open(log_path, 'w', encoding='utf-8') as f:
-            f.write("\n".join(output_lines))
+        # v2.8.3: Use buffer_write for transactional write
+        ctx.buffer_write(Path(log_path), "\n".join(output_lines))
         output.info(f"Appended {len(unique_commits)} commits to {log_path}")
+        
+        # v2.8.3: Only commit if we own the context
+        if _owns_ctx:
+            ctx.commit()
+        
         return True
     except (IOError, OSError):
+        if _owns_ctx:
+            ctx.rollback()
         return False
 
 
@@ -601,7 +649,8 @@ def create_auto_log(
     event_type: str,
     commits: list,
     quiet: bool = False,
-    output: OutputHandler = None
+    output: OutputHandler = None,
+    ctx: SessionContext = None
 ) -> bool:
     """Create auto-generated log for session appending.
     
@@ -613,12 +662,18 @@ def create_auto_log(
         commits: List of commit strings
         quiet: Suppress output
         output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
     
     Returns:
         True on success.
     """
     if output is None:
         output = OutputHandler(quiet=quiet)
+    
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
     
     try:
         if not os.path.exists(LOGS_DIR):
@@ -636,8 +691,8 @@ def create_auto_log(
     counter = 2
     while os.path.exists(filepath):
         if validate_branch_in_log(filepath, branch):
-            # Found the right log, append instead
-            return append_to_log(filepath, commits, output)
+            # Found the right log, append instead (pass ctx for atomic commit)
+            return append_to_log(filepath, commits, output, ctx=ctx)
         filename = f"{today_date}_{topic_slug}-{counter}.md"
         filepath = os.path.join(LOGS_DIR, filename)
         counter += 1
@@ -675,9 +730,11 @@ Event Type: {event_type}
 """
     
     try:
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # v2.8.3: Use buffer_write for transactional write
+        ctx.buffer_write(Path(filepath), content)
     except (IOError, OSError):
+        if _owns_ctx:
+            ctx.rollback()
         return False
     
     output.info(f"""
@@ -696,7 +753,17 @@ Event Type: {event_type}
 └────────────────────────────────────────────────────────────┘
 """)
     
-    _create_archive_marker(filepath)
+    # Pass ctx for atomic commit
+    _create_archive_marker(filepath, ctx=ctx)
+    
+    # v2.8.3: Only commit if we own the context
+    if _owns_ctx:
+        try:
+            ctx.commit()
+        except Exception:
+            ctx.rollback()
+            return False
+    
     return True
 
 # =============================================================================
@@ -922,14 +989,23 @@ def find_changelog() -> str:
     return ""
 
 
-def create_changelog(output: OutputHandler = None) -> str:
+def create_changelog(output: OutputHandler = None, ctx: SessionContext = None) -> str:
     """Create a new CHANGELOG.md file with standard template.
 
+    Args:
+        output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
+        
     Returns:
         Path to created file or empty string on error.
     """
     if output is None:
         output = OutputHandler()
+    
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
     
     changelog_path = DEFAULT_CHANGELOG
 
@@ -946,10 +1022,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 """
 
     try:
-        with open(changelog_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # v2.8.3: Use buffer_write for transactional write
+        ctx.buffer_write(Path(changelog_path), content)
+        
+        # v2.8.3: Only commit if we own the context
+        if _owns_ctx:
+            ctx.commit()
+        
         return changelog_path
     except (IOError, OSError, PermissionError) as e:
+        if _owns_ctx:
+            ctx.rollback()
         output.error(f"Failed to create CHANGELOG.md: {e}")
         return ""
 
@@ -989,26 +1072,41 @@ def prompt_changelog_entry(quiet: bool = False) -> tuple[str, str]:
         return "", ""
 
 
-def add_changelog_entry(category: str, description: str, quiet: bool = False) -> bool:
+def add_changelog_entry(
+    category: str, 
+    description: str, 
+    quiet: bool = False,
+    output: OutputHandler = None,
+    ctx: SessionContext = None
+) -> bool:
     """Add an entry to the project's CHANGELOG.md under [Unreleased].
 
     Args:
         category: The changelog category (added, changed, fixed, etc.)
         description: The changelog entry description.
         quiet: Suppress output if True.
+        output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
 
     Returns:
         True if entry was added successfully.
     """
+    if output is None:
+        output = OutputHandler(quiet=quiet)
+    
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
+        ctx = SessionContext.from_repo(Path.cwd())
+    
     if not category or not description:
         return False
 
     changelog_path = find_changelog()
 
     if not changelog_path:
-        if not quiet:
-            print("No CHANGELOG.md found. Creating one...")
-        changelog_path = create_changelog()
+        output.info("No CHANGELOG.md found. Creating one...")
+        changelog_path = create_changelog(output=output, ctx=ctx)
         if not changelog_path:
             return False
 
@@ -1016,7 +1114,7 @@ def add_changelog_entry(category: str, description: str, quiet: bool = False) ->
         with open(changelog_path, 'r', encoding='utf-8') as f:
             content = f.read()
     except (IOError, OSError) as e:
-        print(f"Error: Failed to read {changelog_path}: {e}")
+        output.error(f"Failed to read {changelog_path}: {e}")
         return False
 
     # Capitalize category for display
@@ -1063,14 +1161,20 @@ def add_changelog_entry(category: str, description: str, quiet: bool = False) ->
             content = content[:insert_pos] + new_category + content[insert_pos:]
 
     try:
-        with open(changelog_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        # v2.8.3: Use buffer_write for transactional write
+        ctx.buffer_write(Path(changelog_path), content)
 
-        if not quiet:
-            print(f"Added to {changelog_path}: [{category_title}] {description}")
+        output.success(f"Added to {changelog_path}: [{category_title}] {description}")
+        
+        # v2.8.3: Only commit if we own the context
+        if _owns_ctx:
+            ctx.commit()
+        
         return True
     except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to write {changelog_path}: {e}")
+        if _owns_ctx:
+            ctx.rollback()
+        output.error(f"Failed to write {changelog_path}: {e}")
         return False
 
 
@@ -1301,8 +1405,9 @@ def create_log_file(
     if output is None:
         output = OutputHandler(quiet=quiet)
     
-    # v2.8: Use SessionContext for transactional writes
-    if ctx is None:
+    # v2.8.3: _owns_ctx pattern for transaction composability
+    _owns_ctx = ctx is None
+    if _owns_ctx:
         ctx = SessionContext.from_repo(Path.cwd())
     
     # Normalize inputs
@@ -1326,7 +1431,9 @@ def create_log_file(
 
     if os.path.exists(filepath):
         output.warning(f"Log file already exists: {filepath}")
-        _create_archive_marker(filepath)
+        _create_archive_marker(filepath, ctx=ctx)
+        if _owns_ctx:
+            ctx.commit()
         return filepath
 
     daily_log = get_session_git_log()
@@ -1359,16 +1466,25 @@ Event Type: {event_type}
     # v2.8: Use buffer_write for transactional write
     try:
         ctx.buffer_write(Path(filepath), content)
-        ctx.commit()  # Commit immediately since this function is standalone
     except Exception as e:
-        ctx.rollback()
-        output.error(f"Failed to write log file: {e}")
+        if _owns_ctx:
+            ctx.rollback()
+        output.error(f"Failed to buffer log file: {e}")
         return ""
 
     output.success(f"Created session log: {filepath}")
 
-    # Create marker file for pre-push hook
-    _create_archive_marker(filepath)
+    # Create marker file for pre-push hook (pass ctx for atomic commit)
+    _create_archive_marker(filepath, ctx=ctx)
+
+    # v2.8.3: Only commit if we own the context
+    if _owns_ctx:
+        try:
+            ctx.commit()
+        except Exception as e:
+            ctx.rollback()
+            output.error(f"Failed to commit log file: {e}")
+            return ""
 
     return filepath
 
@@ -1730,6 +1846,9 @@ Slug format:
                 category, description = prompt_changelog_entry(args.quiet)
                 if category and description:
                     add_changelog_entry(category, description, args.quiet)
+        
+        # v2.8.3: Commit all buffered writes atomically
+        ctx.commit()
     
     except Exception as e:
         ctx.rollback()

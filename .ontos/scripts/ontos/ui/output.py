@@ -89,6 +89,15 @@ class OutputHandler:
         if not self.quiet:
             print(f"⏳ {message}")
     
+    def detail(self, message: str) -> None:
+        """Display a detail message (indented, for additional context).
+        
+        Args:
+            message: Detail message to display.
+        """
+        if not self.quiet:
+            print(f"   {message}")
+    
     def plain(self, message: str) -> None:
         """Display a plain message without emoji.
         

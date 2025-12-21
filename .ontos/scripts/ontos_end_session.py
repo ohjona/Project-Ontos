@@ -1229,7 +1229,7 @@ def load_document_index() -> dict[str, str]:
     return index
 
 
-def suggest_impacts(quiet: bool = False) -> list[str]:
+def suggest_impacts(quiet: bool = False, output: OutputHandler = None) -> list[str]:
     """Suggest document IDs that may have been impacted by recent changes.
     
     Algorithm:
@@ -1240,9 +1240,15 @@ def suggest_impacts(quiet: bool = False) -> list[str]:
     
     This handles both the "work in progress" and "commit then archive" workflows.
     
+    Args:
+        quiet: Suppress output
+        output: OutputHandler instance (creates default if None).
+    
     Returns:
         List of suggested document IDs.
     """
+    if output is None:
+        output = OutputHandler(quiet=quiet)
     try:
         changed_files = set()
         
@@ -1279,8 +1285,8 @@ def suggest_impacts(quiet: bool = False) -> list[str]:
                     if line:
                         changed_files.add(line)
             
-            if not quiet and changed_files:
-                print(f"ℹ️  No uncommitted changes; using today's commits instead")
+            if changed_files:
+                output.info("No uncommitted changes; using today's commits instead")
         
         if not changed_files:
             return []
@@ -1309,14 +1315,13 @@ def suggest_impacts(quiet: bool = False) -> list[str]:
         # Filter out log documents (impacts should reference Space, not Time)
         final_suggestions = [s for s in suggestions if not s.startswith('log_')]
         
-        if not quiet and final_suggestions:
-            print(f"\n💡 Suggested impacts based on changes: {', '.join(final_suggestions)}")
+        if final_suggestions:
+            output.info(f"Suggested impacts based on changes: {', '.join(final_suggestions)}")
         
         return final_suggestions
         
     except Exception as e:
-        if not quiet:
-            print(f"Warning: Could not suggest impacts: {e}")
+        output.warning(f"Could not suggest impacts: {e}")
         return []
 
 
@@ -1358,12 +1363,20 @@ def prompt_for_impacts(suggestions: list[str], quiet: bool = False) -> list[str]
             return []
 
 
-def validate_concepts(concepts: list[str], quiet: bool = False) -> list[str]:
+def validate_concepts(concepts: list[str], quiet: bool = False, output: OutputHandler = None) -> list[str]:
     """Validate concepts against Common_Concepts.md vocabulary.
+    
+    Args:
+        concepts: List of concept tags to validate
+        quiet: Suppress output
+        output: OutputHandler instance (creates default if None).
     
     Returns:
         List of validated concepts (with warnings for unknown).
     """
+    if output is None:
+        output = OutputHandler(quiet=quiet)
+    
     known = load_common_concepts()
     if not known:
         return concepts  # No vocabulary file, skip validation
@@ -1376,11 +1389,10 @@ def validate_concepts(concepts: list[str], quiet: bool = False) -> list[str]:
             # Find similar concepts for suggestions
             similar = [k for k in known if concept[:3] in k or k[:3] in concept]
             
-            if not quiet:
-                print(f"⚠️  Unknown concept '{concept}'")
-                if similar:
-                    print(f"   Did you mean: {', '.join(similar[:3])}?")
-                print(f"   See: docs/reference/Common_Concepts.md")
+            output.warning(f"Unknown concept '{concept}'")
+            if similar:
+                output.detail(f"Did you mean: {', '.join(similar[:3])}?")
+            output.detail("See: docs/reference/Common_Concepts.md")
             
             # Still include it (warning, not error)
             validated.append(concept)
@@ -1533,12 +1545,18 @@ def _create_archive_marker(log_filepath: str, ctx: SessionContext = None) -> Non
 # =============================================================================
 
 
-def check_stale_docs_warning() -> None:
+def check_stale_docs_warning(output: OutputHandler = None) -> None:
     """Check for stale documentation and warn the user.
     
     v2.7: Runs after session archiving to alert users about potentially
     outdated documentation that may need review.
+    
+    Args:
+        output: OutputHandler instance (creates default if None).
     """
+    if output is None:
+        output = OutputHandler()
+    
     from ontos_config import DOCS_DIR, is_ontos_repo
     
     try:
@@ -1574,13 +1592,13 @@ def check_stale_docs_warning() -> None:
                 stale_docs.append(staleness)
         
         if stale_docs:
-            print(f"\n⚠️  {len(stale_docs)} document(s) may be stale:")
+            output.warning(f"{len(stale_docs)} document(s) may be stale:")
             for doc in stale_docs[:3]:  # Show max 3
                 stale_str = ", ".join([f"{a}" for a, _ in doc.stale_atoms[:2]])
-                print(f"   - {doc.doc_id}: describes {stale_str} (modified after {doc.verified_date})")
+                output.detail(f"- {doc.doc_id}: describes {stale_str} (modified after {doc.verified_date})")
             if len(stale_docs) > 3:
-                print(f"   ... and {len(stale_docs) - 3} more")
-            print("   Run: python3 .ontos/scripts/ontos_verify.py --all")
+                output.detail(f"... and {len(stale_docs) - 3} more")
+            output.info("Run: python3 .ontos/scripts/ontos_verify.py --all")
     except Exception as e:
         # Non-fatal: log for debugging but don't block archive
         import logging
@@ -1758,7 +1776,7 @@ Slug format:
         
     # Validate concepts (NEW in v2.3)
     if concepts:
-        concepts = validate_concepts(concepts, args.quiet)
+        concepts = validate_concepts(concepts, args.quiet, output=output)
 
     # Process impacts
     impacts = []
@@ -1767,7 +1785,7 @@ Slug format:
         
     # Auto-suggest impacts if requested
     if args.suggest_impacts:
-        suggestions = suggest_impacts(args.quiet)
+        suggestions = suggest_impacts(args.quiet, output=output)
         if suggestions:
             impacts = prompt_for_impacts(suggestions, args.quiet)
 
@@ -1846,7 +1864,7 @@ Slug format:
         
         # v2.7: Check for stale documentation
         if not args.quiet:
-            check_stale_docs_warning()
+            check_stale_docs_warning(output=output)
 
         # Handle changelog integration
         if args.changelog or args.changelog_category or args.changelog_message:

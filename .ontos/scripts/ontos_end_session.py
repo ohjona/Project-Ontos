@@ -6,7 +6,12 @@ import datetime
 import subprocess
 import argparse
 import sys
+from pathlib import Path
 from typing import Optional
+
+# v2.8: Import transactional context and output handler
+from ontos.core.context import SessionContext
+from ontos.ui.output import OutputHandler
 
 from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT
 
@@ -120,17 +125,21 @@ def detect_implemented_proposal(branch: str, impacts: list) -> Optional[dict]:
     return draft_proposals[0] if draft_proposals else None
 
 
-def graduate_proposal(proposal: dict, quiet: bool = False) -> bool:
+def graduate_proposal(proposal: dict, quiet: bool = False, output: OutputHandler = None) -> bool:
     """Graduate a proposal from proposals/ to strategy/.
 
     Args:
         proposal: Dict with 'id', 'filepath', 'version'
         quiet: Suppress output
+        output: OutputHandler instance (creates default if None).
 
     Returns:
         True if graduation succeeded.
     """
     import shutil
+    
+    if output is None:
+        output = OutputHandler(quiet=quiet)
 
     filepath = proposal['filepath']
     proposals_dir = get_proposals_dir()
@@ -178,17 +187,15 @@ def graduate_proposal(proposal: dict, quiet: bool = False) -> bool:
         # Add entry to decision_history.md
         add_graduation_to_ledger(proposal, dest_path)
 
-        if not quiet:
-            print(f"   ✅ Graduated: {os.path.basename(filepath)}")
-            print(f"      From: proposals/{rel_path}")
-            print(f"      To: strategy/{rel_path}")
-            print(f"      Status: draft → active")
+        output.success(f"Graduated: {os.path.basename(filepath)}")
+        output.info(f"   From: proposals/{rel_path}")
+        output.info(f"   To: strategy/{rel_path}")
+        output.info(f"   Status: draft → active")
 
         return True
 
     except (IOError, OSError, shutil.Error) as e:
-        if not quiet:
-            print(f"   ❌ Graduation failed: {e}")
+        output.error(f"Graduation failed: {e}")
         return False
 
 
@@ -352,7 +359,7 @@ def validate_branch_in_log(log_path: str, expected_branch: str) -> bool:
         return False
 
 
-def append_to_log(log_path: str, new_commits: list) -> bool:
+def append_to_log(log_path: str, new_commits: list, output: OutputHandler = None) -> bool:
     """Append new commits to existing log's Raw Session History.
     
     v1.2: Deduplicates commits to handle amend+push scenarios.
@@ -362,10 +369,14 @@ def append_to_log(log_path: str, new_commits: list) -> bool:
     Args:
         log_path: Path to log file
         new_commits: List of commit strings (format: "hash - message")
+        output: OutputHandler instance (creates default if None).
     
     Returns:
         True if append succeeded, False if fallback needed.
     """
+    if output is None:
+        output = OutputHandler()
+    
     try:
         with open(log_path, 'r', encoding='utf-8') as f:
             lines = f.read().splitlines()
@@ -383,7 +394,7 @@ def append_to_log(log_path: str, new_commits: list) -> bool:
     unique_commits = [c for c in new_commits if c.split()[0][:7] not in existing_hashes]
     
     if not unique_commits:
-        print("ℹ️  No new commits to append (all already present)")
+        output.info("No new commits to append (all already present)")
         return True
     
     # Find Raw Session History section using line-by-line parsing
@@ -417,14 +428,14 @@ def append_to_log(log_path: str, new_commits: list) -> bool:
     
     # v1.4: Fallback if section was missing
     if not inserted:
-        print(f"⚠️  Could not find '## Raw Session History' section in {log_path}")
-        print(f"    Creating new log instead of appending.")
+        output.warning(f"Could not find '## Raw Session History' section in {log_path}")
+        output.info("Creating new log instead of appending.")
         return False  # Signal caller to create new log
     
     try:
         with open(log_path, 'w', encoding='utf-8') as f:
             f.write("\n".join(output_lines))
-        print(f"📝 Appended {len(unique_commits)} commits to {log_path}")
+        output.info(f"Appended {len(unique_commits)} commits to {log_path}")
         return True
     except (IOError, OSError):
         return False
@@ -589,7 +600,8 @@ def create_auto_log(
     source: str,
     event_type: str,
     commits: list,
-    quiet: bool = False
+    quiet: bool = False,
+    output: OutputHandler = None
 ) -> bool:
     """Create auto-generated log for session appending.
     
@@ -600,10 +612,14 @@ def create_auto_log(
         event_type: Type of work
         commits: List of commit strings
         quiet: Suppress output
+        output: OutputHandler instance (creates default if None).
     
     Returns:
         True on success.
     """
+    if output is None:
+        output = OutputHandler(quiet=quiet)
+    
     try:
         if not os.path.exists(LOGS_DIR):
             os.makedirs(LOGS_DIR)
@@ -621,7 +637,7 @@ def create_auto_log(
     while os.path.exists(filepath):
         if validate_branch_in_log(filepath, branch):
             # Found the right log, append instead
-            return append_to_log(filepath, commits)
+            return append_to_log(filepath, commits, output)
         filename = f"{today_date}_{topic_slug}-{counter}.md"
         filepath = os.path.join(LOGS_DIR, filename)
         counter += 1
@@ -664,8 +680,7 @@ Event Type: {event_type}
     except (IOError, OSError):
         return False
     
-    if not quiet:
-        print(f"""
+    output.info(f"""
 ┌────────────────────────────────────────────────────────────┐
 │             📝 SESSION LOG AUTO-GENERATED                  │
 ├────────────────────────────────────────────────────────────┤
@@ -907,12 +922,15 @@ def find_changelog() -> str:
     return ""
 
 
-def create_changelog() -> str:
+def create_changelog(output: OutputHandler = None) -> str:
     """Create a new CHANGELOG.md file with standard template.
 
     Returns:
         Path to created file or empty string on error.
     """
+    if output is None:
+        output = OutputHandler()
+    
     changelog_path = DEFAULT_CHANGELOG
 
     today = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -932,7 +950,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
             f.write(content)
         return changelog_path
     except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to create CHANGELOG.md: {e}")
+        output.error(f"Failed to create CHANGELOG.md: {e}")
         return ""
 
 
@@ -1260,7 +1278,9 @@ def create_log_file(
     source: str = "",
     event_type: str = "chore",
     concepts: list[str] = None,
-    impacts: list[str] = None
+    impacts: list[str] = None,
+    output: OutputHandler = None,
+    ctx: SessionContext = None
 ) -> str:
     """Creates a new session log file with v2.0 schema.
     
@@ -1271,10 +1291,20 @@ def create_log_file(
         event_type: Type of work (feature/fix/refactor/exploration/chore).
         concepts: List of concept tags for searchability.
         impacts: List of document IDs affected by this session.
+        output: OutputHandler instance (creates default if None).
+        ctx: SessionContext for transactional writes (creates default if None).
         
     Returns:
         Path to the created log file, or empty string on error.
     """
+    # v2.8: Use OutputHandler for all messages
+    if output is None:
+        output = OutputHandler(quiet=quiet)
+    
+    # v2.8: Use SessionContext for transactional writes
+    if ctx is None:
+        ctx = SessionContext.from_repo(Path.cwd())
+    
     # Normalize inputs
     topic_slug = topic_slug.lower()
     concepts = concepts or []
@@ -1283,10 +1313,9 @@ def create_log_file(
     try:
         if not os.path.exists(LOGS_DIR):
             os.makedirs(LOGS_DIR)
-            if not quiet:
-                print(f"Created directory: {LOGS_DIR}")
+            output.info(f"Created directory: {LOGS_DIR}")
     except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to create directory {LOGS_DIR}: {e}")
+        output.error(f"Failed to create directory {LOGS_DIR}: {e}")
         return ""
 
     now = datetime.datetime.now().astimezone()
@@ -1296,8 +1325,7 @@ def create_log_file(
     filepath = os.path.join(LOGS_DIR, filename)
 
     if os.path.exists(filepath):
-        if not quiet:
-            print(f"Log file already exists: {filepath}")
+        output.warning(f"Log file already exists: {filepath}")
         _create_archive_marker(filepath)
         return filepath
 
@@ -1328,15 +1356,16 @@ Event Type: {event_type}
     # Append the adaptive template (filling {daily_log})
     content += template_content.format(daily_log=daily_log)
 
+    # v2.8: Use buffer_write for transactional write
     try:
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-    except (IOError, OSError, PermissionError) as e:
-        print(f"Error: Failed to write log file: {e}")
+        ctx.buffer_write(Path(filepath), content)
+        ctx.commit()  # Commit immediately since this function is standalone
+    except Exception as e:
+        ctx.rollback()
+        output.error(f"Failed to write log file: {e}")
         return ""
 
-    if not quiet:
-        print(f"Created session log: {filepath}")
+    output.success(f"Created session log: {filepath}")
 
     # Create marker file for pre-push hook
     _create_archive_marker(filepath)
@@ -1344,7 +1373,7 @@ Event Type: {event_type}
     return filepath
 
 
-def _create_archive_marker(log_filepath: str) -> None:
+def _create_archive_marker(log_filepath: str, ctx: SessionContext = None) -> None:
     """Create marker file to signal that a session was archived.
 
     The pre-push hook checks for this marker to enforce archiving before push.
@@ -1352,14 +1381,20 @@ def _create_archive_marker(log_filepath: str) -> None:
 
     Args:
         log_filepath: Path to the created log file (stored in marker for reference).
+        ctx: SessionContext for transactional writes (direct write if None for backward compat).
     """
     try:
         marker_dir = os.path.dirname(ARCHIVE_MARKER_FILE)
         os.makedirs(marker_dir, exist_ok=True)
 
-        with open(ARCHIVE_MARKER_FILE, 'w', encoding='utf-8') as f:
-            f.write(f"archived={datetime.datetime.now().isoformat()}\n")
-            f.write(f"log={log_filepath}\n")
+        content = f"archived={datetime.datetime.now().isoformat()}\nlog={log_filepath}\n"
+        
+        if ctx is not None:
+            ctx.buffer_write(Path(ARCHIVE_MARKER_FILE), content)
+        else:
+            # Backward compat: direct write if no ctx provided
+            with open(ARCHIVE_MARKER_FILE, 'w', encoding='utf-8') as f:
+                f.write(content)
     except (IOError, OSError, PermissionError):
         # Non-fatal: marker creation failure shouldn't break archiving
         pass
@@ -1655,38 +1690,51 @@ Slug format:
         sys.exit(0)
 
     # Create session log
-    result = create_log_file(
-        args.topic,
-        args.quiet,
-        args.source or "",
-        event_type,
-        concepts,
-        impacts
-    )
-    if not result:
-        sys.exit(1)
-
-    # v2.6.1: Check for proposal graduation
-    branch = get_current_branch()
-    if branch:
-        proposal = detect_implemented_proposal(branch, impacts)
-        if proposal:
-            prompt_graduation(proposal, args.quiet)
+    # v2.8: Create SessionContext for transactional writes
+    ctx = SessionContext.from_repo(Path.cwd())
+    output = OutputHandler(quiet=args.quiet)
     
-    # v2.7: Check for stale documentation
-    if not args.quiet:
-        check_stale_docs_warning()
+    try:
+        result = create_log_file(
+            args.topic,
+            args.quiet,
+            args.source or "",
+            event_type,
+            concepts,
+            impacts,
+            output=output,
+            ctx=ctx
+        )
+        if not result:
+            ctx.rollback()
+            sys.exit(1)
 
-    # Handle changelog integration
-    if args.changelog or args.changelog_category or args.changelog_message:
-        if args.changelog_category and args.changelog_message:
-            # Non-interactive mode
-            add_changelog_entry(args.changelog_category, args.changelog_message, args.quiet)
-        else:
-            # Interactive mode
-            category, description = prompt_changelog_entry(args.quiet)
-            if category and description:
-                add_changelog_entry(category, description, args.quiet)
+        # v2.6.1: Check for proposal graduation
+        branch = get_current_branch()
+        if branch:
+            proposal = detect_implemented_proposal(branch, impacts)
+            if proposal:
+                prompt_graduation(proposal, args.quiet)
+        
+        # v2.7: Check for stale documentation
+        if not args.quiet:
+            check_stale_docs_warning()
+
+        # Handle changelog integration
+        if args.changelog or args.changelog_category or args.changelog_message:
+            if args.changelog_category and args.changelog_message:
+                # Non-interactive mode
+                add_changelog_entry(args.changelog_category, args.changelog_message, args.quiet)
+            else:
+                # Interactive mode
+                category, description = prompt_changelog_entry(args.quiet)
+                if category and description:
+                    add_changelog_entry(category, description, args.quiet)
+    
+    except Exception as e:
+        ctx.rollback()
+        output.error(f"Session archiving failed: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

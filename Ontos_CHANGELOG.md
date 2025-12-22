@@ -21,6 +21,67 @@ All notable changes to **Project Ontos itself** (the protocol and tooling) will 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2025-12-22
+
+### Theme: "Curation Levels"
+
+Implements tiered validation with L0 Scaffold → L1 Stub → L2 Full to lower adoption friction.
+
+### Added
+- **Curation Module** (`.ontos/scripts/ontos/core/curation.py`)
+  - `CurationLevel` enum (SCAFFOLD=0, STUB=1, FULL=2)
+  - `detect_curation_level()` - Infer level from frontmatter
+  - `validate_at_level()` - Level-appropriate validation
+  - `create_scaffold()` / `create_stub()` - Generate L0/L1 frontmatter
+  - Type inference from path and content
+
+- **Scaffold Script** (`ontos_scaffold.py`)
+  - `--dry-run` default, `--apply` to execute
+  - Respects `.ontosignore` patterns
+
+- **Stub Script** (`ontos_stub.py`)
+  - Interactive mode or `--goal "..." --type product`
+  - Creates L1 documents with goal field
+
+- **Promote Script** (`ontos_promote.py`) — *Chief Architect Feedback*
+  - Interactive L0/L1 → L2 promotion with fuzzy ID matching
+  - `--check` mode to preview promotable documents
+  - `--all-ready` for batch promotion of ready docs
+
+- **Context Map Level Markers** — *Chief Architect Feedback*
+  - All documents display `[L0]`/`[L1]`/`[L2]` markers
+  - ⚠️ warnings for incomplete curation
+
+- **`--strict` Curation Mode** — *Chief Architect Feedback*
+  - `python3 ontos.py map --strict` exits 1 if L0/L1 docs present
+
+- **Maintain Curation Stats** — *Chief Architect Feedback*
+  - Shows L0/L1/L2 breakdown at end of maintenance
+  - Suggests `promote --check` for incomplete documents
+
+- **Unified CLI Updates**
+  - New `scaffold` command: `python3 ontos.py scaffold --apply`
+  - New `stub` command: `python3 ontos.py stub --goal "..." --type atom`
+  - New `promote` command: `python3 ontos.py promote --check`
+  - New `curate` alias for `scaffold`
+
+- **New Status Values**
+  - `scaffold` - Level 0 auto-generated documents
+  - `pending_curation` - Level 1 awaiting full curation
+
+- **175 New Tests**
+  - `test_curation.py` (48 tests) - Level detection, validation, scaffolding
+  - `test_promote.py` (16 tests) - Promotion functionality
+
+### Curation Levels
+| Level | Name | Required Fields | Status |
+|-------|------|-----------------|--------|
+| 0 | Scaffold | `id`, `type` | `scaffold` |
+| 1 | Stub | `id`, `type`, `status` | `pending_curation` |
+| 2 | Full | All + `depends_on`/`concepts` | `draft`, `active`... |
+
+---
+
 ## [2.9.0] - 2025-12-22
 
 ### Theme: "Schema Versioning"

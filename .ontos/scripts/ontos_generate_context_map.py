@@ -14,6 +14,13 @@ from typing import Optional
 from ontos.core.context import SessionContext
 from ontos.ui.output import OutputHandler
 
+# v2.9.1: Import curation for level markers
+from ontos.core.curation import (
+    CurationLevel,
+    detect_curation_level,
+    level_marker,
+)
+
 from ontos_config import (
     __version__,
     DOCS_DIR,
@@ -297,7 +304,18 @@ def generate_tree(files_data: dict[str, dict]) -> str:
                 tokens = format_token_count(data.get('tokens', 0))
                 status_indicator = get_status_indicator(data.get('status', 'unknown'))
                 
-                tree.append(f"- **{doc_id}**{status_indicator} ({data['filename']}) {tokens}")
+                # v2.9.1: Add curation level marker
+                fm = {'id': doc_id, 'type': data['type'], 'status': data.get('status', ''),
+                      'depends_on': data['depends_on'], 'concepts': data.get('concepts', [])}
+                curation_level = detect_curation_level(fm)
+                curation_marker = level_marker(curation_level)
+                
+                # Add warning for incomplete curation
+                curation_warning = ""
+                if curation_level < CurationLevel.FULL:
+                    curation_warning = f"  ⚠️ {data.get('status', 'incomplete')}"
+                
+                tree.append(f"- **{doc_id}** {curation_marker}{status_indicator} ({data['filename']}) {tokens}{curation_warning}")
                 tree.append(f"  - Status: {data['status']}")
                 if data['type'] != 'log':
                     tree.append(f"  - Depends On: {deps}")
@@ -1074,6 +1092,20 @@ Scanned Directory: `{dirs_str}`
 
     # Count error-level issues (exclude INFO for strict mode purposes)
     error_issues = [i for i in issues if '[INFO]' not in i]
+    
+    # v2.9.1: Report L0/L1 documents (informational, does not fail --strict)
+    # This is intentionally not added to error_issues - existing docs may be L0/L1
+    incomplete_docs = []
+    for doc_id, data in files_data.items():
+        fm = {'id': doc_id, 'type': data['type'], 'status': data.get('status', ''),
+              'depends_on': data['depends_on'], 'concepts': data.get('concepts', [])}
+        level = detect_curation_level(fm)
+        if level < CurationLevel.FULL:
+            incomplete_docs.append((doc_id, level))
+    
+    if incomplete_docs and not quiet:
+        output.info(f"\nCuration Status: {len(incomplete_docs)} document(s) at L0/L1")
+        output.info(f"  Run `python3 ontos.py promote --check` to review.")
 
     # Display lint warnings
     if lint_warnings:

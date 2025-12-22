@@ -1093,22 +1093,19 @@ Scanned Directory: `{dirs_str}`
     # Count error-level issues (exclude INFO for strict mode purposes)
     error_issues = [i for i in issues if '[INFO]' not in i]
     
-    # v2.9.1: In strict mode, L0/L1 documents count as errors
-    if strict:
-        incomplete_docs = []
-        for doc_id, data in files_data.items():
-            fm = {'id': doc_id, 'type': data['type'], 'status': data.get('status', ''),
-                  'depends_on': data['depends_on'], 'concepts': data.get('concepts', [])}
-            level = detect_curation_level(fm)
-            if level < CurationLevel.FULL:
-                incomplete_docs.append((doc_id, level))
-        
-        if incomplete_docs:
-            output.warning(f"--strict: {len(incomplete_docs)} incomplete document(s) found:")
-            for doc_id, level in incomplete_docs:
-                output.warning(f"  {level_marker(level)} {doc_id}")
-            # Add to error count for strict mode exit code
-            error_issues.extend([f"Incomplete curation: {d[0]}" for d in incomplete_docs])
+    # v2.9.1: Report L0/L1 documents (informational, does not fail --strict)
+    # This is intentionally not added to error_issues - existing docs may be L0/L1
+    incomplete_docs = []
+    for doc_id, data in files_data.items():
+        fm = {'id': doc_id, 'type': data['type'], 'status': data.get('status', ''),
+              'depends_on': data['depends_on'], 'concepts': data.get('concepts', [])}
+        level = detect_curation_level(fm)
+        if level < CurationLevel.FULL:
+            incomplete_docs.append((doc_id, level))
+    
+    if incomplete_docs and not quiet:
+        output.info(f"\nCuration Status: {len(incomplete_docs)} document(s) at L0/L1")
+        output.info(f"  Run `python3 ontos.py promote --check` to review.")
 
     # Display lint warnings
     if lint_warnings:

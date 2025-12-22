@@ -2,7 +2,7 @@
 id: claude_v2_9_implementation_review_v2
 type: atom
 status: complete
-depends_on: [v2_9_implementation_plan, claude_v2_9_implementation_review]
+depends_on: [v2_9_implementation_plan]
 concepts: [architecture, review, security, adoption]
 ---
 

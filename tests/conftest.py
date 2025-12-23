@@ -4,10 +4,30 @@ import os
 import sys
 import shutil
 import subprocess
+import warnings
 import pytest
 
 # Add scripts directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scripts'))
+
+
+# v2.9.2: Configure warning filters for deprecation warnings
+def pytest_configure(config):
+    """Configure pytest warning filters."""
+    # Show FutureWarnings from ontos modules
+    warnings.filterwarnings(
+        "always",
+        category=FutureWarning,
+        module=r"ontos.*"
+    )
+    
+    # Suppress the ontos_lib deprecation warning in tests
+    # (tests may intentionally import from ontos_lib to test the shim)
+    warnings.filterwarnings(
+        "ignore",
+        message="Importing from 'ontos_lib' is deprecated",
+        category=FutureWarning,
+    )
 
 
 # =============================================================================

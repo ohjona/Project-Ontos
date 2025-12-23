@@ -12,10 +12,21 @@ This module re-exports functions from their new locations in the ontos package.
     from ontos.core.context import SessionContext
 
 DEPRECATION TIMELINE:
-- v2.8: Silent operation (no warnings) - YOU ARE HERE
-- v2.9: DeprecationWarning on import
+- v2.8: Silent operation (no warnings)
+- v2.9.2: FutureWarning on import - YOU ARE HERE
 - v3.0: Module removed, use ontos package directly
 """
+
+# v2.9.2: Emit FutureWarning on import (visible by default)
+import warnings
+warnings.warn(
+    "Importing from 'ontos_lib' is deprecated. "
+    "Import from 'ontos.core' instead. "
+    "This module will be removed in v3.0. "
+    "See: docs/reference/Ontos_Manual.md#migration-guide",
+    FutureWarning,
+    stacklevel=2
+)
 
 # =============================================================================
 # RE-EXPORTS FROM NEW PACKAGE STRUCTURE

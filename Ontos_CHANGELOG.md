@@ -21,6 +21,50 @@ All notable changes to **Project Ontos itself** (the protocol and tooling) will 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.2] - 2025-12-23
+
+### Theme: "Deprecation Warnings"
+
+Prepares users for v3.0 breaking changes by warning them about deprecated import paths and direct script execution.
+
+### Added
+- **FutureWarning on `ontos_lib` import**
+  - Visible by default (FutureWarning not silenced like DeprecationWarning)
+  - Points users to `ontos.core` package and migration guide
+
+- **ONTOS_CLI_DISPATCH env var** in `ontos.py`
+  - Signals to scripts they're being called via unified CLI
+  - Suppresses deprecation warnings when using `python3 ontos.py <command>`
+
+- **[DEPRECATION] notices for direct script execution**
+  - All 10 user-facing scripts emit notice when run directly
+  - Points to correct `python3 ontos.py <command>` equivalent
+  - Suppressible via `ONTOS_NO_DEPRECATION_WARNINGS=1`
+
+- **pytest warning filters** in `tests/conftest.py`
+  - Shows FutureWarnings from ontos modules
+  - Suppresses `ontos_lib` warning during tests
+
+- **7 new tests** in `test_deprecation.py`
+  - FutureWarning emission, CLI dispatch, suppression env var
+  - Multi-script deprecation pattern validation
+
+### Scripts Updated
+| Script | CLI Command |
+|--------|-------------|
+| ontos_end_session.py | `log` |
+| ontos_generate_context_map.py | `map` |
+| ontos_maintain.py | `maintain` |
+| ontos_consolidate.py | `consolidate` |
+| ontos_query.py | `query` |
+| ontos_update.py | `update` |
+| ontos_migrate_schema.py | `migrate` |
+| ontos_scaffold.py | `scaffold` |
+| ontos_stub.py | `stub` |
+| ontos_promote.py | `promote` |
+
+---
+
 ## [2.9.1] - 2025-12-22
 
 ### Theme: "Curation Levels"

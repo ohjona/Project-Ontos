@@ -91,6 +91,11 @@ def main():
 
     module_name, _ = COMMANDS[command]
 
+    # v2.9.2: Signal to scripts that they're being called via unified CLI
+    # This suppresses deprecation warnings about direct script execution
+    import os
+    os.environ['ONTOS_CLI_DISPATCH'] = '1'
+
     # Import and run the module
     import importlib
     try:

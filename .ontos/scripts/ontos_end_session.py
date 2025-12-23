@@ -1886,5 +1886,19 @@ Slug format:
         sys.exit(1)
 
 
+def emit_deprecation_notice(message: str) -> None:
+    """Always-visible CLI notice for deprecated usage."""
+    import sys
+    print(f"[DEPRECATION] {message}", file=sys.stderr)
+
+
 if __name__ == "__main__":
+    import os
+    if not os.environ.get('ONTOS_CLI_DISPATCH'):
+        if not os.environ.get('ONTOS_NO_DEPRECATION_WARNINGS'):
+            emit_deprecation_notice(
+                f"Direct execution of {Path(__file__).name} is deprecated. "
+                "Use 'python3 ontos.py log' instead. "
+                "Direct script execution will be removed in v3.0."
+            )
     main()

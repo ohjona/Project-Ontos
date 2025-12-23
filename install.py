@@ -107,14 +107,17 @@ def sha256_file(filepath: Path) -> str:
     return sha256.hexdigest()
 
 
-def download_file(url: str, dest: Path, description: str = "", max_retries: int = 3) -> bool:
-    """Download a file from URL with retry logic and exponential backoff."""
+def download_file(url: str, dest: Path, description: str = "", max_retries: int = 3, timeout: int = 60) -> bool:
+    """Download a file from URL with retry logic, timeout, and exponential backoff."""
     for attempt in range(max_retries):
         try:
             log(f"Downloading {description or url}...")
-            urllib.request.urlretrieve(url, dest)
+            # Use urlopen with timeout instead of urlretrieve (which has no timeout)
+            with urllib.request.urlopen(url, timeout=timeout) as response:
+                with open(dest, 'wb') as out_file:
+                    shutil.copyfileobj(response, out_file)
             return True
-        except urllib.error.URLError as e:
+        except (urllib.error.URLError, OSError) as e:
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt
                 log(f"Download failed, retrying in {wait_time}s... ({attempt + 1}/{max_retries})", "warning")
@@ -223,9 +226,9 @@ def restore_from_backup(backup_path: Path) -> bool:
 
 
 def cleanup_backup(backup_path: Path) -> None:
-    """Remove backup directory after successful installation."""
+    """Remove only this specific backup directory after successful installation."""
     try:
-        shutil.rmtree(backup_path.parent)  # Remove .ontos_backup entirely
+        shutil.rmtree(backup_path)  # Remove only this backup, not entire .ontos_backup
     except Exception:
         pass  # Ignore cleanup errors
 
@@ -329,22 +332,46 @@ def verify_local_checksum(filepath: Path, expected_checksum: str) -> bool:
     return True
 
 
+def is_path_traversal(name: str) -> bool:
+    """Check if a tar member name attempts path traversal (POSIX + Windows)."""
+    # POSIX absolute path
+    if name.startswith('/'):
+        return True
+    # Parent directory traversal
+    if '..' in name:
+        return True
+    # Windows drive letter (e.g., C:, D:)
+    if len(name) >= 2 and name[1] == ':' and name[0].isalpha():
+        return True
+    # Windows absolute UNC path
+    if name.startswith('\\\\') or name.startswith('//'):
+        return True
+    return False
+
+
 def extract_bundle(bundle_path: Path, dest_dir: Path) -> bool:
     """Extract the tar.gz bundle to destination directory.
 
-    SECURITY: Protects against path traversal and symlink attacks.
+    SECURITY: Protects against:
+    - Path traversal attacks (POSIX and Windows)
+    - Symlink/hardlink attacks
+    - Device nodes, FIFOs, and other special files
     """
     try:
         log("Extracting files...")
         with tarfile.open(bundle_path, 'r:gz') as tar:
             for member in tar.getmembers():
-                # Security: check for path traversal attacks
-                if member.name.startswith('/') or '..' in member.name:
+                # Security: check for path traversal attacks (POSIX + Windows)
+                if is_path_traversal(member.name):
                     log(f"SECURITY ERROR: Suspicious path in archive: {member.name}", "error")
                     return False
                 # Security: check for symlink attacks
                 if member.issym() or member.islnk():
                     log(f"SECURITY ERROR: Symlinks not allowed in archive: {member.name}", "error")
+                    return False
+                # Security: only allow regular files and directories
+                if not (member.isfile() or member.isdir()):
+                    log(f"SECURITY ERROR: Only regular files and directories allowed: {member.name}", "error")
                     return False
 
             # Use filter='data' for safe extraction (Python 3.12+) or manual extraction
@@ -353,7 +380,7 @@ def extract_bundle(bundle_path: Path, dest_dir: Path) -> bool:
             else:
                 tar.extractall(dest_dir)
         return True
-    except tarfile.TarError as e:
+    except (tarfile.TarError, OSError) as e:
         log(f"Extraction failed: {e}", "error")
         return False
 
@@ -393,8 +420,8 @@ def verify_extraction(dest_dir: Path) -> bool:
     return True
 
 
-def run_initialization() -> bool:
-    """Run ontos_init.py to complete setup."""
+def run_initialization(timeout: int = 120) -> bool:
+    """Run ontos_init.py to complete setup with timeout."""
     log("Running initialization...")
 
     init_path = Path.cwd() / "ontos_init.py"
@@ -402,11 +429,16 @@ def run_initialization() -> bool:
         log("ontos_init.py not found after extraction.", "error")
         return False
 
-    result = subprocess.run(
-        [sys.executable, str(init_path), "--non-interactive"],
-        capture_output=True,
-        text=True
-    )
+    try:
+        result = subprocess.run(
+            [sys.executable, str(init_path), "--non-interactive"],
+            capture_output=True,
+            text=True,
+            timeout=timeout
+        )
+    except subprocess.TimeoutExpired:
+        log(f"Initialization timed out after {timeout}s.", "error")
+        return False
 
     if result.returncode != 0:
         log(f"Initialization failed: {result.stderr}", "error")

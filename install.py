@@ -2,11 +2,11 @@
 """Ontos Installer - Single-file bootstrap for Project Ontos.
 
 Usage:
-    curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.3/install.py
+    curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
     python3 install.py
 
 Options:
-    --version VERSION   Install specific version (default: 2.9.3)
+    --version VERSION   Install specific version (default: 2.9.4)
     --latest            Fetch latest version from GitHub Releases API
     --upgrade           Upgrade existing installation
     --check             Verify installation integrity without changes
@@ -58,7 +58,7 @@ GITHUB_RELEASES_URL = f"https://github.com/{GITHUB_REPO}/releases/download"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}"
 
 # Default version (can be overridden with --latest to fetch from API)
-DEFAULT_VERSION = "2.9.3"
+DEFAULT_VERSION = "2.9.4"
 
 # Fallback expected files (used only if manifest.json is missing)
 EXPECTED_FILES_FALLBACK = [
@@ -174,8 +174,18 @@ def detect_existing_installation() -> dict:
 # =============================================================================
 
 def create_backup() -> Path:
-    """Create backup of current installation for rollback."""
+    """Create backup of current installation for rollback.
+
+    SECURITY: Validates backup directory is not a symlink to prevent
+    symlink redirection attacks.
+    """
     backup_dir = Path.cwd() / ".ontos_backup"
+
+    # Security: Prevent symlink redirection attack
+    if backup_dir.exists() and backup_dir.is_symlink():
+        log("SECURITY ERROR: .ontos_backup is a symlink. Aborting.", "error")
+        raise OSError("Backup directory is a symlink - potential security issue")
+
     timestamp = int(time.time())
     backup_path = backup_dir / f"backup_{timestamp}"
     backup_path.mkdir(parents=True, exist_ok=True)
@@ -235,7 +245,7 @@ def cleanup_backup(backup_path: Path) -> None:
 
 def read_user_config() -> dict:
     """Read user's config values for merge during upgrade."""
-    config_path = Path.cwd() / ".ontos" / "scripts" / "ontos_config.py"
+    config_path = Path.cwd() / "ontos_config.py"
     if not config_path.exists():
         return {}
 
@@ -265,6 +275,54 @@ def merge_configs(new_config: dict, old_config: dict) -> dict:
         if key in merged:
             merged[key] = value  # Preserve user's customization
     return merged
+
+
+def write_user_config(config: dict) -> bool:
+    """Write merged config values back to ontos_config.py.
+
+    Preserves file structure and comments, only updates values present in config dict.
+
+    Args:
+        config: Dictionary of config key-value pairs to write
+
+    Returns:
+        True on success, False on failure
+    """
+    config_path = Path.cwd() / "ontos_config.py"
+    if not config_path.exists():
+        log("Config file not found, skipping config write.", "warning")
+        return False
+
+    try:
+        lines = config_path.read_text().split('\n')
+        updated_lines = []
+
+        for line in lines:
+            stripped = line.strip()
+            # Skip comments and empty lines
+            if stripped.startswith('#') or not stripped or '=' not in stripped:
+                updated_lines.append(line)
+                continue
+
+            # Parse key from line
+            parts = stripped.split('=', 1)
+            if len(parts) == 2:
+                key = parts[0].strip()
+                if key in config:
+                    # Preserve indentation
+                    indent = len(line) - len(line.lstrip())
+                    updated_lines.append(' ' * indent + f"{key} = {config[key]}")
+                else:
+                    updated_lines.append(line)
+            else:
+                updated_lines.append(line)
+
+        config_path.write_text('\n'.join(updated_lines))
+        return True
+
+    except (IOError, OSError) as e:
+        log(f"Failed to write config: {e}", "error")
+        return False
 
 
 # =============================================================================
@@ -553,8 +611,10 @@ def install(version: str = None, upgrade: bool = False) -> int:
         if upgrade and old_config:
             new_config = read_user_config()
             merged = merge_configs(new_config, old_config)
-            # Write merged config (simplified - writes variables directly)
-            log("Config merged: your customizations preserved + new defaults added", "success")
+            if write_user_config(merged):
+                log("Config merged: your customizations preserved + new defaults added", "success")
+            else:
+                log("Config merge skipped (file not found or write failed)", "warning")
 
         # Remove sentinel on success
         sentinel.unlink(missing_ok=True)

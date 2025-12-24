@@ -5,7 +5,7 @@ status: active
 depends_on: []
 ---
 
-# Ontos Manual v2.8
+# Ontos Manual v2.9
 
 *The complete reference for Project Ontos*
 
@@ -14,21 +14,15 @@ depends_on: []
 ## Quick Start
 
 ```bash
-# 1. Clone Ontos
-git clone https://github.com/ohjona/Project-Ontos.git /tmp/ontos
+# Install Ontos in your project
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
+python3 install.py
 
-# 2. Copy to your project
-cp -r /tmp/ontos/.ontos your-project/
-cp /tmp/ontos/ontos_init.py your-project/
-cp /tmp/ontos/docs/reference/Ontos_Agent_Instructions.md your-project/
-
-# 3. Initialize (installs hooks, generates context map)
-cd your-project
-python3 ontos_init.py
-
-# 4. Activate
+# Activate
 # Tell your AI: "Ontos"
 ```
+
+> **Security Note:** The installer verifies SHA256 checksums of all downloaded assets.
 
 ---
 
@@ -197,8 +191,89 @@ python3 .ontos/scripts/ontos_generate_context_map.py --include-rejected
 
 ---
 
+## 4. Curation Levels (v2.9+)
 
-## 4. Monthly Consolidation
+To lower the barrier to adoption, Ontos v2.9 supports tiered validation.
+
+### The Levels
+
+| Level | Name | Description | Validation |
+|-------|------|-------------|------------|
+| **0** | **Scaffold** | Auto-generated placeholder | Minimal (ID + Type only) |
+| **1** | **Stub** | User provided goal | Relaxed (No deps required) |
+| **2** | **Full** | Complete Ontos document | Strict (All fields required) |
+
+### Curation Workflow
+
+1. **Scaffold:** Generate placeholders for untagged files.
+   ```bash
+   python3 ontos.py scaffold --apply
+   ```
+
+2. **Stub:** Identify the goal of a document.
+   ```bash
+   python3 ontos.py stub --goal "Explain the payment flow" --type product
+   ```
+
+3. **Promote:** Add dependencies and concepts to reach Level 2.
+   ```bash
+   python3 ontos.py promote --check
+   python3 ontos.py promote docs/payments.md
+   ```
+
+### Validation Modes
+
+- **Standard:** `python3 ontos.py map` (Includes L0/L1 documents)
+- **Strict:** `python3 ontos.py map --strict` (Fails if L0/L1 documents exist)
+
+Use strict mode in CI/CD to ensure your knowledge graph is fully curated.
+
+### Schema Versioning (v2.9.0)
+
+Ontos v2.9 introduces explicit schema versioning to track document evolution.
+
+**The Schema Field:**
+```yaml
+---
+id: my_document
+type: product
+ontos_schema: "2.2"  # Indicates v2.2 schema
+---
+```
+
+**Schema Versions:**
+| Version | Features |
+|---------|----------|
+| 1.0 | ID only (legacy) |
+| 2.0 | ID + Type |
+| 2.1 | Staleness tracking (`describes`, `describes_verified`) |
+| 2.2 | Curation levels (`curation_level`, `ontos_schema`) |
+
+**Check Migration Status:**
+```bash
+python3 ontos.py migrate --check
+```
+
+### Deprecation Warnings (v2.9.2)
+
+Direct script execution is deprecated. Use the unified CLI:
+
+```bash
+# Deprecated (will be removed in v3.0)
+python3 .ontos/scripts/ontos_end_session.py
+
+# Preferred
+python3 ontos.py log
+```
+
+**Suppression:** To silence deprecation warnings in scripts:
+```bash
+ONTOS_NO_DEPRECATION_WARNINGS=1 python3 .ontos/scripts/ontos_end_session.py
+```
+
+---
+
+## 5. Monthly Consolidation
 
 When `logs/` exceeds ~15 files, perform consolidation to keep context lean.
 
@@ -254,13 +329,27 @@ Uses OAuth2 with JWT tokens.
 
 ---
 
-## 4. Installation
+## 6. Installation
 
 ### Prerequisites
 - Python 3.9+
 - Git
 
-### Standard Install
+### Standard Install (v2.9+)
+
+Run this one-liner in your project root:
+
+```bash
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
+python3 install.py
+```
+
+The installer will:
+1. Verify SHA256 checksums of all assets (security first)
+2. Download and extract the Ontos bundle
+3. Run initialization (`ontos_init.py`)
+
+### Manual Install (Legacy)
 ```bash
 # Copy scripts and init file
 cp -r /path/to/ontos/.ontos your-project/
@@ -316,12 +405,17 @@ python3 .ontos/scripts/ontos_remove_frontmatter.py --yes
 
 ---
 
-## 5. Migrating Existing Docs
+## 7. Migrating Existing Docs
 
-### Auto-detect untagged files
+### Auto-scaffold untagged files (v2.9+)
+
+Use the scaffold command to generate Level 0 frontmatter for all markdown files:
+
 ```bash
-python3 .ontos/scripts/ontos_migrate_frontmatter.py
+python3 ontos.py scaffold --apply
 ```
+
+This replaces the old `ontos_migrate_frontmatter.py` workflow.
 
 ### Tag via AI
 Give your agent the generated `migration_prompt.txt`. It will:
@@ -337,7 +431,7 @@ python3 .ontos/scripts/ontos_generate_context_map.py --strict
 
 ---
 
-## 6. Error Reference
+## 8. Error Reference
 
 | Error | Cause | Fix |
 |-------|-------|-----|
@@ -349,7 +443,7 @@ python3 .ontos/scripts/ontos_generate_context_map.py --strict
 
 ---
 
-## 7. CI/CD Integration
+## 9. CI/CD Integration
 
 ### Strict validation
 ```yaml
@@ -372,7 +466,7 @@ repos:
 
 ---
 
-## 8. Unified CLI (v2.8+)
+## 10. Unified CLI (v2.8+)
 
 Ontos v2.8 introduces a unified command interface:
 
@@ -391,6 +485,10 @@ python3 ontos.py <command> [options]
 | `consolidate` | Archive old logs     | `python3 .ontos/scripts/ontos_consolidate.py`        |
 | `query`     | Search documents       | `python3 .ontos/scripts/ontos_query.py`              |
 | `update`    | Update Ontos scripts   | `python3 .ontos/scripts/ontos_update.py`             |
+| `scaffold`  | Generate scaffolds     | `python3 .ontos/scripts/ontos_scaffold.py`           |
+| `stub`      | Create stub            | `python3 .ontos/scripts/ontos_stub.py`               |
+| `promote`   | Promote documents      | `python3 .ontos/scripts/ontos_promote.py`            |
+| `migrate`   | Migrate schema         | `python3 .ontos/scripts/ontos_migrate_schema.py`     |
 
 ### Command Aliases
 
@@ -403,6 +501,8 @@ For convenience, commands have short aliases:
 - `archive-old` → `consolidate`
 - `search`, `find` → `query`
 - `upgrade` → `update`
+- `curate` → `scaffold`
+- `schema` → `migrate`
 
 ### Examples
 
@@ -427,7 +527,7 @@ python3 ontos.py query --health
 
 ---
 
-## 9. Updating Ontos
+## 11. Updating Ontos
 
 ```bash
 # Check for updates
@@ -441,7 +541,7 @@ python3 .ontos/scripts/ontos_update.py
 
 ---
 
-## 10. Scripts Reference
+## 12. Scripts Reference
 
 | Script | Purpose |
 |--------|---------|
@@ -464,7 +564,7 @@ python3 .ontos/scripts/ontos_update.py
 
 ---
 
-## 11. Documentation Staleness Tracking (v2.7)
+## 13. Documentation Staleness Tracking (v2.7)
 
 Track when documentation becomes outdated after code changes.
 
@@ -516,4 +616,23 @@ describes_verified: 2025-12-19
 describes:
   - ontos_manual
 describes_verified: 2025-12-19
+```
+
+---
+
+## 14. Advanced Topics
+
+### Schema Versioning (v2.9+)
+
+Ontos v2.9 introduces explicit schema versioning to support future upgrades.
+
+- **v1.0**: Legacy (ID only)
+- **v2.0**: Standard (ID + Type)
+- **v2.1**: Staleness tracking (describes)
+- **v2.2**: Curation levels (curation_level, ontos_schema)
+- **v3.0**: Future (Typed edges)
+
+To check your documents:
+```bash
+python3 ontos.py migrate --check
 ```

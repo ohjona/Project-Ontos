@@ -1,0 +1,19 @@
+Security review (v2.9.4) — **BLOCK**
+
+**Issues I Found**
+- **High:** `install.py` still defaults to `DEFAULT_VERSION = "2.9.3"` and the usage header references `v2.9.3`. In a v2.9.4 release this silently installs an older version. Users expecting latest security fixes will be downgraded.
+- **Medium:** Config merge can corrupt `ontos_config.py`. `read_user_config()` treats any line with `=` as a key/value; complex values (lists/dicts/strings with `=`) get rewritten and can break config or silently change behavior.
+- **Medium:** Backup path can be redirected via symlink. `.ontos_backup` is created under CWD with no validation. A local attacker can pre-create `.ontos_backup` as a symlink, causing backup/restore to write outside the repo.
+
+**Edge Cases Not Handled**
+- `--latest` API failure silently falls back to `DEFAULT_VERSION`, potentially pinning old versions in CI without notice.
+- No locking; concurrent installs can race and leave partial state.
+- Offline upgrade path is blocked (`--bundle` doesn’t support upgrading).
+
+**Questions Reviewers Should Have Asked**
+- Why is the installer still defaulting to 2.9.3 in a 2.9.4 release?
+- Should API failure be a hard error instead of silently falling back?
+- Is config parsing safe for Python config values with `=`?
+- Should backup path be validated or protected against symlink redirection?
+
+**Verdict:** BLOCK until the above are addressed.

@@ -21,6 +21,20 @@ All notable changes to **Project Ontos itself** (the protocol and tooling) will 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.4] - 2025-12-23
+
+### Theme: "Documentation & Polish"
+
+Final release of the v2.9 series, focusing on documentation and adoption.
+
+### Changed
+- **Ontos_Manual.md** — Added "Curation Levels", "Schema Versioning", and updated "Installation"
+- **Ontos_Agent_Instructions.md** — Added "Curate Ontos" commands
+- **README.md** — Updated Quick Start to use `install.py`
+- **ontos_config_defaults.py** — Bumped version to 2.9.4
+
+---
+
 ## [2.9.3] - 2025-12-23
 
 ### Theme: "install.py Bootstrap"

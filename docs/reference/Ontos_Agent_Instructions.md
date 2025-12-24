@@ -59,11 +59,19 @@ Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`, `decision`
 
 **RULE:** Never use `git push --no-verify` without explicit user approval.
 
+### "Curate Ontos" (v2.9)
+1. `python3 ontos.py scaffold` — Preview scaffolds for untagged files
+2. `python3 ontos.py scaffold --apply` — Create Level 0 scaffolds
+3. `python3 ontos.py stub --goal "..." --type product` — Create Level 1 stub
+4. `python3 ontos.py promote --check` — Check for documents ready to promote
+5. `python3 ontos.py promote <file>` — Interactive promotion to Level 2
+
 ### "Maintain Ontos" (Weekly)
 1. `python3 ontos.py maintain`
-2. This runs four steps:
+2. This runs five steps:
    - Migrate untagged files
    - Regenerate context map
+   - **Report curation stats (L0/L1/L2)**
    - Consolidate old logs (if `AUTO_CONSOLIDATE=True`)
    - **Review proposals (v2.6.1)** — prompts to graduate implemented proposals
 3. Fix any errors reported
@@ -71,6 +79,46 @@ Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`, `decision`
 
 ### "Update Ontos"
 1. `python3 ontos.py update`
+2. `python3 ontos.py migrate --check` (Check for schema updates)
+
+### "Install Ontos" (v2.9.3+)
+For fresh installations:
+```bash
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
+python3 install.py
+```
+The installer verifies SHA256 checksums before extraction.
+
+### "Upgrade Ontos" (v2.9.3+)
+For existing installations:
+```bash
+python3 install.py --upgrade --latest
+```
+Config customizations are automatically preserved during upgrade.
+
+### "Create Scaffold" (v2.9.1+)
+Auto-scaffold untagged markdown files:
+1. `python3 ontos.py scaffold --dry-run` — Preview changes
+2. `python3 ontos.py scaffold --apply` — Apply scaffolds (L0)
+3. Review and promote scaffolds to L1/L2
+
+### "Create Stub" (v2.9.1+)
+Create minimal L1 documents (goal only):
+```bash
+python3 ontos.py stub docs/feature.md
+```
+
+### "Promote Document" (v2.9.1+)
+Elevate curation level:
+1. `python3 ontos.py promote docs/feature.md` — L0→L1 or L1→L2
+2. Fill in required fields for target level
+3. Re-run promote after editing
+
+### "Check Schema Migration" (v2.9.0+)
+Check documents for schema updates:
+```bash
+python3 ontos.py migrate --check
+```
 
 ### "Verify Ontos" (v2.7)
 Mark documentation as current after reviewing described atoms:
@@ -81,6 +129,7 @@ Mark documentation as current after reviewing described atoms:
 - After updating code that a document describes
 - When Archive Ontos shows staleness warnings
 - When context map Section 5 shows stale documents
+
 
 ## Type Hierarchy
 

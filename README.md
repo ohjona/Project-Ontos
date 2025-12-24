@@ -82,17 +82,14 @@ Or simpler: **your project's memory that works everywhere.**
 
 **Install** (paste into Claude Code, Cursor, or any agentic CLI):
 
-```
-Install Project Ontos in this repository.
-
-1. Clone or download the Ontos scripts from: https://github.com/ohjona/Project-Ontos
-2. Copy the `.ontos/` folder and `ontos_init.py` into my project root
-3. Create `docs/reference` and copy `docs/reference/Ontos_Agent_Instructions.md` and `.ontos-internal/reference/Common_Concepts.md` into it
-4. Run `python3 ontos_init.py` to initialize (installs hooks, generates context map)
-5. If successful, show me the contents of Ontos_Context_Map.md
+```bash
+# Install Project Ontos in this repository
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
+python3 install.py
 ```
 
-> See the [Ontos Manual](docs/reference/Ontos_Manual.md) for configuration options.
+> **Security Note:** The installer verifies SHA256 checksums of all downloaded assets.
+> See the [Ontos Manual](docs/reference/Ontos_Manual.md) for details.
 
 **Use it** - once installed, tell your Agent:
 
@@ -132,13 +129,25 @@ To update Ontos to the latest version:
 
 > **"Update Ontos"**
 
-Or manually:
+Or use the installer:
 
 ```bash
-python3 .ontos/scripts/ontos_update.py
+python3 install.py --upgrade --latest
 ```
 
-Your `ontos_config.py` customizations are never overwritten.
+Your `ontos_config.py` customizations are automatically preserved.
+
+### Offline Installation
+
+For air-gapped environments:
+
+```bash
+# Download on a connected machine
+curl -LO https://github.com/ohjona/Project-Ontos/releases/download/v2.9.4/ontos-bundle.tar.gz
+
+# Get checksum from releases page, then install
+python3 install.py --bundle ./ontos-bundle.tar.gz --checksum <SHA256>
+```
 
 ---
 

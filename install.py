@@ -267,6 +267,54 @@ def merge_configs(new_config: dict, old_config: dict) -> dict:
     return merged
 
 
+def write_user_config(config: dict) -> bool:
+    """Write merged config values back to ontos_config.py.
+
+    Preserves file structure and comments, only updates values present in config dict.
+
+    Args:
+        config: Dictionary of config key-value pairs to write
+
+    Returns:
+        True on success, False on failure
+    """
+    config_path = Path.cwd() / ".ontos" / "scripts" / "ontos_config.py"
+    if not config_path.exists():
+        log("Config file not found, skipping config write.", "warning")
+        return False
+
+    try:
+        lines = config_path.read_text().split('\n')
+        updated_lines = []
+
+        for line in lines:
+            stripped = line.strip()
+            # Skip comments and empty lines
+            if stripped.startswith('#') or not stripped or '=' not in stripped:
+                updated_lines.append(line)
+                continue
+
+            # Parse key from line
+            parts = stripped.split('=', 1)
+            if len(parts) == 2:
+                key = parts[0].strip()
+                if key in config:
+                    # Preserve indentation
+                    indent = len(line) - len(line.lstrip())
+                    updated_lines.append(' ' * indent + f"{key} = {config[key]}")
+                else:
+                    updated_lines.append(line)
+            else:
+                updated_lines.append(line)
+
+        config_path.write_text('\n'.join(updated_lines))
+        return True
+
+    except (IOError, OSError) as e:
+        log(f"Failed to write config: {e}", "error")
+        return False
+
+
 # =============================================================================
 # MAIN INSTALLATION LOGIC
 # =============================================================================
@@ -553,8 +601,10 @@ def install(version: str = None, upgrade: bool = False) -> int:
         if upgrade and old_config:
             new_config = read_user_config()
             merged = merge_configs(new_config, old_config)
-            # Write merged config (simplified - writes variables directly)
-            log("Config merged: your customizations preserved + new defaults added", "success")
+            if write_user_config(merged):
+                log("Config merged: your customizations preserved + new defaults added", "success")
+            else:
+                log("Config merge skipped (file not found or write failed)", "warning")
 
         # Remove sentinel on success
         sentinel.unlink(missing_ok=True)

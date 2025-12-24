@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2025-12-23 14:09:45 UTC
+Generated: 2025-12-24 07:03:46 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2025-12-23 23:09:45
+Generated on: 2025-12-24 16:03:46
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -17,15 +17,15 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **mission** [L2] (mission.md) ~377 tokens
   - Status: active
   - Depends On: None
-- **ontos_agent_instructions** [L2] (Ontos_Agent_Instructions.md) ~2,100 tokens
+- **ontos_agent_instructions** [L2] (Ontos_Agent_Instructions.md) ~2,500 tokens
   - Status: active
   - Depends On: ontos_manual
-- **ontos_manual** [L2] (Ontos_Manual.md) ~3,400 tokens
+- **ontos_manual** [L2] (Ontos_Manual.md) ~4,000 tokens
   - Status: active
   - Depends On: None
 
 ### STRATEGY
-- **antigravity_v2_9_instructions** [L2] (v2.9_antigravity_instructions.md) ~5,300 tokens
+- **antigravity_v2_9_instructions** [L2] (v2.9_antigravity_instructions.md) ~5,200 tokens
   - Status: active
   - Depends On: v2_9_implementation_plan, master_plan_v4
 - **codex_2_6_v1_review** [L2] [draft] (Codex_2.6_v1.md) ~766 tokens
@@ -82,7 +82,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_8_implementation_plan_review_codex** [L2] [draft] (v2.8_implementation_plan_review_codex.md) ~789 tokens
   - Status: draft
   - Depends On: v2_8_implementation_plan
-- **v2_9_implementation_plan** [L2] (v2.9_implementation_plan.md) ~28,000 tokens
+- **v2_9_4_implementation_plan** [L2] [draft] (v2.9.4_implementation_plan.md) ~4,500 tokens
+  - Status: draft
+  - Depends On: v2_9_implementation_plan, master_plan_v4
+- **v2_9_implementation_plan** [L2] (v2.9_implementation_plan.md) ~29,600 tokens
   - Status: active
   - Depends On: master_plan_v4, v2_8_implementation_plan
 - **v2_strategy** [L2] (v2_strategy.md) ~2,600 tokens
@@ -129,6 +132,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **claude_v2_8_implementation_review** [L2] (Claude_v2.8_Implementation_Review.md) ~3,000 tokens
   - Status: complete
   - Depends On: v2_8_implementation_plan, master_plan_v4
+- **claude_v2_9_4_implementation_review** [L2] (Claude_v2.9.4_Implementation_Review.md) ~2,600 tokens
+  - Status: complete
+  - Depends On: v2_9_implementation_plan
 - **claude_v2_9_implementation_review** [L2] (Claude_v2.9_Implementation_Review.md) ~3,600 tokens
   - Status: complete
   - Depends On: v2_9_implementation_plan
@@ -219,6 +225,12 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_7_implementation_synthesis** [L1] (v2.7_implementation_synthesis.md) ~3,900 tokens  ⚠️ complete
   - Status: complete
   - Depends On: None
+- **v2_9_4_implementation_plan_review_codex_gpt5_v1** [L2] [draft] (v2.9.4_implementation_plan_review_codex_gpt5_v1.md) ~750 tokens
+  - Status: draft
+  - Depends On: v2_9_implementation_plan
+- **v2_9_4_implementation_plan_review_gemini** [L2] (v2.9.4_implementation_plan_review_gemini.md) ~936 tokens
+  - Status: complete
+  - Depends On: v2_9_implementation_plan
 - **v2_9_implementation_plan_review_codex** [L2] [draft] (v2.9_implementation_plan_review_codex.md) ~1,700 tokens
   - Status: draft
   - Depends On: v2_9_implementation_plan
@@ -353,11 +365,22 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251223_v292_deprecation_warnings** [L1] (2025-12-23_v292-deprecation-warnings.md) ~354 tokens  ⚠️ active
   - Status: active
   - Impacts: v2_9_implementation_plan, ontos_manual
+- **log_20251223_v293_install_bootstrap** [L1] (2025-12-23_v293-install-bootstrap.md) ~141 tokens  ⚠️ active
+  - Status: active
+  - Impacts: v2_9_implementation_plan, ontos_manual
+- **log_20251223_v2_9_4_release** [L2] (2025-12-23_v2-9-4-release.md) ~406 tokens
+  - Status: active
+  - Impacts: ontos_manual, ontos_agent_instructions, v2_9_implementation_plan
 
 
 ## 2. Recent Timeline
+- **2025-12-23** [feature] **V293 Install Bootstrap** (`log_20251223_v293_install_bootstrap`)
+  - Impacted: `v2_9_implementation_plan`, `ontos_manual`
 - **2025-12-23** [feature] **V292 Deprecation Warnings** (`log_20251223_v292_deprecation_warnings`)
   - Impacted: `v2_9_implementation_plan`, `ontos_manual`
+- **2025-12-23** [chore] **V2 9 4 Release** (`log_20251223_v2_9_4_release`)
+  - Impacted: `ontos_manual`, `ontos_agent_instructions`, `v2_9_implementation_plan`
+  - Concepts: documentation, release, v2.9
 - **2025-12-22** [feature] **V291 Curation Levels** (`log_20251222_v291_curation_levels`)
   - Impacted: `v2_9_implementation_plan`, `ontos_manual`
 - **2025-12-22** [feature] **V290 Schema Versioning** (`log_20251222_v290_schema_versioning`)
@@ -374,12 +397,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `v2_8_implementation_plan`
 - **2025-12-21** [refactor] **V2 8 3 Release** (`log_20251221_v2_8_3_release`)
   - Impacted: `v2_8_implementation_plan`
-- **2025-12-21** [refactor] **V2 8 3 Owns Ctx Pattern** (`log_20251221_v2_8_3_owns_ctx_pattern`)
-  - Impacted: `v2_8_implementation_plan`
-- **2025-12-21** [refactor] **V2 8 3 Chief Architect Gaps** (`log_20251221_v2_8_3_chief_architect_gaps`)
-  - Impacted: `v2_8_implementation_plan`
 
-*Showing 10 of 40 sessions*
+*Showing 10 of 42 sessions*
 
 ## 3. Dependency Audit
 No issues found.
@@ -398,6 +417,7 @@ No issues found.
 | claude_install_ux_review | [Claude_InstallUX_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Claude_InstallUX_Review.md) | atom |
 | claude_v2_7_implementation_review | [Claude_v2.7_Implementation_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/Claude_v2.7_Implementation_Review.md) | atom |
 | claude_v2_8_implementation_review | [Claude_v2.8_Implementation_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.8/Claude_v2.8_Implementation_Review.md) | atom |
+| claude_v2_9_4_implementation_review | [Claude_v2.9.4_Implementation_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/Claude_v2.9.4_Implementation_Review.md) | atom |
 | claude_v2_9_implementation_review | [Claude_v2.9_Implementation_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/Claude_v2.9_Implementation_Review.md) | atom |
 | claude_v2_9_implementation_review_v2 | [Claude_v2.9_Implementation_Review_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/Claude_v2.9_Implementation_Review_v2.md) | atom |
 | claude_v2_9_implementation_review_v3 | [Claude_v2.9_Implementation_Review_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/Claude_v2.9_Implementation_Review_v3.md) | atom |
@@ -466,6 +486,8 @@ No issues found.
 | log_20251222_v291_curation_levels | [2025-12-22_v291-curation-levels.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-22_v291-curation-levels.md) | log |
 | log_20251222_v2_9_architectural_review | [2025-12-22_v2-9-architectural-review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-22_v2-9-architectural-review.md) | log |
 | log_20251223_v292_deprecation_warnings | [2025-12-23_v292-deprecation-warnings.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-23_v292-deprecation-warnings.md) | log |
+| log_20251223_v293_install_bootstrap | [2025-12-23_v293-install-bootstrap.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-23_v293-install-bootstrap.md) | log |
+| log_20251223_v2_9_4_release | [2025-12-23_v2-9-4-release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2025-12-23_v2-9-4-release.md) | log |
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
@@ -489,6 +511,9 @@ No issues found.
 | v2_7_implementation_synthesis | [v2.7_implementation_synthesis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.7/v2.7_implementation_synthesis.md) | atom |
 | v2_8_implementation_plan | [v2.8_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.8/v2.8_implementation_plan.md) | strategy |
 | v2_8_implementation_plan_review_codex | [v2.8_implementation_plan_review_codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.8/v2.8_implementation_plan_review_codex.md) | strategy |
+| v2_9_4_implementation_plan | [v2.9.4_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.9/v2.9.4_implementation_plan.md) | strategy |
+| v2_9_4_implementation_plan_review_codex_gpt5_v1 | [v2.9.4_implementation_plan_review_codex_gpt5_v1.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/v2.9.4_implementation_plan_review_codex_gpt5_v1.md) | atom |
+| v2_9_4_implementation_plan_review_gemini | [v2.9.4_implementation_plan_review_gemini.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/v2.9.4_implementation_plan_review_gemini.md) | atom |
 | v2_9_implementation_plan | [v2.9_implementation_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.9/v2.9_implementation_plan.md) | strategy |
 | v2_9_implementation_plan_review_codex | [v2.9_implementation_plan_review_codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/v2.9_implementation_plan_review_codex.md) | atom |
 | v2_9_implementation_plan_review_codex_v2 | [v2.9_implementation_plan_review_codex_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9/v2.9_implementation_plan_review_codex_v2.md) | atom |

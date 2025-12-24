@@ -2,11 +2,11 @@
 """Ontos Installer - Single-file bootstrap for Project Ontos.
 
 Usage:
-    curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.3/install.py
+    curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
     python3 install.py
 
 Options:
-    --version VERSION   Install specific version (default: 2.9.3)
+    --version VERSION   Install specific version (default: 2.9.4)
     --latest            Fetch latest version from GitHub Releases API
     --upgrade           Upgrade existing installation
     --check             Verify installation integrity without changes
@@ -58,7 +58,7 @@ GITHUB_RELEASES_URL = f"https://github.com/{GITHUB_REPO}/releases/download"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}"
 
 # Default version (can be overridden with --latest to fetch from API)
-DEFAULT_VERSION = "2.9.3"
+DEFAULT_VERSION = "2.9.4"
 
 # Fallback expected files (used only if manifest.json is missing)
 EXPECTED_FILES_FALLBACK = [
@@ -174,8 +174,18 @@ def detect_existing_installation() -> dict:
 # =============================================================================
 
 def create_backup() -> Path:
-    """Create backup of current installation for rollback."""
+    """Create backup of current installation for rollback.
+
+    SECURITY: Validates backup directory is not a symlink to prevent
+    symlink redirection attacks.
+    """
     backup_dir = Path.cwd() / ".ontos_backup"
+
+    # Security: Prevent symlink redirection attack
+    if backup_dir.exists() and backup_dir.is_symlink():
+        log("SECURITY ERROR: .ontos_backup is a symlink. Aborting.", "error")
+        raise OSError("Backup directory is a symlink - potential security issue")
+
     timestamp = int(time.time())
     backup_path = backup_dir / f"backup_{timestamp}"
     backup_path.mkdir(parents=True, exist_ok=True)

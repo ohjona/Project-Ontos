@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2026-01-08 06:18:30 UTC
+Generated: 2026-01-08 07:39:22 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-08 01:18:30
+Generated on: 2026-01-08 02:39:22
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -34,25 +34,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **master_plan_v4** [L2] (master_plan.md) ~2,600 tokens
   - Status: active
   - Depends On: mission, v2_strategy
-- **s3_archive_analysis** [L2] [draft] (s3-archive-analysis.md) ~2,600 tokens
-  - Status: draft
-  - Depends On: v2_strategy
-- **s3_archive_implementation_plan** [L2] [draft] (s3-archive-implementation-plan.md) ~8,200 tokens
-  - Status: draft
-  - Depends On: s3_archive_analysis
 - **v2_strategy** [L2] (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
 - **v3_0_security_requirements** [L2] [draft] (v3.0_security_requirements.md) ~5,100 tokens
-  - Status: draft
-  - Depends On: master_plan_v4
-- **v3_master_plan_context_kernel_review_codex** [L2] [draft] (v3_master_plan_context_kernel_review_codex.md) ~968 tokens
-  - Status: draft
-  - Depends On: master_plan_v4
-- **v3_master_plan_context_kernel_review_codex_v2** [L2] [draft] (v3_master_plan_context_kernel_review_codex_v2.md) ~1,000 tokens
-  - Status: draft
-  - Depends On: master_plan_v4
-- **v3_master_plan_context_kernel_review_codex_v3** [L2] [draft] (v3_master_plan_context_kernel_review_codex_v3.md) ~1,000 tokens
   - Status: draft
   - Depends On: master_plan_v4
 
@@ -60,15 +45,12 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **architect_synthesis_install_ux** [L2] [draft] (Architect_Synthesis_InstallUX.md) ~4,000 tokens
   - Status: draft
   - Depends On: installation_ux_proposal, claude_install_ux_review, gemini_install_ux_review, installation_ux_proposal_review
+- **chief_architect_v3_0_analysis** [L2] [draft] (Chief_Architect_v3.0_Comprehensive_Analysis.md) ~4,600 tokens
+  - Status: draft
+  - Depends On: master_plan_v4, v3_0_security_requirements
 - **claude_install_ux_review** [L2] (Claude_InstallUX_Review.md) ~3,500 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
-- **claude_v3_master_plan_review** [L2] (Claude_v3_Master_Plan_Review.md) ~3,300 tokens
-  - Status: complete
-  - Depends On: v2_strategy
-- **claude_v3_master_plan_review_v2** [L2] (Claude_v3_Master_Plan_Review_v2.md) ~3,100 tokens
-  - Status: complete
-  - Depends On: v2_strategy
 - **common_concepts** [L1] (Common_Concepts.md) ~654 tokens  ⚠️ active
   - Status: active
   - Depends On: None
@@ -78,12 +60,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **gemini_install_ux_review** [L2] (Gemini_Review_Installation_UX_Proposal.md) ~2,800 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
-- **gemini_v3_master_plan_review_v1** [L2] (v3_master_plan_review_gemini.md) ~1,900 tokens
-  - Status: complete
-  - Depends On: master_plan_v4
-- **gemini_v3_master_plan_review_v2** [L2] (v3_master_plan_review_gemini_2.md) ~1,500 tokens
-  - Status: complete
-  - Depends On: master_plan_v4, gemini_v3_master_plan_review_v1
 - **installation_experience_report** [L2] (Ontos_Installation_Experience_Report.md) ~2,200 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
@@ -140,14 +116,11 @@ No issues found.
 | ID | Filename | Type |
 |---|---|---|
 | architect_synthesis_install_ux | [Architect_Synthesis_InstallUX.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Architect_Synthesis_InstallUX.md) | atom |
+| chief_architect_v3_0_analysis | [Chief_Architect_v3.0_Comprehensive_Analysis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0-Components/Chief_Architect_v3.0_Comprehensive_Analysis.md) | atom |
 | claude_install_ux_review | [Claude_InstallUX_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Claude_InstallUX_Review.md) | atom |
-| claude_v3_master_plan_review | [Claude_v3_Master_Plan_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/Claude_v3_Master_Plan_Review.md) | atom |
-| claude_v3_master_plan_review_v2 | [Claude_v3_Master_Plan_Review_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/Claude_v3_Master_Plan_Review_v2.md) | atom |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
 | dual_mode_matrix | [Dual_Mode_Matrix.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/reference/Dual_Mode_Matrix.md) | atom |
 | gemini_install_ux_review | [Gemini_Review_Installation_UX_Proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Gemini_Review_Installation_UX_Proposal.md) | atom |
-| gemini_v3_master_plan_review_v1 | [v3_master_plan_review_gemini.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_review_gemini.md) | atom |
-| gemini_v3_master_plan_review_v2 | [v3_master_plan_review_gemini_2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_review_gemini_2.md) | atom |
 | installation_experience_report | [Ontos_Installation_Experience_Report.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Ontos_Installation_Experience_Report.md) | atom |
 | installation_ux_proposal | [Installation_UX_Proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Installation_UX_Proposal.md) | strategy |
 | installation_ux_proposal_review | [Installation_UX_Proposal_Review_Codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Installation_UX_Proposal_Review_Codex.md) | strategy |
@@ -160,17 +133,12 @@ No issues found.
 | master_plan_v4 | [master_plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/master_plan.md) | strategy |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
-| ontos_codebase_map | [Ontos_Codebase_Map.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/Ontos_Codebase_Map.md) | atom |
-| ontos_deep_analysis_brief | [Ontos_Deep_Analysis_Brief.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/Ontos_Deep_Analysis_Brief.md) | atom |
+| ontos_codebase_map | [Ontos_Codebase_Map.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0-Components/Ontos_Codebase_Map.md) | atom |
+| ontos_deep_analysis_brief | [Ontos_Deep_Analysis_Brief.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0-Components/Ontos_Deep_Analysis_Brief.md) | atom |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
-| s3_archive_analysis | [s3-archive-analysis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/s3-archive-analysis.md) | strategy |
-| s3_archive_implementation_plan | [s3-archive-implementation-plan.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/s3-archive-implementation-plan.md) | strategy |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
 | v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2_strategy.md) | strategy |
 | v3_0_security_requirements | [v3.0_security_requirements.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/security/v3.0_security_requirements.md) | strategy |
-| v3_master_plan_context_kernel_review_codex | [v3_master_plan_context_kernel_review_codex.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_context_kernel_review_codex.md) | strategy |
-| v3_master_plan_context_kernel_review_codex_v2 | [v3_master_plan_context_kernel_review_codex_v2.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_context_kernel_review_codex_v2.md) | strategy |
-| v3_master_plan_context_kernel_review_codex_v3 | [v3_master_plan_context_kernel_review_codex_v3.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0/V3.0 Components/v3_master_plan_context_kernel_review_codex_v3.md) | strategy |
 
 
 ## 5. Documentation Staleness Audit

@@ -37,7 +37,6 @@ depends_on: [mission, v2_strategy]
 6. ***Deterministic Purity:** We reject probabilistic retrieval (Vector/Semantic Search) in favor of structural graph traversal.*
 
 ---
-
 ## ***I. Executive Strategy: The Pivot to Protocol***
 
 ### ***1.1 The Market Gap: Context Death in a Long-Context World***
@@ -184,6 +183,18 @@ depends_on: [mission, v2_strategy]
 * ***Test:** Ontos MCP (Retrieve focus\_ids \+ 1-hop dependencies).*
 * ***Metric:** **Repair Turns** (Count of user corrections needed).*
 * ***Success Criteria:** 40% reduction in Repair Turns.*
+
+---
+
+## ***VI. Document Lifecycle***
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | Planning phase, open questions |
+| `active` | Being implemented |
+| `complete` | Implemented and released |
+
+**Archival:** Once a major version is released and the next version stabilizes, move its `strategy/` and `proposals/` directories to `archive/`.
 
 ---
 

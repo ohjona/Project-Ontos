@@ -2,16 +2,16 @@
 id: ontos_deep_analysis_brief
 type: atom
 status: draft
-depends_on: [v2_strategy, mission]
+depends_on: [v2_strategy, mission, master_plan_v4]
 concepts: [analysis, summary, marketing, v3]
 ---
 
 # Project Ontos: Deep Analysis Brief
 
 **Purpose:** Comprehensive summary for external AI analysis (marketing fit, V3.0 strategy, collaboration, improvement opportunities)
-**Generated:** 2025-12-18
-**Current Version:** 2.6.2
-**Codebase:** ~6,800 lines Python (16 scripts), 16 test files, MIT licensed
+**Generated:** 2026-01-08
+**Current Version:** 2.9.5
+**Codebase:** ~11,500 lines Python (25+ scripts), 132 tests, MIT licensed
 
 ---
 
@@ -37,10 +37,11 @@ id: pricing_strategy
 type: strategy
 status: active
 depends_on: [target_audience, mission]
+concepts: [monetization, growth]
 ---
 ```
 
-A script generates `Ontos_Context_Map.md` — a navigable index any AI can read. The map shows document hierarchy, dependencies, token estimates, and recent changes.
+A script generates `Ontos_Context_Map.md` — a navigable index any AI can read. The map shows document hierarchy, dependencies, curation levels, token estimates, and recent changes.
 
 ### Mission Statement
 
@@ -48,7 +49,7 @@ A script generates `Ontos_Context_Map.md` — a navigable index any AI can read.
 
 ### The Name
 
-From Greek ontos, meaning "being" — the root of ontology. Your documentation gains existence as a persistent knowledge graph, not ephemeral chat history.
+From Greek *ontos*, meaning "being" — the root of ontology. Your documentation gains existence as a persistent knowledge graph, not ephemeral chat history.
 
 ---
 
@@ -72,13 +73,19 @@ Decisions are tracked in version control. The history of *why* you built it is a
 
 **Why:** Explicit structure beats probabilistic search. For critical decisions, deterministic wins.
 
-### 4. Intent Over Automation
+### 4. Functional Core, Imperative Shell (v2.8+)
 
-Ontos requires deliberate action: tagging documents, connecting decisions to docs, marking what matters. This friction is the feature.
+Logic must be separated from I/O. The "Brain" (Logic) never calls print() directly. All file writes go through transactional buffers with atomic commit.
 
-**Why:** Signal degrades with automation. Noise compounds; curation doesn't.
+**Why:** Testability, API exposure, and v3.0 MCP Server preparation.
 
-### 5. Structure Over Search
+### 5. Graceful Curation (v2.9+)
+
+Lower the adoption barrier with tiered validation: L0 (Scaffold) → L1 (Stub) → L2 (Full). Don't demand full metadata upfront — let teams grow into it.
+
+**Why:** De-risks the "Librarian's Wager." Teams can start with minimal friction and add rigor as value proves itself.
+
+### 6. Structure Over Search
 
 The context map IS the query interface — human-readable, agent-navigable. No semantic search, no vector databases.
 
@@ -132,37 +139,69 @@ impacts: [auth_flow, api_spec]
 
 | Status | Meaning | Survives in Graph? |
 |--------|---------|-------------------|
+| `scaffold` | L0 auto-generated | Yes |
+| `pending_curation` | L1 stub | Yes |
 | `draft` | Work in progress | Yes |
 | `active` | Current truth | Yes |
 | `deprecated` | Past truth (superseded) | Yes |
+| `complete` | Finished work (reviews) | Yes |
 | `archived` | Historical record | Excluded by default |
 | `rejected` | Considered, not approved | Excluded by default |
-| `complete` | Finished work (reviews) | Yes |
 
 ---
 
-## IV. ARCHITECTURE & TOOLING
+## IV. ARCHITECTURE & TOOLING (v2.9.5)
 
-### Script Inventory (16 scripts, 6,800 lines)
+### Package Structure (v2.8+)
+
+```
+ontos/
+├── core/                    # Pure logic layer (no I/O)
+│   ├── context.py           # SessionContext — transactional file ops
+│   ├── schema.py            # Schema versioning (1.0 → 3.0)
+│   ├── curation.py          # Curation levels (L0/L1/L2)
+│   ├── staleness.py         # Describes field validation
+│   ├── history.py           # Decision history generation
+│   ├── paths.py             # Mode-aware path resolution
+│   ├── frontmatter.py       # Pure YAML parsing
+│   └── config.py            # Configuration resolution
+└── ui/
+    └── output.py            # OutputHandler for display
+```
+
+### Unified CLI (v2.8+)
+
+Single entry point: `python3 ontos.py <command>`
+
+| Command | Purpose |
+|---------|---------|
+| `log` | Create/enhance session logs |
+| `map` | Generate context map |
+| `verify` | Update describes_verified dates |
+| `maintain` | Run maintenance tasks |
+| `consolidate` | Archive old logs |
+| `query` | Query the graph |
+| `scaffold` | Generate L0 scaffolds |
+| `stub` | Create L1 stubs |
+| `promote` | Promote L0/L1 to L2 |
+| `migrate` | Migrate schema versions |
+| `update` | Update Ontos from GitHub |
+
+### Script Inventory (~11,500 lines)
 
 | Script | Lines | Purpose |
 |--------|-------|---------|
-| `ontos_generate_context_map.py` | 1,043 | Build graph, validate, generate map |
 | `ontos_end_session.py` | 1,625 | Create/enhance session logs |
-| `ontos_lib.py` | 679 | Shared utilities, path helpers |
-| `ontos_update.py` | 508 | Pull updates from GitHub |
+| `ontos_generate_context_map.py` | 1,043 | Build graph, validate, generate map |
+| `ontos_update.py` | 521 | Pull updates from GitHub |
+| `ontos/core/curation.py` | 489 | Curation level detection/validation |
+| `ontos/core/schema.py` | 421 | Schema versioning |
 | `ontos_consolidate.py` | 396 | Archive old logs into history |
 | `ontos_pre_push_check.py` | 385 | Pre-push hook logic |
-| `ontos_query.py` | 308 | Query graph (deps, concepts, stale) |
-| `ontos_maintain.py` | 298 | Migration + regeneration |
-| `ontos_config_defaults.py` | 282 | Mode presets, defaults |
-| `ontos_pre_commit_check.py` | 252 | Pre-commit consolidation |
-| `ontos_install_hooks.py` | 182 | Git hook installation |
-| `ontos_migrate_frontmatter.py` | 183 | Find untagged files |
-| `ontos_summarize.py` | 175 | Generate doc summaries |
-| `ontos_remove_frontmatter.py` | 167 | Strip YAML headers |
-| `ontos_config.py` | 159 | User configuration |
-| `ontos_migrate_v2.py` | 127 | v1 to v2 migration |
+| `ontos/core/staleness.py` | 353 | Describes validation |
+| `ontos/core/paths.py` | 345 | Path helpers |
+| `ontos_verify.py` | 316 | Staleness verification |
+| ... | ... | 15+ more scripts |
 
 ### Dual-Mode Architecture
 
@@ -170,21 +209,6 @@ impacts: [auth_flow, api_spec]
 **User Mode:** Using Ontos in your project (`docs/`)
 
 Detection: Presence of `.ontos-internal/` directory.
-
-```
-User Mode Structure:
-docs/
-  strategy/
-    proposals/       # Draft proposals (status: draft)
-    decision_history.md
-  archive/
-    logs/            # Consolidated logs
-    proposals/       # Rejected proposals
-  reference/
-    Common_Concepts.md
-    Ontos_Agent_Instructions.md
-  logs/              # Active session logs
-```
 
 ### Configuration Modes (v2.5+)
 
@@ -194,20 +218,18 @@ docs/
 | **prompted** | "Keep me in the loop" (DEFAULT) | Blocks push | Agent reminder |
 | **advisory** | "Maximum flexibility" | Warning only | Manual only |
 
-### Validation System
+### Validation System (6 checks)
 
-5 integrity checks:
 1. **[BROKEN LINK]** — Reference to nonexistent ID
-2. **[CYCLE]** — Circular dependency (A to B to A)
+2. **[CYCLE]** — Circular dependency (A → B → A)
 3. **[ORPHAN]** — No dependents (floating doc)
 4. **[DEPTH]** — Chain exceeds 5 levels
-5. **[ARCHITECTURE]** — Lower rank depends on higher (atom to strategy)
-
-**Type-Status Matrix (v2.6):** Only valid combinations allowed.
+5. **[ARCHITECTURE]** — Lower rank depends on higher
+6. **[STALE]** — describes_verified older than atom modification
 
 ### Testing Infrastructure
 
-- 16 test files, 150+ tests
+- 6 test files, 132 tests
 - Dual-mode testing: `pytest --mode=contributor` and `pytest --mode=user`
 - CI via GitHub Actions
 
@@ -215,71 +237,104 @@ docs/
 
 ## V. KEY FEATURES
 
-### 1. Context Map Generation
+### 1. Curation Levels (v2.9.1)
+
+Lower adoption barrier with tiered validation:
+
+| Level | Name | Required | Status |
+|-------|------|----------|--------|
+| 0 | Scaffold | `id`, `type` | `scaffold` |
+| 1 | Stub | `id`, `type`, `status`, `goal` | `pending_curation` |
+| 2 | Full | All + `depends_on`/`concepts` | `draft`, `active`... |
+
+**Commands:**
+```bash
+python3 ontos.py scaffold --apply  # Add L0 frontmatter to untagged files
+python3 ontos.py stub --goal "..." # Create L1 document
+python3 ontos.py promote --check   # See what's ready for L2
+```
+
+### 2. Schema Versioning (v2.9.0)
+
+Forward compatibility for v3.0 migration:
+
+| Schema | Required Fields | Introduced |
+|--------|-----------------|------------|
+| 1.0 | `id` | Legacy |
+| 2.0 | `id`, `type` | v2.0 |
+| 2.1 | `id`, `type` | v2.7 (describes) |
+| 2.2 | `id`, `type`, `status` | v2.9 (curation) |
+| 3.0 | `id`, `type`, `status`, `ontos_schema` | v3.0 |
+
+**Commands:**
+```bash
+python3 ontos.py migrate --check  # Check schema versions
+python3 ontos.py migrate --apply  # Migrate to latest
+```
+
+### 3. Documentation Staleness (v2.7)
+
+Track when docs become outdated after code changes:
+
+```yaml
+---
+id: ontos_manual
+type: atom
+describes: [ontos_end_session, ontos_maintain]
+describes_verified: 2025-12-20
+---
+```
+
+When described atoms change, Ontos warns about potentially stale docs.
+
+### 4. Transactional File Operations (v2.8)
+
+All file writes go through `SessionContext`:
+- Two-phase commit (temp-then-rename)
+- Atomic operations
+- Stale lock detection with PID liveness
+- Rollback on failure
+
+### 5. install.py Bootstrap (v2.9.3)
+
+Curl-bootstrapped installation with security:
+```bash
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.5/install.py
+python3 install.py
+```
+
+Features: SHA256 verification, path traversal protection, offline mode, upgrade with rollback.
+
+### 6. Context Map Generation
 
 ```markdown
 ## 1. Hierarchy Tree
 ### KERNEL
-- **mission** (mission.md) ~377 tokens
+- **mission** [L2] (mission.md) ~377 tokens
   - Status: active
   - Depends On: None
 
 ### STRATEGY
-- **v2_strategy** (v2_strategy.md) ~2,600 tokens
+- **v2_strategy** [L2] (v2_strategy.md) ~2,600 tokens
   - Status: active
   - Depends On: mission
 ```
 
-Token estimates enable context budgeting. Agents load only what's needed.
+Token estimates enable context budgeting. Curation markers ([L0]/[L1]/[L2]) show completeness.
 
-### 2. Session Archival
+### 7. Immutable History (v2.7)
 
-```bash
-python3 .ontos/scripts/ontos_end_session.py -e feature -s "Claude"
-```
+`decision_history.md` is regenerated deterministically from archived logs:
+- Sorted by date (desc), event type, slug
+- No merge conflicts
+- Full traceability
 
-Auto-suggests impacted docs from git diff. Creates structured log with:
-- Goal, Key Decisions, Alternatives Considered
-- Concepts (tags), Impacts (affected docs)
-- Status: auto-generated to active (after enrichment)
+### 8. Deprecation Warnings (v2.9.2)
 
-### 3. Pre-Push/Pre-Commit Hooks
-
-- **Pre-push:** Validates context map, optionally blocks until session archived
-- **Pre-commit:** Auto-consolidates old logs (automated mode)
-- Detects CI environments, rebases; graceful degradation
-
-### 4. Log Consolidation
-
-Keeps newest N logs (default: 10), archives old ones to `decision_history.md`:
-
-```markdown
-| Date | Slug | Event | Decision / Outcome | Impacted | Archive Path |
-|:-----|:-----|:------|:-------------------|:---------|:-------------|
-| 2025-12-17 | v2-6-proposals | feature | APPROVED: Proposals workflow | v2_strategy | archive/... |
-```
-
-### 5. Proposal Workflow (v2.6+)
-
-Proposals live in `strategy/proposals/` with `status: draft`:
-- **Create** — draft in proposals/
-- **Approve** — move to strategy/, change to active, log in decision_history
-- **Reject** — require `rejected_reason` (min 10 chars), move to archive/proposals/
-
-**Automated graduation (v2.6.1):** Archive Ontos detects implementation by branch name or impacts, prompts for graduation.
-
-### 6. Query Interface
-
-```bash
-python3 .ontos/scripts/ontos_query.py --depends-on auth_flow
-python3 .ontos/scripts/ontos_query.py --concept auth
-python3 .ontos/scripts/ontos_query.py --stale 30
-python3 .ontos/scripts/ontos_query.py --health
-```
-
-### 7. Historical Recall
-
-Agents can read archived logs referenced in `decision_history.md` even though they're excluded from the context map by default.
+Prepares users for v3.0:
+- FutureWarning on `ontos_lib` import
+- Direct script execution notices
+- Points to unified CLI equivalents
 
 ---
 
@@ -287,70 +342,54 @@ Agents can read archived logs referenced in `decision_history.md` even though th
 
 | Version | Theme | Key Changes |
 |---------|-------|-------------|
-| **2.6.2** | Count-Based Consolidation | Retention count (10), warning threshold (20) |
-| **2.6.1** | Automated Graduation | Branch-based proposal detection, graduation prompts |
-| **2.6.0** | Proposals Workflow | Type-status matrix, rejection metadata, stale detection |
-| **2.5.2** | Dual-Mode Remediation | Template loader, nested directories, path helpers |
-| **2.5.0** | The Promises | Mode promises (automated/prompted/advisory), pre-commit hook |
-| **2.4.0** | Configuration UX | Mode system, session appending, --auto/--enhance flags |
-| **2.3.0** | Tooling & Maintenance | query.py, consolidate.py, maintain.py, adaptive templates |
-| **2.2.0** | Data Quality | Common concepts, lint warnings, alternatives section |
-| **2.1.0** | Smart Memory | Decision history ledger, consolidation ritual, historical recall |
-| **2.0.0** | Dual Ontology | Space/Time separation, impacts field, token estimates |
-| **1.5.0** | Self-Development | Dual-mode (contributor/user), log type, .ontos-internal/ |
-| **1.0.0** | First Release | Update script, backup system, CI/CD |
+| **2.9.5** | Quality & Testing | 20 SessionContext tests, pure/impure fix |
+| **2.9.3** | install.py Bootstrap | Curl-bootstrapped with SHA256 |
+| **2.9.1** | Curation Levels | L0 Scaffold → L1 Stub → L2 Full |
+| **2.9.0** | Schema Versioning | Forward compat for v3.0 |
+| **2.8.5** | Unified CLI | `python3 ontos.py <command>` |
+| **2.8.0** | Clean Architecture | `ontos/` package, SessionContext |
+| **2.7.0** | Documentation Staleness | `describes` field, immutable history |
+| **2.6.0** | Proposals Workflow | Type-status matrix, rejection metadata |
+| **2.5.0** | The Promises | Mode system (automated/prompted/advisory) |
+| **2.0.0** | Dual Ontology | Space/Time separation, impacts field |
 
-**Development cadence:** Rapid iteration since Nov 2025. ~15 releases in ~5 weeks.
+**Development cadence:** Rapid iteration since Nov 2025. ~25 releases in ~7 weeks.
 
 ---
 
-## VII. CURRENT WORK: v2.7 DOCUMENTATION ONTOLOGY
+## VII. CURRENT FOCUS: V3.0 PREPARATION
 
-### The Problem
+### The v3.0 Vision
 
-Ontos tracks dependencies downward (strategy to atom) but has no mechanism for detecting when user-facing documentation (README, Manual) becomes stale after implementation atoms change.
+Move from script-based tools to a **system-wide daemon** (MCP Server):
+- `pip install ontos` — Logic moves to PyPI
+- `ontos serve` — Local MCP Server
+- Agents "pull" context dynamically
 
-**Example:** `ontos_end_session.py` gets new flags. The Manual doesn't mention them. There's no warning.
+### Master Plan Core Invariants
 
-### The Insight: Second-Order Atoms
+1. **Zero-Dependency (V2.x):** Python Standard Library only
+2. **System Package (V3.x):** PyPI distribution with boto3, mcp deps
+3. **Local-First:** Data lives in user's git repo
+4. **Functional Core, Imperative Shell:** Logic never calls print()
+5. **The Librarian's Wager:** Higher friction → Higher signal
+6. **Deterministic Purity:** No vector/semantic search
 
-User-facing docs are **second-order atoms**: they describe implementations rather than implementing strategy directly. Their truth derives from implementation truth.
+### v3.0 Feature Tracker
 
-```
-First-order: strategy to atom (implements)
-Second-order: atom from doc (describes)
-```
+| Feature | Type | Status |
+|---------|------|--------|
+| pip install ontos | Distro | Planned |
+| Local MCP Server | Protocol | Planned |
+| Typed Edges | Ontology | Planned |
+| Test Suite Overhaul | Arch | Planned |
 
-This is a different relationship than `depends_on`.
+### Security Requirements (v2.9.4)
 
-### Proposed Solution: `describes` Field
-
-```yaml
----
-id: ontos_manual
-type: atom
-depends_on: [v2_strategy]  # WHY this doc exists
-describes:                  # WHAT this doc describes
-  - ontos_end_session
-  - ontos_maintain
-describes_verified: 2025-12-18  # Last verified date
----
-```
-
-When described atoms change, Archive Ontos warns about potentially stale docs.
-
-### Design Decisions (from multi-model review)
-
-| Decision | Resolution | Rationale |
-|----------|------------|-----------|
-| Field name | `describes` (not `documents`) | Avoids noun/verb ambiguity |
-| Targets | Valid atom IDs only | Maintain ontological closure |
-| Verification | Doc-level `describes_verified` date | Survives git operations (unlike mtime) |
-| Transitive staleness | No — direct only | Docs describe interfaces, not internals |
-| Section-level tracking | Deferred to v2.8 | Adds precision but also maintenance burden |
-| Performance | < 1 second for check | Hooks must be fast or get bypassed |
-
-**Status:** Philosophy approved by 3-model review (Claude, Codex, Gemini). Implementation proposal pending.
+- MCP Server binds to 127.0.0.1 only
+- Auto-generated auth token required
+- File locking for concurrent access
+- No HTTP fallback
 
 ---
 
@@ -413,10 +452,12 @@ NOT building for:
 
 1. **Zero dependencies** — Pure Python 3.9+, standard library only
 2. **Deterministic** — No ML, no probability, no surprises
-3. **Testable** — Dual-mode testing, comprehensive CI
-4. **Extensible** — Clean separation of concerns, path helpers
-5. **Backward compatible** — Path helpers with fallback logic
-6. **Fast** — Context map generation in milliseconds
+3. **Testable** — Dual-mode testing, 132 tests, comprehensive CI
+4. **Transactional** — Two-phase commit with atomic operations
+5. **Extensible** — Clean package structure, path helpers
+6. **Backward compatible** — Schema versioning, graceful migration
+7. **Fast** — Context map generation in milliseconds
+8. **Secure** — SHA256 verification, no network in core operations
 
 ---
 
@@ -428,23 +469,24 @@ NOT building for:
 4. **Single-repo** — No cross-repo knowledge graphs (yet)
 5. **No GUI** — CLI and markdown only (by design)
 6. **Adoption risk** — Requires team buy-in; one person can undermine shared memory
+7. **Learning curve** — Curation levels help, but still requires understanding the model
 
 ---
 
-## XII. FUTURE DIRECTIONS (v3.0 and beyond)
+## XII. FUTURE DIRECTIONS
 
-### Confirmed / In Progress
+### Confirmed (v3.0)
 
-- **v2.7:** Documentation staleness detection (`describes` field)
+- **pip install ontos** — System-wide installation
+- **Local MCP Server** — Agent pulls context dynamically
+- **Typed Edges** — `implements`, `tests`, `deprecates` relationships
 
 ### Speculative / Under Consideration
 
-- **Semantic query layer** — Natural language queries over graph (opt-in, local)
 - **Cross-repo federation** — Shared kernel across projects
 - **AI-assisted tagging** — Suggest `concepts`, `depends_on` from content
 - **S3 archive backend** — Offload old logs to cloud storage
 - **VS Code extension** — Visual graph explorer (but not a dashboard)
-- **Multi-language support** — i18n for frontmatter fields
 
 ### Philosophy Tensions to Watch
 
@@ -455,7 +497,19 @@ NOT building for:
 
 ---
 
-## XIII. SUCCESS METRICS
+## XIII. DOCUMENT LIFECYCLE (v2.9.5)
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | Planning phase, open questions |
+| `active` | Being implemented |
+| `complete` | Implemented and released |
+
+**Archival:** Once a major version is released and the next version stabilizes, move its `strategy/` and `proposals/` directories to `archive/`.
+
+---
+
+## XIV. SUCCESS METRICS
 
 ### For Users
 
@@ -471,7 +525,7 @@ NOT building for:
 
 ---
 
-## XIV. ANALYSIS PROMPTS
+## XV. ANALYSIS PROMPTS
 
 Use this brief to explore:
 
@@ -481,8 +535,8 @@ Use this brief to explore:
 - What's the wedge? First use case that proves value fastest?
 
 ### V3.0 Strategy
-- Is `describes` the right v2.7 bet, or should v3.0 jump to semantic queries?
-- Should cross-repo federation be v3.0's headline feature?
+- Is the MCP Server the right v3.0 bet?
+- Should cross-repo federation be a v3.0 feature?
 - How does Ontos stay relevant as AI context windows grow (1M+ tokens)?
 
 ### Collaboration Opportunities
@@ -493,8 +547,9 @@ Use this brief to explore:
 ### Improvement Opportunities
 - Where does the UX have the most friction?
 - What's the 80/20 feature that would unlock adoption?
-- Is the type hierarchy (kernel to strategy to product to atom) too rigid or too loose?
+- Is the type hierarchy (kernel → strategy → product → atom) too rigid or too loose?
+- Are curation levels (L0/L1/L2) the right abstraction?
 
 ---
 
-*End of brief. Total: ~3,000 words, ~4,500 tokens.*
+*End of brief. Total: ~4,000 words, ~6,000 tokens.*

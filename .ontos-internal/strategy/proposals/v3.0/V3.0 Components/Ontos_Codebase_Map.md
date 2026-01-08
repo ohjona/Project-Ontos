@@ -2,16 +2,16 @@
 id: ontos_codebase_map
 type: atom
 status: draft
-depends_on: [v2_strategy]
+depends_on: [v2_strategy, master_plan_v4]
 concepts: [architecture, codebase, reference, technical]
 ---
 
 # Project Ontos: Codebase Map
 
 **Purpose:** Technical architecture reference for deep codebase analysis
-**Generated:** 2025-12-18
-**Version:** 2.6.2
-**Total:** ~6,800 lines Python across 16 scripts + 16 test files
+**Generated:** 2026-01-08
+**Version:** 2.9.5
+**Total:** ~11,500 lines Python across 25+ scripts + 6 test files (132 tests)
 
 ---
 
@@ -19,11 +19,33 @@ concepts: [architecture, codebase, reference, technical]
 
 ```
 Project-Ontos/
+├── ontos.py                         # Unified CLI dispatcher (NEW in v2.8)
+├── install.py                       # Curl-bootstrapped installer (NEW in v2.9.3)
+├── ontos_init.py                    # Bootstrap script (563 lines)
+├── checksums.json                   # SHA256 checksums per version
+│
 ├── .ontos/                          # Core toolkit (portable)
-│   ├── scripts/                     # Python scripts (16 total)
-│   │   ├── ontos_lib.py             # Shared library (679 lines)
+│   ├── scripts/                     # Python scripts (25+ total)
+│   │   ├── ontos/                   # NEW: Core package (v2.8+)
+│   │   │   ├── __init__.py          # Package exports
+│   │   │   ├── core/                # Pure logic layer
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── context.py       # SessionContext (271 lines)
+│   │   │   │   ├── schema.py        # Schema versioning (421 lines)
+│   │   │   │   ├── curation.py      # Curation levels (489 lines)
+│   │   │   │   ├── staleness.py     # Describes validation (353 lines)
+│   │   │   │   ├── history.py       # Decision history (263 lines)
+│   │   │   │   ├── paths.py         # Path helpers (345 lines)
+│   │   │   │   ├── frontmatter.py   # Pure parsing (122 lines)
+│   │   │   │   ├── config.py        # Config helpers (83 lines)
+│   │   │   │   └── proposals.py     # Proposal management (134 lines)
+│   │   │   └── ui/                  # I/O layer
+│   │   │       ├── __init__.py
+│   │   │       └── output.py        # OutputHandler (108 lines)
+│   │   │
+│   │   ├── ontos_lib.py             # Re-export shim (95 lines, deprecated)
 │   │   ├── ontos_config_defaults.py # Mode presets, constants (282 lines)
-│   │   ├── ontos_config.py          # Generated user config (imports defaults)
+│   │   ├── ontos_config.py          # Generated user config
 │   │   ├── ontos_generate_context_map.py  # Graph builder (1,043 lines)
 │   │   ├── ontos_end_session.py     # Session archival (1,625 lines)
 │   │   ├── ontos_consolidate.py     # Log consolidation (396 lines)
@@ -31,47 +53,55 @@ Project-Ontos/
 │   │   ├── ontos_pre_commit_check.py # Pre-commit hook logic (252 lines)
 │   │   ├── ontos_query.py           # Graph queries (308 lines)
 │   │   ├── ontos_maintain.py        # Maintenance orchestrator (298 lines)
-│   │   ├── ontos_update.py          # Self-update from GitHub (508 lines)
-│   │   ├── ontos_install_hooks.py   # Hook installer (182 lines)
+│   │   ├── ontos_update.py          # Self-update from GitHub (521 lines)
+│   │   ├── ontos_verify.py          # Staleness verification (316 lines)
+│   │   ├── ontos_scaffold.py        # L0 scaffold generation (275 lines)
+│   │   ├── ontos_stub.py            # L1 stub creation (280 lines)
+│   │   ├── ontos_promote.py         # L0/L1 → L2 promotion (NEW)
+│   │   ├── ontos_migrate_schema.py  # Schema migration (NEW)
+│   │   ├── ontos_create_bundle.py   # Bundle for releases (NEW)
 │   │   ├── ontos_migrate_frontmatter.py # Find untagged files (183 lines)
 │   │   ├── ontos_migrate_v2.py      # v1 to v2 migration (127 lines)
 │   │   ├── ontos_summarize.py       # Doc summarizer (175 lines)
-│   │   └── ontos_remove_frontmatter.py # Strip YAML headers (167 lines)
+│   │   └── tests/                   # Pytest test suite (6 files, 132 tests)
+│   │       ├── conftest.py          # Fixtures, mode selection
+│   │       ├── test_context.py      # SessionContext tests (20 tests)
+│   │       ├── test_schema.py       # Schema versioning (42 tests)
+│   │       ├── test_curation.py     # Curation levels (48 tests)
+│   │       ├── test_promote.py      # Promotion tests (16 tests)
+│   │       └── test_deprecation.py  # Deprecation warnings (7 tests)
+│   │
 │   ├── hooks/                       # Git hook scripts
-│   │   ├── pre-push               # Bash wrapper calls Python
-│   │   └── pre-commit             # Bash wrapper calls Python
+│   │   ├── pre-push                 # Bash wrapper calls Python
+│   │   └── pre-commit               # Bash wrapper calls Python
 │   └── templates/                   # Starter doc templates
 │       ├── templates.py             # Template loader module
-│       ├── ontos_config.py.template # Config template with placeholders
-│       ├── decision_history_template.md
-│       └── common_concepts_template.md
+│       └── *.template               # Various templates
 │
 ├── .ontos-internal/                 # Contributor-mode docs (Ontos itself)
 │   ├── kernel/
 │   │   └── mission.md
 │   ├── strategy/
+│   │   ├── master_plan.md           # v4.0 Strategic Plan
 │   │   ├── v2_strategy.md
-│   │   ├── decision_history.md
-│   │   └── proposals/              # Draft proposals
-│   │       └── v2.7/
+│   │   ├── decision_history.md      # Generated ledger
+│   │   └── proposals/               # Draft proposals
+│   │       ├── v3.0/                # v3.0 planning
+│   │       └── Install_experience/  # Installation UX
 │   ├── atom/
 │   │   └── schema.md
 │   ├── reference/
 │   │   ├── Common_Concepts.md
 │   │   └── Dual_Mode_Matrix.md
-│   ├── archive/
-│   │   ├── logs/                   # Consolidated logs
-│   │   └── proposals/              # Rejected proposals
+│   ├── archive/                     # Completed/rejected work
+│   │   ├── logs/                    # Historical logs
+│   │   ├── proposals/               # Archived proposals
+│   │   └── strategy/                # Completed version plans
 │   └── logs/                        # Active session logs
 │
 ├── docs/                            # User-mode docs (when installed in project)
 │   └── [mirrors .ontos-internal structure]
 │
-├── tests/                           # Pytest test suite
-│   ├── conftest.py                  # Fixtures, mode selection
-│   └── test_*.py                    # 16 test files
-│
-├── ontos_init.py                    # Bootstrap script
 ├── Ontos_Context_Map.md             # Generated knowledge graph index
 ├── Ontos_CHANGELOG.md               # Version history
 └── README.md                        # Public documentation
@@ -79,107 +109,358 @@ Project-Ontos/
 
 ---
 
-## II. CORE MODULES
+## II. UNIFIED CLI (v2.8+)
 
-### 1. ontos_lib.py (679 lines) — Shared Library
+### ontos.py — Command Dispatcher
 
-The utility backbone. All other scripts import from here.
+Located at project root. Single entry point for all Ontos commands.
+
+**Commands:**
+
+| Command | Script | Purpose |
+|---------|--------|---------|
+| `log` | ontos_end_session.py | Create/enhance session logs |
+| `map` | ontos_generate_context_map.py | Generate context map |
+| `verify` | ontos_verify.py | Update describes_verified dates |
+| `maintain` | ontos_maintain.py | Run maintenance tasks |
+| `consolidate` | ontos_consolidate.py | Archive old logs |
+| `query` | ontos_query.py | Query the graph |
+| `update` | ontos_update.py | Update Ontos from GitHub |
+| `migrate` | ontos_migrate_schema.py | Migrate schema versions |
+| `scaffold` | ontos_scaffold.py | Generate L0 scaffolds |
+| `stub` | ontos_stub.py | Create L1 stubs |
+| `promote` | ontos_promote.py | Promote L0/L1 to L2 |
+
+**Aliases (11 total):**
+
+| Alias | Maps To | Natural Language |
+|-------|---------|------------------|
+| `archive` | `log` | "Archive this session" |
+| `context` | `map` | "Generate context" |
+| `check` | `verify` | "Check staleness" |
+| `health` | `maintain` | "Health check" |
+| `cleanup` | `consolidate` | "Clean up logs" |
+| `search` | `query` | "Search the graph" |
+| `upgrade` | `update` | "Upgrade Ontos" |
+| `schema` | `migrate` | "Check schema" |
+| `curate` | `scaffold` | "Curate documents" |
+| `init` | `stub` | "Initialize doc" |
+| `level-up` | `promote` | "Level up docs" |
+
+**Usage:**
+```bash
+python3 ontos.py map              # Generate context map
+python3 ontos.py log -e feature   # Archive session
+python3 ontos.py promote --check  # Check promotable docs
+python3 ontos.py --help           # Show all commands
+```
+
+---
+
+## III. CORE PACKAGE (ontos/)
+
+### Architecture Overview
+
+```
+ontos/
+├── core/          # Pure logic (no I/O)
+│   ├── context.py      # SessionContext — transactional file ops
+│   ├── schema.py       # Schema versioning and validation
+│   ├── curation.py     # Curation level detection and validation
+│   ├── staleness.py    # Describes field staleness detection
+│   ├── history.py      # Decision history generation
+│   ├── paths.py        # Mode-aware path resolution
+│   ├── frontmatter.py  # Pure YAML parsing
+│   ├── config.py       # Configuration resolution
+│   └── proposals.py    # Proposal management
+└── ui/            # I/O layer
+    └── output.py       # OutputHandler for display
+```
+
+### 1. context.py (271 lines) — SessionContext
+
+Transactional file operations with two-phase commit.
+
+**Key Classes:**
+
+```python
+class FileOperation(Enum):
+    WRITE = "write"
+    DELETE = "delete"
+    MOVE = "move"
+
+@dataclass
+class PendingWrite:
+    path: Path
+    operation: FileOperation
+    content: Optional[str] = None
+    destination: Optional[Path] = None
+
+@dataclass
+class SessionContext:
+    repo_root: Path
+    config: Dict
+    pending_writes: List[PendingWrite] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    errors: List[str] = field(default_factory=list)
+
+    def buffer_write(self, path: Path, content: str) -> None
+    def buffer_delete(self, path: Path) -> None
+    def buffer_move(self, src: Path, dest: Path) -> None
+    def commit(self) -> List[Path]  # Two-phase commit
+    def rollback(self) -> None
+    def warn(self, message: str) -> None
+    def error(self, message: str) -> None
+
+    @classmethod
+    def from_repo(cls, repo_root: Path) -> "SessionContext"
+```
+
+**Two-Phase Commit Algorithm:**
+```python
+def commit(self) -> List[Path]:
+    """Atomic commit: temp-then-rename for each file."""
+    modified = []
+    temp_files = []
+
+    # Phase 1: Write to temp files
+    for op in self.pending_writes:
+        if op.operation == FileOperation.WRITE:
+            temp_path = op.path.with_suffix(op.path.suffix + '.tmp')
+            temp_path.write_text(op.content)
+            temp_files.append((temp_path, op.path))
+
+    # Phase 2: Atomic rename
+    try:
+        for temp_path, final_path in temp_files:
+            temp_path.rename(final_path)  # Atomic on POSIX
+            modified.append(final_path)
+    except Exception:
+        # Cleanup temp files on failure
+        for temp_path, _ in temp_files:
+            temp_path.unlink(missing_ok=True)
+        raise
+
+    self.pending_writes.clear()
+    return modified
+```
+
+**Lock Management:**
+```python
+def _acquire_lock(self, lock_path: Path, timeout: float = 5.0) -> bool:
+    """Acquire lock with stale detection (PID liveness check)."""
+    # If lock exists, check if PID is alive
+    # If PID dead, remove stale lock
+    # Create lock with current PID
+
+def _release_lock(self, lock_path: Path) -> None:
+    """Release lock file."""
+```
+
+### 2. schema.py (421 lines) — Schema Versioning
+
+Forward compatibility for v3.0 migration.
+
+**Schema Version Definitions:**
+
+| Schema | Required Fields | Introduced |
+|--------|-----------------|------------|
+| 1.0 | `id` | Legacy |
+| 2.0 | `id`, `type` | v2.0 |
+| 2.1 | `id`, `type` | v2.7 (describes) |
+| 2.2 | `id`, `type`, `status` | v2.9 (curation) |
+| 3.0 | `id`, `type`, `status`, `ontos_schema` | v3.0 |
 
 **Key Functions:**
 
-| Function | Purpose | Used By |
-|----------|---------|---------|
-| `parse_frontmatter(filepath)` | Extract YAML frontmatter from markdown | All scripts |
-| `normalize_type(type_value)` | Normalize doc type strings | Context map, query |
-| `normalize_depends_on(deps)` | Normalize dependency lists | Context map, query |
-| `resolve_config(key, default)` | Mode-aware config resolution | All scripts |
-| `get_logs_dir()` | Mode-aware path to logs directory | Consolidate, hooks |
-| `get_proposals_dir()` | Mode-aware path to proposals | End session, maintain |
-| `get_decision_history_path()` | Mode-aware path to history file | Consolidate, maintain |
-| `get_archive_dir()` | Mode-aware path to archive | Consolidate, hooks |
-| `is_ontos_repo()` | Detect contributor vs user mode | All scripts |
-| `load_common_concepts()` | Load concept vocabulary from file | End session |
-| `find_last_session_date()` | Find most recent log date | End session |
-| `get_git_last_modified(path)` | Get file's last commit date | Query (stale detection) |
-| `find_draft_proposals()` | Find status:draft proposals | Maintain |
-| `get_log_count()` | Count active logs | Pre-commit hook |
-| `get_source()` | Get source from env/config chain | End session |
-
-**Mode Detection Algorithm:**
 ```python
-def is_ontos_repo():
+def parse_version(version_str: str) -> Tuple[int, int]
+def detect_schema_version(frontmatter: Dict) -> str
+def check_compatibility(tool_version: str, doc_version: str) -> SchemaCheckResult
+def validate_frontmatter(frontmatter: Dict, schema_version: str) -> List[str]
+def serialize_frontmatter(frontmatter: Dict) -> str
+```
+
+**Compatibility Matrix:**
+
+| Tool | Can Read |
+|------|----------|
+| v2.9 | 1.0, 2.0, 2.1, 2.2 |
+| v3.0 | 1.0, 2.0, 2.1, 2.2, 3.0 |
+
+### 3. curation.py (489 lines) — Curation Levels
+
+Tiered validation to lower adoption friction.
+
+**Curation Levels:**
+
+| Level | Name | Required | Status |
+|-------|------|----------|--------|
+| 0 | Scaffold | `id`, `type` | `scaffold` |
+| 1 | Stub | `id`, `type`, `status`, `goal` | `pending_curation` |
+| 2 | Full | All + `depends_on`/`concepts` | `draft`, `active`... |
+
+**Key Functions:**
+
+```python
+class CurationLevel(Enum):
+    SCAFFOLD = 0
+    STUB = 1
+    FULL = 2
+
+def detect_curation_level(frontmatter: Dict) -> CurationLevel
+def validate_at_level(frontmatter: Dict, level: CurationLevel) -> List[str]
+def create_scaffold(filepath: Path, doc_type: str) -> Dict
+def create_stub(filepath: Path, doc_type: str, goal: str) -> Dict
+def infer_type_from_path(filepath: Path) -> str
+def infer_type_from_content(content: str) -> str
+```
+
+**Level Detection Algorithm:**
+```python
+def detect_curation_level(fm: Dict) -> CurationLevel:
+    if fm.get('status') in ('scaffold',):
+        return CurationLevel.SCAFFOLD
+    if fm.get('status') in ('pending_curation',):
+        return CurationLevel.STUB
+    if 'depends_on' in fm or 'concepts' in fm:
+        return CurationLevel.FULL
+    if 'goal' in fm:
+        return CurationLevel.STUB
+    return CurationLevel.SCAFFOLD
+```
+
+### 4. staleness.py (353 lines) — Describes Validation
+
+Track when documentation becomes stale after code changes.
+
+**Key Concepts:**
+
+```yaml
+# Document declares what it describes:
+---
+id: ontos_manual
+type: atom
+describes: [ontos_end_session, ontos_maintain]
+describes_verified: 2025-12-20
+---
+```
+
+**Staleness Detection:**
+```python
+def check_staleness(doc_path: Path, frontmatter: Dict) -> List[StaleResult]:
+    """Compare describes_verified against atom modification dates."""
+    verified_date = frontmatter.get('describes_verified')
+    describes = frontmatter.get('describes', [])
+
+    stale = []
+    for atom_id in describes:
+        atom_mtime = get_file_modification_date(atom_id)
+        if atom_mtime > verified_date:
+            stale.append(StaleResult(
+                doc_id=frontmatter['id'],
+                atom_id=atom_id,
+                verified=verified_date,
+                atom_modified=atom_mtime
+            ))
+    return stale
+```
+
+### 5. history.py (263 lines) — Decision History
+
+Immutable, deterministically generated decision ledger.
+
+**Generation Algorithm:**
+```python
+def regenerate_decision_history(logs_dir: Path, archive_dir: Path) -> str:
+    """Generate decision_history.md from archived logs."""
+    entries = []
+
+    # Scan archived logs
+    for log_path in archive_dir.glob('*.md'):
+        fm = parse_frontmatter(log_path)
+        entries.append({
+            'date': extract_date(log_path.name),
+            'slug': extract_slug(log_path.name),
+            'event': fm.get('event_type', 'chore'),
+            'summary': extract_summary(log_path),
+            'impacts': fm.get('impacts', []),
+            'archive_path': str(log_path)
+        })
+
+    # Sort deterministically
+    entries.sort(key=lambda e: (e['date'], e['event'], e['slug']), reverse=True)
+
+    # Generate markdown table
+    return render_history_table(entries)
+```
+
+### 6. paths.py (345 lines) — Path Resolution
+
+Mode-aware path helpers with deprecation warnings.
+
+**Key Functions:**
+
+```python
+def is_ontos_repo() -> bool
+def get_logs_dir() -> Path
+def get_proposals_dir() -> Path
+def get_decision_history_path() -> Path
+def get_archive_logs_dir() -> Path
+def get_archive_proposals_dir() -> Path
+def get_concepts_path() -> Path
+```
+
+**Mode Detection:**
+```python
+def is_ontos_repo() -> bool:
     """True if .ontos-internal/ exists (contributor mode)."""
-    return os.path.exists(os.path.join(PROJECT_ROOT, '.ontos-internal'))
+    return (PROJECT_ROOT / '.ontos-internal').exists()
+
+def get_logs_dir() -> Path:
+    if is_ontos_repo():
+        return PROJECT_ROOT / '.ontos-internal' / 'logs'
+    else:
+        docs_dir = resolve_config('DOCS_DIR', 'docs')
+        return PROJECT_ROOT / docs_dir / 'logs'
 ```
 
-**Config Resolution Chain:**
-```
-1. User's ontos_config.py (if exists)
-2. Environment variable ONTOS_{KEY}
-3. Mode preset from ontos_config_defaults.py
-4. Hardcoded default
-```
+### 7. output.py (108 lines) — OutputHandler
 
----
-
-### 2. ontos_config_defaults.py (282 lines) — Configuration System
-
-Defines mode presets and default values.
-
-**Mode Presets:**
+Centralized output formatting for pure/impure separation.
 
 ```python
-MODE_PRESETS = {
-    'automated': {
-        'ENFORCE_ARCHIVE_BEFORE_PUSH': False,   # Auto-archive instead
-        'AUTO_ARCHIVE_ON_PUSH': True,           # Create logs automatically
-        'AUTO_CONSOLIDATE_ON_COMMIT': True,     # Consolidate on commit
-        'REQUIRE_SOURCE_IN_LOGS': False,        # Don't require source
-    },
-    'prompted': {  # DEFAULT
-        'ENFORCE_ARCHIVE_BEFORE_PUSH': True,    # Block until archived
-        'AUTO_ARCHIVE_ON_PUSH': False,          # Manual archive
-        'AUTO_CONSOLIDATE_ON_COMMIT': False,    # Manual consolidation
-        'REQUIRE_SOURCE_IN_LOGS': True,         # Require source
-    },
-    'advisory': {
-        'ENFORCE_ARCHIVE_BEFORE_PUSH': False,   # Warning only
-        'AUTO_ARCHIVE_ON_PUSH': False,          # Manual
-        'AUTO_CONSOLIDATE_ON_COMMIT': False,    # Manual
-        'REQUIRE_SOURCE_IN_LOGS': False,        # Optional
-    }
-}
+class OutputHandler:
+    def __init__(self, quiet: bool = False):
+        self.quiet = quiet
+
+    def info(self, message: str) -> None
+    def success(self, message: str) -> None
+    def warning(self, message: str) -> None
+    def error(self, message: str) -> None
+    def detail(self, message: str) -> None  # Indented context
+    def display_errors(self, errors: List[str]) -> None
 ```
-
-**Key Constants:**
-
-| Constant | Value | Purpose |
-|----------|-------|---------|
-| `ONTOS_VERSION` | "2.6.2" | Current version |
-| `LOG_RETENTION_COUNT` | 10 | Keep newest N logs |
-| `LOG_WARNING_THRESHOLD` | 20 | Warn when exceeds |
-| `CONSOLIDATION_THRESHOLD_DAYS` | 30 | Age-based fallback |
-| `HOOK_TIMEOUT_SECONDS` | 10 | Max hook runtime |
-| `SMALL_CHANGE_THRESHOLD` | 20 | Lines for "small" |
-| `BLOCKED_BRANCH_NAMES` | ['main', 'master', 'develop', 'dev'] | Skip auto-slug |
 
 ---
 
-### 3. ontos_generate_context_map.py (1,043 lines) — Graph Engine
+## IV. MAJOR SCRIPTS
 
-The core graph builder and validator.
+### 1. ontos_generate_context_map.py (1,043 lines) — Graph Engine
 
-**Main Entry Point:**
+**Main Flow:**
 ```python
 def main():
     files_data = scan_docs(docs_dir)      # 1. Scan all .md files
     files_data = validate_and_filter()     # 2. Filter by status
     errors = validate_graph(files_data)    # 3. Run integrity checks
-    output = generate_output(files_data)   # 4. Build markdown output
-    write_context_map(output)              # 5. Write to file
+    regenerate_history()                   # 4. Rebuild decision_history.md
+    check_staleness()                      # 5. Check describes field
+    output = generate_output(files_data)   # 6. Build markdown output
+    write_context_map(output)              # 7. Write to file
 ```
 
-**Graph Validation Checks:**
+**Validation Checks (6 total):**
 
 | Check | Function | Error Type |
 |-------|----------|------------|
@@ -188,8 +469,9 @@ def main():
 | Orphans | `find_orphans()` | `[ORPHAN]` |
 | Depth | `check_depth()` | `[DEPTH]` |
 | Architecture | `check_architecture_violations()` | `[ARCHITECTURE]` |
+| Staleness | `check_staleness()` | `[STALE]` |
 
-**Type Hierarchy (Rank):**
+**Type Hierarchy:**
 ```python
 TYPE_HIERARCHY = {
     'kernel': 0,    # Highest (depends on nothing)
@@ -200,74 +482,16 @@ TYPE_HIERARCHY = {
 }
 ```
 
-**Architecture Violation Rule:**
-```python
-def is_architecture_violation(from_type, to_type):
-    """Lower rank cannot depend on higher rank."""
-    from_rank = TYPE_HIERARCHY.get(from_type, 99)
-    to_rank = TYPE_HIERARCHY.get(to_type, 99)
-    return from_rank < to_rank  # e.g., atom (3) depends on log (4) = violation
-```
+**Context Map Sections:**
+1. Hierarchy Tree (by type with [L0]/[L1]/[L2] markers)
+2. Recent Timeline (last 5 logs)
+3. Dependency Audit (errors)
+4. Index (ID → File mapping)
+5. Documentation Staleness Audit
 
-**Type-Status Matrix (v2.6):**
-```python
-VALID_TYPE_STATUS = {
-    'kernel': ['active'],
-    'strategy': ['active', 'draft', 'deprecated'],
-    'product': ['active', 'draft', 'deprecated'],
-    'atom': ['active', 'draft', 'deprecated'],
-    'log': ['active', 'auto-generated', 'archived'],
-    'review': ['complete', 'draft'],
-}
-```
+### 2. ontos_end_session.py (1,625 lines) — Session Archival
 
-**Cycle Detection Algorithm (Tarjan's):**
-```python
-def detect_cycles(graph):
-    """Detect cycles using DFS with coloring."""
-    WHITE, GRAY, BLACK = 0, 1, 2
-    color = {node: WHITE for node in graph}
-    cycles = []
-
-    def dfs(node, path):
-        color[node] = GRAY
-        for neighbor in graph.get(node, []):
-            if color[neighbor] == GRAY:
-                # Found cycle
-                cycle_start = path.index(neighbor)
-                cycles.append(path[cycle_start:] + [neighbor])
-            elif color[neighbor] == WHITE:
-                dfs(neighbor, path + [neighbor])
-        color[node] = BLACK
-
-    for node in graph:
-        if color[node] == WHITE:
-            dfs(node, [node])
-
-    return cycles
-```
-
-**Token Estimation:**
-```python
-def estimate_tokens(filepath):
-    """Estimate token count (word_count * 1.3)."""
-    with open(filepath) as f:
-        content = f.read()
-    word_count = len(content.split())
-    return int(word_count * 1.3)
-```
-
-**Output Sections Generated:**
-1. Hierarchy Tree (by type)
-2. Dependency Audit (errors)
-3. Index (ID → File mapping)
-4. Stats (doc counts, token estimates)
-
----
-
-### 4. ontos_end_session.py (1,625 lines) — Session Archival
-
-The most complex script. Handles session logging and changelog integration.
+The most complex script. Uses v2.8 transactional architecture.
 
 **Main Workflows:**
 
@@ -278,8 +502,9 @@ Normal Mode:
   3. Get event type (feature/fix/refactor/etc.)
   4. Suggest impacts from git diff
   5. Validate concepts against vocabulary
-  6. Create log file with adaptive template
+  6. Create log file via buffer_write()
   7. Detect and optionally graduate proposals
+  8. Commit all changes atomically
 
 Auto Mode (--auto, called by pre-push hook):
   1. Get current branch
@@ -294,246 +519,72 @@ Enhance Mode (--enhance):
   3. Print instructions for enrichment
 ```
 
-**Key Functions:**
-
-| Function | Purpose |
-|----------|---------|
-| `create_log_file()` | Create new session log with template |
-| `auto_archive()` | Create auto-generated log for hook |
-| `append_to_log()` | Add commits to existing log |
-| `find_existing_log_for_today()` | Find log to append to |
-| `validate_branch_in_log()` | Prevent wrong-branch appending |
-| `suggest_impacts()` | Auto-detect impacted docs from git |
-| `validate_concepts()` | Check concepts against vocabulary |
-| `detect_implemented_proposal()` | Find proposals matching branch |
-| `graduate_proposal()` | Move proposal from proposals/ to strategy/ |
-| `generate_template_sections()` | Adaptive template by event type |
-
-**Adaptive Templates:**
-
-| Event Type | Sections |
-|------------|----------|
-| `chore` | Goal, Changes Made |
-| `fix` | Goal, Changes Made, Next Steps |
-| `feature` | Goal, Key Decisions, Changes Made, Next Steps |
-| `refactor` | Goal, Key Decisions, Alternatives Considered, Changes Made |
-| `exploration` | Goal, Key Decisions, Alternatives Considered, Next Steps |
-| `decision` | All five sections |
-
-**Impact Suggestion Algorithm:**
+**Transaction Pattern (_owns_ctx):**
 ```python
-def suggest_impacts():
-    """Match changed files to doc IDs."""
-    # 1. Get changed files from git status
-    # 2. If clean, get today's commits
-    # 3. Load doc index from context map
-    # 4. Match files to doc IDs by path
-    # 5. Filter out log documents
+def create_log_file(ctx: SessionContext = None, _owns_ctx: bool = False):
+    """Create log file with optional transaction ownership."""
+    if ctx is None:
+        ctx = SessionContext.from_repo(PROJECT_ROOT)
+        _owns_ctx = True
+
+    # Buffer all writes
+    ctx.buffer_write(log_path, log_content)
+
+    # Only commit if we own the context
+    if _owns_ctx:
+        ctx.commit()
 ```
 
-**Proposal Graduation Detection:**
-```python
-def detect_implemented_proposal(branch, impacts):
-    """Heuristics for proposal detection."""
-    # 1. Extract version patterns from branch (e.g., v2.6, v2-6)
-    # 2. Scan proposals/ for status:draft files
-    # 3. Match by:
-    #    - Branch version matches filepath/ID
-    #    - Session impacts the proposal
+### 3. install.py (Root) — Bootstrap Installer
+
+Curl-bootstrapped installation with SHA256 verification.
+
+**Usage:**
+```bash
+curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.5/install.py
+python3 install.py
 ```
+
+**Security Features:**
+
+| Protection | Implementation |
+|------------|----------------|
+| Checksum verification | SHA256 from tag-aligned checksums.json |
+| Path traversal | Rejects `..` and absolute paths |
+| Symlink attacks | Rejects symlinks/hardlinks in archive |
+| HTTPS only | No HTTP fallback |
+| Retry logic | Exponential backoff on failures |
+
+**Modes:**
+- Fresh install: Downloads bundle, verifies checksums, extracts
+- Upgrade (`--upgrade`): Merges config, rollback on failure
+- Offline (`--bundle` + `--checksum`): Air-gapped installation
 
 ---
 
-### 5. ontos_consolidate.py (396 lines) — Log Archival
+## V. DATA FORMATS
 
-Moves old logs to archive and updates decision_history.md.
-
-**Entry Points:**
-
-| Flag | Behavior |
-|------|----------|
-| `--count N` | Keep newest N logs (default: 15) |
-| `--by-age` | Use age-based instead of count |
-| `--days N` | Age threshold (default: 30) |
-| `--all` | Process without prompting |
-| `--dry-run` | Preview only |
-
-**Consolidation Flow:**
-```
-1. find_excess_logs()           # Find logs exceeding retention count
-2. For each log:
-   a. extract_summary()         # Get Goal section as summary
-   b. archive_log()             # Move to archive/logs/
-   c. append_to_decision_history()  # Add row to ledger
-```
-
-**Decision History Format:**
-```markdown
-| Date | Slug | Event | Decision / Outcome | Impacted | Archive Path |
-|:-----|:-----|:------|:-------------------|:---------|:-------------|
-| 2025-12-17 | v2-6 | feature | Added type-status matrix | schema | archive/... |
-```
-
----
-
-### 6. ontos_pre_push_check.py (385 lines) — Pre-Push Hook
-
-Called by bash hook. Controls push blocking/archiving behavior.
-
-**Decision Flow:**
-```python
-def main():
-    regenerate_context_map()           # 1. Ensure map is current
-    check_log_count_warning()          # 2. Warn if logs exceed threshold
-    check_version_reminder()           # 3. Remind contributors about changelog
-
-    if marker_exists():                # 4. Session already archived?
-        delete_marker()
-        return 0  # Allow push
-
-    if AUTO_ARCHIVE_ON_PUSH:           # 5. Automated mode?
-        run_auto_archive()
-        return 0
-
-    if ENFORCE_ARCHIVE_BEFORE_PUSH:    # 6. Prompted mode?
-        print_blocking_message()
-        return 1  # Block push
-    else:                              # 7. Advisory mode
-        print_advisory_message()
-        return 0
-```
-
-**Marker File System:**
-```
-.ontos/session_archived
-├── archived=2025-12-18T10:30:00
-└── log=docs/logs/2025-12-18_feature-x.md
-```
-
----
-
-### 7. ontos_pre_commit_check.py (252 lines) — Pre-Commit Hook
-
-Auto-consolidation on commit (automated mode only).
-
-**Safety Features:**
-```python
-def should_consolidate():
-    # Skip if:
-    if mode != 'automated': return False
-    if is_ci_environment(): return False
-    if is_special_git_operation(): return False  # Rebase, cherry-pick
-    if os.environ.get('ONTOS_SKIP_HOOKS'): return False
-
-    # Trigger if:
-    log_count = get_log_count()
-    return log_count > LOG_WARNING_THRESHOLD  # 20
-```
-
-**CI Detection:**
-```python
-CI_INDICATORS = [
-    'CI', 'CONTINUOUS_INTEGRATION', 'GITHUB_ACTIONS',
-    'GITLAB_CI', 'JENKINS_URL', 'CIRCLECI', 'BUILDKITE', 'TF_BUILD'
-]
-```
-
----
-
-### 8. ontos_query.py (308 lines) — Graph Queries
-
-CLI for querying the knowledge graph.
-
-**Query Types:**
-
-| Query | Command | Returns |
-|-------|---------|---------|
-| Dependencies | `--depends-on ID` | What ID depends on |
-| Reverse deps | `--depended-by ID` | What depends on ID |
-| By concept | `--concept TAG` | Docs with concept |
-| Stale docs | `--stale DAYS` | Docs not updated in N days |
-| Health | `--health` | Graph metrics |
-| List | `--list-ids` | All document IDs |
-
-**Health Metrics:**
-```python
-{
-    'total_docs': 42,
-    'by_type': {'kernel': 1, 'strategy': 5, 'atom': 20, 'log': 16},
-    'orphans': 3,
-    'orphan_ids': ['unused_spec', ...],
-    'empty_impacts': 5,
-    'connectivity': 95.2,  # % reachable from kernel
-    'reachable_from_kernel': 40
-}
-```
-
----
-
-### 9. ontos_maintain.py (298 lines) — Maintenance Orchestrator
-
-Runs maintenance tasks in sequence.
-
-**Steps:**
-```
-1. ontos_migrate_frontmatter.py  # Find untagged files
-2. ontos_generate_context_map.py # Rebuild graph
-3. ontos_consolidate.py          # Consolidate excess logs
-4. review_proposals()            # Prompt to graduate proposals
-```
-
----
-
-### 10. ontos_init.py (563 lines) — Bootstrap
-
-Located at project root. Initializes Ontos for new projects.
-
-**Initialization Steps:**
-```
-1. Verify .ontos/scripts exists
-2. Prompt for mode (automated/prompted/advisory)
-3. Prompt for default source name
-4. Generate ontos_config.py
-5. Create directory structure
-6. Install git hooks
-7. Create starter docs
-8. Generate initial context map
-```
-
-**Directory Structure Created:**
-```
-docs/
-├── logs/
-├── strategy/
-│   └── proposals/
-├── archive/
-│   ├── logs/
-│   └── proposals/
-└── reference/
-```
-
----
-
-## III. DATA FORMATS
-
-### Frontmatter Schema
+### Frontmatter Schema (v2.9.5)
 
 **Space Documents (kernel, strategy, product, atom):**
 ```yaml
 ---
 id: unique_identifier           # Required, snake_case
 type: atom                      # Required: kernel|strategy|product|atom
-status: active                  # Required: active|draft|deprecated|archived|rejected
+status: active                  # Required: active|draft|deprecated|scaffold|pending_curation
 depends_on: [parent_id]         # Optional, list of IDs
 concepts: [auth, security]      # Optional, list of tags
+describes: [atom_id]            # Optional (v2.7+), docs this describes
+describes_verified: 2025-12-20  # Optional, last verification date
+ontos_schema: "2.2"             # Optional (v3.0 will require)
 ---
 ```
 
 **Time Documents (logs):**
 ```yaml
 ---
-id: log_20251218_feature_x      # Required, includes date
-type: log                       # Required
+id: log_20251210_auth_refactor
+type: log
 status: active                  # active|auto-generated|archived
 event_type: feature             # feature|fix|refactor|exploration|chore|decision
 branch: feat/feature-x          # Optional, for validation
@@ -542,356 +593,153 @@ impacts: [auth_flow, api_spec]  # Connects to Space documents
 ---
 ```
 
-**Review Documents:**
-```yaml
----
-id: claude_v2_7_review
-type: review
-status: complete                # complete|draft
-depends_on: [v2_7_proposal]
----
-```
+### Curation Level Status Values
 
-**Rejected Proposals:**
-```yaml
----
-id: rejected_feature
-type: strategy
-status: rejected
-rejected_reason: "Does not align with v2 philosophy" # Required, min 10 chars
-rejected_date: 2025-12-15
----
-```
+| Status | Level | Meaning |
+|--------|-------|---------|
+| `scaffold` | L0 | Auto-generated, minimal |
+| `pending_curation` | L1 | Has goal, needs completion |
+| `draft` | L2 | Work in progress |
+| `active` | L2 | Current truth |
+| `deprecated` | L2 | Past truth |
+| `rejected` | L2 | Considered, not approved |
+| `complete` | L2 | Finished (reviews) |
 
-### Configuration Format
+### Configuration Modes
 
-**ontos_config.py:**
 ```python
-"""Ontos Configuration."""
-
-ONTOS_MODE = "prompted"         # automated|prompted|advisory
-DEFAULT_SOURCE = "Claude"       # Or None to prompt each time
-
-# Custom overrides (optional)
-DOCS_DIR = "documentation"      # Default: "docs"
-LOG_RETENTION_COUNT = 20        # Default: 10
-
-# Import defaults (required)
-from .ontos.scripts.ontos_config_defaults import *
-```
-
-### Context Map Format
-
-**Ontos_Context_Map.md:**
-```markdown
-# Ontos Context Map
-
-## 1. Hierarchy Tree
-
-### KERNEL
-- **mission** (mission.md) ~377 tokens
-  - Status: active
-  - Depends On: None
-
-### STRATEGY
-- **v2_strategy** (v2_strategy.md) ~2,600 tokens
-  - Status: active
-  - Depends On: mission
-
-## 2. Dependency Audit
-[BROKEN LINK] doc_a references missing ID: nonexistent
-[ARCHITECTURE] atom_doc (atom) depends on log_doc (log)
-
-## 3. Index
-| ID | File | Type | Status |
-|:---|:-----|:-----|:-------|
-| mission | mission.md | kernel | active |
-
-## 4. Stats
-- Total: 42 documents
-- By type: kernel (1), strategy (5), product (3), atom (20), log (13)
-- Estimated tokens: ~45,000
+MODE_PRESETS = {
+    'automated': {
+        'ENFORCE_ARCHIVE_BEFORE_PUSH': False,
+        'AUTO_ARCHIVE_ON_PUSH': True,
+        'AUTO_CONSOLIDATE_ON_COMMIT': True,
+        'REQUIRE_SOURCE_IN_LOGS': False,
+    },
+    'prompted': {  # DEFAULT
+        'ENFORCE_ARCHIVE_BEFORE_PUSH': True,
+        'AUTO_ARCHIVE_ON_PUSH': False,
+        'AUTO_CONSOLIDATE_ON_COMMIT': False,
+        'REQUIRE_SOURCE_IN_LOGS': True,
+    },
+    'advisory': {
+        'ENFORCE_ARCHIVE_BEFORE_PUSH': False,
+        'AUTO_ARCHIVE_ON_PUSH': False,
+        'AUTO_CONSOLIDATE_ON_COMMIT': False,
+        'REQUIRE_SOURCE_IN_LOGS': False,
+    }
+}
 ```
 
 ---
 
-## IV. DATA FLOW DIAGRAMS
+## VI. TESTING INFRASTRUCTURE
 
-### 1. Session Archival Flow
+### Test Files (6 files, 132 tests)
 
-```
-[Developer Work] → [git commit]
-        ↓
-[git push] → [pre-push hook]
-        ↓
-[ontos_pre_push_check.py]
-        ↓
-   ┌────┴────────────────────────────────────┐
-   │                                          │
-   ▼                                          ▼
-[Marker exists?] ──YES──> [Delete marker] → [ALLOW PUSH]
-   │
-   NO
-   ↓
-[Mode = automated?] ──YES──> [auto_archive()] → [ALLOW]
-   │
-   NO
-   ↓
-[Mode = prompted?] ──YES──> [Block with message] → [BLOCK]
-   │
-   NO (advisory)
-   ↓
-[Print reminder] → [ALLOW PUSH]
-```
-
-### 2. Context Map Generation Flow
-
-```
-[.md files in docs/]
-        ↓
-[scan_docs()] ──────> Parse frontmatter
-        ↓                    ↓
-[files_data dict] ────> {id: {type, status, depends_on, ...}}
-        ↓
-[validate_and_filter()] ──> Filter archived/rejected
-        ↓
-[validate_graph()]
-        ├── check_broken_links()
-        ├── detect_cycles()
-        ├── find_orphans()
-        ├── check_depth()
-        └── check_architecture_violations()
-        ↓
-[generate_output()]
-        ├── Hierarchy tree
-        ├── Dependency audit
-        ├── Index table
-        └── Stats
-        ↓
-[Ontos_Context_Map.md]
-```
-
-### 3. Log Consolidation Flow
-
-```
-[Active logs in logs/]
-        ↓
-[find_excess_logs(retention_count=10)]
-        ↓
-[Logs to consolidate]
-        ↓
-   For each log:
-        ↓
-[extract_summary()] ──> Goal section first line
-        ↓
-[archive_log()] ──> Move to archive/logs/
-        ↓
-[append_to_decision_history()]
-        ↓
-   Add row to History Ledger table
-        ↓
-[decision_history.md updated]
-```
-
-### 4. Proposal Lifecycle
-
-```
-[New Proposal]
-        ↓
-[Create in proposals/] ──> status: draft
-        ↓
-[Work on feature branch]
-        ↓
-[Archive Ontos] ──> detect_implemented_proposal()
-        ↓
-[Match found?] ──YES──> [Prompt: Graduate?]
-        │                       ↓
-        │               [graduate_proposal()]
-        │                       ├── Move to strategy/
-        │                       ├── Change status: draft → active
-        │                       └── Add to decision_history.md
-        │
-        └──NO──> [Stay as draft]
-
-[Rejection Path]
-        ↓
-[Add rejected_reason, rejected_date]
-        ↓
-[Move to archive/proposals/]
-```
-
----
-
-## V. TESTING INFRASTRUCTURE
-
-### Test Files (16 files, ~80KB)
-
-| Test File | Lines | Coverage Area |
+| Test File | Tests | Coverage Area |
 |-----------|-------|---------------|
-| `test_v26_validation.py` | 730 | Type-status matrix, rejection metadata |
-| `test_orphan_detection.py` | 340 | Orphan, depth, architecture checks |
-| `test_yaml_edge_cases.py` | 316 | Frontmatter parsing edge cases |
-| `test_lint.py` | 268 | Data quality linting |
-| `test_cycle_detection.py` | 220 | Graph cycle detection |
-| `test_pre_commit_check.py` | 348 | Pre-commit hook logic |
-| `test_end_session.py` | 175 | Session archival |
-| `test_frontmatter_parsing.py` | 140 | YAML parsing |
-| `test_query.py` | 115 | Graph queries |
-| `test_config.py` | 137 | Config resolution |
-| `test_consolidate.py` | 97 | Log consolidation |
-| `test_pre_push_check.py` | 95 | Pre-push hook |
-| `test_migrate_frontmatter.py` | 103 | Untagged file detection |
-| `test_maintain.py` | 82 | Maintenance orchestrator |
-| `test_dual_mode.py` | 79 | Contributor vs user mode |
-| `test_lib.py` | 132 | Library functions |
+| `test_context.py` | 20 | SessionContext, two-phase commit, locking |
+| `test_schema.py` | 42 | Schema versioning, validation, serialization |
+| `test_curation.py` | 48 | Curation levels, scaffolding, promotion |
+| `test_promote.py` | 16 | L0/L1 → L2 promotion |
+| `test_deprecation.py` | 7 | FutureWarning, CLI dispatch |
+| `conftest.py` | - | Fixtures, mode selection |
 
-### conftest.py Fixtures
+### Key Test Patterns
 
+**Transaction Testing:**
 ```python
-@pytest.fixture
-def temp_docs_dir(tmp_path):
-    """Create temporary docs structure."""
+def test_commit_creates_file(self, tmp_path):
+    """commit() creates file with buffered content."""
+    ctx = SessionContext(repo_root=tmp_path, config={})
+    test_file = tmp_path / 'test.md'
+    ctx.buffer_write(test_file, 'hello world')
 
-@pytest.fixture
-def mock_git_repo(tmp_path):
-    """Create temporary git repository."""
+    modified = ctx.commit()
 
-@pytest.fixture
-def contributor_mode(monkeypatch):
-    """Simulate contributor mode."""
-
-@pytest.fixture
-def user_mode(monkeypatch):
-    """Simulate user mode."""
+    assert test_file.exists()
+    assert test_file.read_text() == 'hello world'
+    assert test_file in modified
 ```
 
-### Dual-Mode Testing
+**Curation Level Testing:**
+```python
+def test_detect_l0_scaffold():
+    fm = {'id': 'test', 'type': 'atom', 'status': 'scaffold'}
+    assert detect_curation_level(fm) == CurationLevel.SCAFFOLD
 
-```bash
-# Run as contributor
-pytest --mode=contributor
-
-# Run as user
-pytest --mode=user
-
-# Default: contributor (since .ontos-internal exists)
-pytest
+def test_detect_l2_with_depends_on():
+    fm = {'id': 'test', 'type': 'atom', 'depends_on': ['parent']}
+    assert detect_curation_level(fm) == CurationLevel.FULL
 ```
 
 ---
 
-## VI. KEY ALGORITHMS
+## VII. KEY ALGORITHMS
 
-### 1. Mode-Aware Path Resolution
-
-```python
-def get_logs_dir():
-    """Return logs directory based on mode."""
-    if is_ontos_repo():
-        return PROJECT_ROOT / '.ontos-internal' / 'logs'
-    else:
-        docs_dir = resolve_config('DOCS_DIR', 'docs')
-        return PROJECT_ROOT / docs_dir / 'logs'
-```
-
-### 2. Config Resolution Chain
+### 1. Two-Phase Commit
 
 ```python
-def resolve_config(key, default):
+def commit(self) -> List[Path]:
     """
-    Resolution order:
-    1. User's ontos_config.py
-    2. Environment variable ONTOS_{KEY}
-    3. Mode preset (from ONTOS_MODE)
-    4. Default parameter
-    """
-    # Try user config
-    try:
-        import ontos_config
-        if hasattr(ontos_config, key):
-            return getattr(ontos_config, key)
-    except ImportError:
-        pass
-
-    # Try environment
-    env_key = f'ONTOS_{key}'
-    if env_key in os.environ:
-        return parse_env_value(os.environ[env_key])
-
-    # Try mode preset
-    mode = get_current_mode()
-    if mode in MODE_PRESETS and key in MODE_PRESETS[mode]:
-        return MODE_PRESETS[mode][key]
-
-    return default
-```
-
-### 3. Slug Collision Handling
-
-```python
-def find_existing_log_for_today(branch_slug, branch_name):
-    """
-    Handle multiple branches with same slug:
-    1. Try exact match: 2025-12-18_feature-x.md
-    2. Validate branch field matches
-    3. Try collision variants: 2025-12-18_feature-x-2.md
-    """
-    today = datetime.now().strftime('%Y-%m-%d')
-
-    exact = f"{today}_{branch_slug}.md"
-    if os.path.exists(exact):
-        if validate_branch_in_log(exact, branch_name):
-            return exact
-        # Collision! Different branch
-
-    for i in range(2, 100):
-        variant = f"{today}_{branch_slug}-{i}.md"
-        if os.path.exists(variant):
-            if validate_branch_in_log(variant, branch_name):
-                return variant
-
-    return None
-```
-
-### 4. Impact Suggestion from Git Diff
-
-```python
-def suggest_impacts():
-    """
-    1. Get changed files from git status (uncommitted)
-    2. If clean, get files from today's commits
-    3. Load doc index from context map
-    4. Match by:
-       - Direct path match
-       - Directory containment
-    5. Filter out log documents
+    Phase 1: Write all content to temp files (.tmp suffix)
+    Phase 2: Atomic rename to final paths
+    On failure: Clean up temp files, raise exception
     """
 ```
 
----
+### 2. Stale Lock Detection
 
-## VII. EXTENSION POINTS
+```python
+def _acquire_lock(self, lock_path: Path, timeout: float) -> bool:
+    """
+    1. Check if lock file exists
+    2. If exists, read PID from lock
+    3. Check if PID is alive: os.kill(pid, 0)
+    4. If dead, remove stale lock
+    5. Create new lock with our PID
+    6. Retry with backoff until timeout
+    """
+```
 
-### Adding a New Document Type
+### 3. Curation Level Inference
 
-1. Add to `TYPE_HIERARCHY` in `ontos_generate_context_map.py`
-2. Add to `VALID_TYPE_STATUS` matrix
-3. Update validation logic in `normalize_type()`
-4. Add tests in `test_v26_validation.py`
+```python
+def detect_curation_level(fm: Dict) -> CurationLevel:
+    """
+    1. If status == 'scaffold': return L0
+    2. If status == 'pending_curation': return L1
+    3. If has 'depends_on' or 'concepts': return L2
+    4. If has 'goal': return L1
+    5. Default: L0
+    """
+```
 
-### Adding a New Config Option
+### 4. Schema Version Detection
 
-1. Add default to `MODE_PRESETS` or constants in `ontos_config_defaults.py`
-2. Use `resolve_config()` to read it
-3. Document in `Dual_Mode_Matrix.md`
-4. Add tests for all three modes
+```python
+def detect_schema_version(fm: Dict) -> str:
+    """
+    1. If 'ontos_schema' field: use explicit version
+    2. If 'curation_level' field: return '2.2'
+    3. If 'describes' field: return '2.1'
+    4. If 'type' field: return '2.0'
+    5. Default: '1.0'
+    """
+```
 
-### Adding a New Hook
+### 5. Immutable History Generation
 
-1. Create `ontos_{hook_name}_check.py` in scripts/
-2. Create bash wrapper in `.ontos/hooks/`
-3. Add installation logic to `ontos_init.py`
-4. Add tests
+```python
+def regenerate_decision_history():
+    """
+    1. Scan archive/logs/ for all .md files
+    2. Extract date, slug, event_type, summary from each
+    3. Sort by (date DESC, event_type ASC, slug ASC)
+    4. Render deterministic markdown table
+    5. Write with GENERATED header
+    """
+```
 
 ---
 
@@ -907,8 +755,11 @@ def suggest_impacts():
 - `datetime` — Date handling
 - `subprocess` — Git commands
 - `shutil` — File operations
-- `collections.defaultdict` — Graph building
+- `pathlib` — Path manipulation
+- `dataclasses` — Data structures
+- `enum` — Enumerations
 - `typing` — Type hints
+- `warnings` — Deprecation warnings
 
 **Development:**
 - `pytest` — Testing framework
@@ -916,43 +767,18 @@ def suggest_impacts():
 
 ---
 
-## IX. ERROR HANDLING PATTERNS
+## IX. DOCUMENT LIFECYCLE
 
-### 1. Graceful Degradation
+| Status | Meaning | Scanned? |
+|--------|---------|----------|
+| `draft` | Planning phase, open questions | Yes |
+| `active` | Being implemented | Yes |
+| `complete` | Implemented and released | Yes |
+| `deprecated` | Past truth, superseded | Yes |
+| `archived` | Historical record | No (by default) |
+| `rejected` | Considered, not approved | No (by default) |
 
-```python
-# Hooks never crash the workflow
-def main():
-    try:
-        # Hook logic
-        return result
-    except Exception as e:
-        print(f"Warning: {e}")
-        return 0  # Never block
-```
-
-### 2. Fallback Chains
-
-```python
-# Config resolution: user → env → preset → default
-value = resolve_config('KEY', 'default')
-
-# Path resolution: mode-aware → fallback
-path = get_logs_dir() or 'docs/logs'
-
-# Git operations: try multiple approaches
-result = git_log_since_upstream() or git_log_last_n(5)
-```
-
-### 3. Validation with Warnings
-
-```python
-# Unknown concept = warning, not error
-if concept not in known_concepts:
-    print(f"⚠️  Unknown concept '{concept}'")
-    # Still include it
-    validated.append(concept)
-```
+**Archival:** Once a major version is released and the next version stabilizes, move its `strategy/` and `proposals/` directories to `archive/`.
 
 ---
 
@@ -961,17 +787,13 @@ if concept not in known_concepts:
 | Operation | Typical Time | Notes |
 |-----------|-------------|-------|
 | Context map generation | 50-200ms | Scales with doc count |
-| Pre-push hook | <500ms | Includes map regen |
+| Pre-push hook | <500ms | Includes map regen + history |
 | Pre-commit hook | <100ms | Count check only |
 | Log consolidation | 100-500ms | Per log archived |
 | Query (--health) | 50-100ms | Full graph traversal |
-
-**Optimization Notes:**
-- Token estimation: word_count × 1.3 (fast approximation)
-- Git operations: subprocess with timeout
-- Frontmatter parsing: only reads first 2KB for status checks
-- Cycle detection: O(V+E) using Tarjan's algorithm
+| Schema migration check | <100ms | Frontmatter scan |
+| Curation scaffold | <50ms | Per file |
 
 ---
 
-*End of codebase map. Total: ~5,500 words, ~7,500 tokens.*
+*End of codebase map. Total: ~7,500 words, ~10,000 tokens.*

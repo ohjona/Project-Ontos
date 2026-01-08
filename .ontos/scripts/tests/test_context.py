@@ -14,7 +14,7 @@ Per v2.9.5 spec, tests focus on behavior, not internal mechanics.
 import os
 import time
 from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 import pytest
 
 from ontos.core.context import SessionContext, FileOperation, PendingWrite

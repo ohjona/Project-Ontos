@@ -20,7 +20,7 @@ Usage:
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Tuple
 
 __all__ = [
     'TypeDefinition',
@@ -39,8 +39,8 @@ class TypeDefinition:
     name: str
     rank: int
     description: str
-    can_depend_on: List[str]
-    valid_statuses: List[str]
+    can_depend_on: Tuple[str, ...]  # truly immutable with frozen=True
+    valid_statuses: Tuple[str, ...]  # truly immutable with frozen=True
     uses_impacts: bool = False  # True only for log
 
 
@@ -56,48 +56,51 @@ class FieldDefinition:
 
 
 # Curation meta-statuses apply to all types during L0/L1 processing
-_CURATION_STATUSES = ["scaffold", "pending_curation"]
+_CURATION_STATUSES: Tuple[str, ...] = ("scaffold", "pending_curation")
 
 TYPE_DEFINITIONS: Dict[str, TypeDefinition] = {
     "kernel": TypeDefinition(
         name="kernel",
         rank=0,
         description="Foundational principles - mission, values, core identity",
-        can_depend_on=["kernel"],  # kernel can depend on other kernels
-        valid_statuses=["active", "draft", "deprecated"] + _CURATION_STATUSES,
+        can_depend_on=("kernel",),  # kernel can depend on other kernels
+        valid_statuses=("active", "draft", "deprecated") + _CURATION_STATUSES,
     ),
     "strategy": TypeDefinition(
         name="strategy",
         rank=1,
         description="Goals, direction, roadmap - business decisions",
-        can_depend_on=["kernel"],
-        valid_statuses=["active", "draft", "deprecated", "rejected", "complete"] + _CURATION_STATUSES,
+        can_depend_on=("kernel",),
+        valid_statuses=("active", "draft", "deprecated", "rejected", "complete") + _CURATION_STATUSES,
     ),
     "product": TypeDefinition(
         name="product",
         rank=2,
         description="User-facing specifications - features, requirements",
-        can_depend_on=["kernel", "strategy"],
-        valid_statuses=["active", "draft", "deprecated"] + _CURATION_STATUSES,
+        can_depend_on=("kernel", "strategy"),
+        valid_statuses=("active", "draft", "deprecated") + _CURATION_STATUSES,
     ),
     "atom": TypeDefinition(
         name="atom",
         rank=3,
         description="Technical specs, architecture, implementation details",
-        can_depend_on=["kernel", "strategy", "product", "atom"],
-        valid_statuses=["active", "draft", "deprecated", "complete"] + _CURATION_STATUSES,
+        can_depend_on=("kernel", "strategy", "product", "atom"),
+        valid_statuses=("active", "draft", "deprecated", "complete") + _CURATION_STATUSES,
     ),
     "log": TypeDefinition(
         name="log",
         rank=4,
         description="Session history - temporal records of work",
-        can_depend_on=[],
+        can_depend_on=(),
         # BEHAVIOR FIX: Added auto-generated (used in practice, was missing from VALID_TYPE_STATUS)
-        valid_statuses=["active", "archived", "auto-generated"] + _CURATION_STATUSES,
+        valid_statuses=("active", "archived", "auto-generated") + _CURATION_STATUSES,
         uses_impacts=True,
     ),
 }
 
+# FIELD_DEFINITIONS: Metadata for documentation generation.
+# NOT consumed by runtime validation (that uses SCHEMA_DEFINITIONS in schema.py).
+# Future work (v3.0) may wire this into validators.
 FIELD_DEFINITIONS: Dict[str, FieldDefinition] = {
     "id": FieldDefinition(
         name="id",

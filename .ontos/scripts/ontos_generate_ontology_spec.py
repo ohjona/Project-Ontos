@@ -39,6 +39,7 @@ def generate_spec() -> str:
         ">",
         f"> Generated: {timestamp}",
         "> Source: `.ontos/scripts/ontos/core/ontology.py`",
+        "> Schema: v2.2+ (see schema.py for version differences)",
         "",
         "---",
         "",

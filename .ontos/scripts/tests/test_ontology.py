@@ -32,7 +32,7 @@ class TestTypeDefinitions:
     def test_log_uses_impacts(self):
         """Log type uses impacts, not depends_on."""
         assert TYPE_DEFINITIONS["log"].uses_impacts is True
-        assert TYPE_DEFINITIONS["log"].can_depend_on == []
+        assert TYPE_DEFINITIONS["log"].can_depend_on == ()
 
     def test_strategy_has_complete_status(self):
         """Strategy can have 'complete' status (for reviews)."""

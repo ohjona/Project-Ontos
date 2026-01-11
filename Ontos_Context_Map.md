@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2026-01-11 19:15:18 UTC
+Generated: 2026-01-11 20:40:40 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-11 14:15:18
+Generated on: 2026-01-11 15:40:40
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -75,7 +75,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **llm_b_chief_architect_v3_board_review** [L2] [draft] (Ontos_v3.0_Board_Review_LLM_B_Chief_Architect_Response.md) ~4,400 tokens
   - Status: draft
   - Depends On: chief_architect_v3_0_analysis
-- **ontology_architecture_proposal** [L2] [draft] (Ontology_Architecture_Proposal.md) ~10,900 tokens
+- **ontology_architecture_proposal** [L2] [draft] (Ontology_Architecture_Proposal.md) ~12,100 tokens
   - Status: draft
   - Depends On: technical_architecture, constitution, schema
 - **ontos_codebase_map** [L2] [draft] (Ontos_Codebase_Map.md) ~6,300 tokens
@@ -110,9 +110,15 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20260111_ontology_architecture_research** [L2] (2026-01-11_docs-v3-0-add-technical-architecture-and-finaliz.md) ~1,300 tokens
   - Status: active
   - Impacts: ontology_architecture_proposal, constitution, philosophy, technical_architecture, v2_strategy, schema
+- **log_20260112_v2_9_6_cleanup** [L2] (2026-01-12_chore-v2-9-6-cleanup.md) ~319 tokens
+  - Status: active
+  - Impacts: ontology_architecture_proposal
 
 
 ## 2. Recent Timeline
+- **2026-01-12** [chore] **Chore V2 9 6 Cleanup** (`log_20260112_v2_9_6_cleanup`)
+  - Impacted: `ontology_architecture_proposal`
+  - Concepts: cleanup, v2.9.6, housekeeping
 - **2026-01-11** [decision] **Docs V3 0 Add Technical Architecture And Finaliz** (`log_20260111_ontology_architecture_research`)
   - Impacted: `ontology_architecture_proposal`, `constitution`, `philosophy`, `technical_architecture`, `v2_strategy`, `schema`
   - Concepts: schema, docs, architecture
@@ -154,6 +160,7 @@ No issues found.
 | log_20260107_v2_9_5_quality_release | [2026-01-07_v2-9-5-quality-release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-07_v2-9-5-quality-release.md) | log |
 | log_20260108_housekeeping_archive_docs | [2026-01-08_housekeeping-archive-docs.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-08_housekeeping-archive-docs.md) | log |
 | log_20260111_ontology_architecture_research | [2026-01-11_docs-v3-0-add-technical-architecture-and-finaliz.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-11_docs-v3-0-add-technical-architecture-and-finaliz.md) | log |
+| log_20260112_v2_9_6_cleanup | [2026-01-12_chore-v2-9-6-cleanup.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_chore-v2-9-6-cleanup.md) | log |
 | mission | [mission.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/mission.md) | kernel |
 | ontology_architecture_proposal | [Ontology_Architecture_Proposal.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v2.9.6/Ontology_Architecture_Proposal.md) | atom |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |

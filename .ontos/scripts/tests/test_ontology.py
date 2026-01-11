@@ -58,10 +58,11 @@ class TestFieldDefinitions:
         assert required.issubset(FIELD_DEFINITIONS.keys())
 
     def test_depends_on_applies_to_non_logs(self):
-        """depends_on applies to all types except log."""
+        """depends_on applies to strategy, product, atom (not kernel or log)."""
         fd = FIELD_DEFINITIONS["depends_on"]
         assert "log" not in fd.applies_to
-        assert "kernel" in fd.applies_to
+        assert "kernel" not in fd.applies_to  # kernel docs have no dependencies
+        assert fd.applies_to == ["strategy", "product", "atom"]
 
     def test_impacts_applies_to_log_only(self):
         """impacts applies only to log type."""
@@ -113,14 +114,15 @@ class TestGeneratorFieldCategorization:
         assert set(universal) == {"id", "type", "status"}
 
     def test_required_type_specific_fields(self):
-        """Required fields with applies_to set are type-specific."""
+        """Fields required for SPECIFIC types: depends_on only."""
         type_specific = [n for n, fd in FIELD_DEFINITIONS.items()
                          if fd.required and fd.applies_to is not None]
-        assert set(type_specific) == {"depends_on", "event_type"}
+        assert set(type_specific) == {"depends_on"}  # event_type is optional
 
     def test_optional_fields(self):
         """Optional fields have required=False."""
         optional = [n for n, fd in FIELD_DEFINITIONS.items() if not fd.required]
         assert set(optional) == {"impacts", "concepts", "ontos_schema", 
-                                  "curation_level", "describes"}
+                                  "curation_level", "describes", "event_type"}
+
 

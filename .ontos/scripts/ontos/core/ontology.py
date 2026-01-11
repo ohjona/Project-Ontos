@@ -117,7 +117,7 @@ FIELD_DEFINITIONS: Dict[str, FieldDefinition] = {
         field_type="list",
         required=True,
         description="Referenced document IDs",
-        applies_to=["kernel", "strategy", "product", "atom"],
+        applies_to=["strategy", "product", "atom"],  # kernel excluded per curation.py
     ),
     "impacts": FieldDefinition(
         name="impacts",
@@ -129,7 +129,7 @@ FIELD_DEFINITIONS: Dict[str, FieldDefinition] = {
     "event_type": FieldDefinition(
         name="event_type",
         field_type="enum",
-        required=True,
+        required=False,  # not enforced by schema.py or curation.py
         description="Session type",
         valid_values=["feature", "fix", "refactor", "exploration", "chore", "decision"],
         applies_to=["log"],

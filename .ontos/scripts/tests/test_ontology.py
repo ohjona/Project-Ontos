@@ -1,0 +1,103 @@
+"""Tests for the ontology module (v2.9.6+).
+
+These tests verify the single source of truth for Ontos type and field definitions.
+"""
+
+import pytest
+from ontos.core.ontology import (
+    TYPE_DEFINITIONS,
+    FIELD_DEFINITIONS,
+    get_type_hierarchy,
+    get_valid_types,
+    get_valid_type_status,
+)
+
+
+class TestTypeDefinitions:
+    """Tests for TYPE_DEFINITIONS."""
+
+    def test_type_definitions_complete(self):
+        """All 5 types defined."""
+        assert set(TYPE_DEFINITIONS.keys()) == {"kernel", "strategy", "product", "atom", "log"}
+
+    def test_type_ranks_ordered(self):
+        """Ranks are 0-4 in hierarchy order."""
+        ranks = [td.rank for td in TYPE_DEFINITIONS.values()]
+        assert sorted(ranks) == [0, 1, 2, 3, 4]
+
+    def test_kernel_can_depend_on_kernel(self):
+        """Kernel can depend on other kernels (e.g., constitution->mission)."""
+        assert "kernel" in TYPE_DEFINITIONS["kernel"].can_depend_on
+
+    def test_log_uses_impacts(self):
+        """Log type uses impacts, not depends_on."""
+        assert TYPE_DEFINITIONS["log"].uses_impacts is True
+        assert TYPE_DEFINITIONS["log"].can_depend_on == []
+
+    def test_strategy_has_complete_status(self):
+        """Strategy can have 'complete' status (for reviews)."""
+        assert "complete" in TYPE_DEFINITIONS["strategy"].valid_statuses
+
+    def test_all_types_have_curation_statuses(self):
+        """All types support scaffold and pending_curation (curation meta-statuses)."""
+        for type_name, td in TYPE_DEFINITIONS.items():
+            assert "scaffold" in td.valid_statuses, f"{type_name} missing scaffold"
+            assert "pending_curation" in td.valid_statuses, f"{type_name} missing pending_curation"
+
+    def test_log_has_auto_generated(self):
+        """Log type supports auto-generated status (behavior fix)."""
+        assert "auto-generated" in TYPE_DEFINITIONS["log"].valid_statuses
+
+
+class TestFieldDefinitions:
+    """Tests for FIELD_DEFINITIONS."""
+
+    def test_field_definitions_complete(self):
+        """All required fields defined."""
+        required = {"id", "type", "status", "depends_on"}
+        assert required.issubset(FIELD_DEFINITIONS.keys())
+
+    def test_depends_on_applies_to_non_logs(self):
+        """depends_on applies to all types except log."""
+        fd = FIELD_DEFINITIONS["depends_on"]
+        assert "log" not in fd.applies_to
+        assert "kernel" in fd.applies_to
+
+    def test_impacts_applies_to_log_only(self):
+        """impacts applies only to log type."""
+        fd = FIELD_DEFINITIONS["impacts"]
+        assert fd.applies_to == ["log"]
+
+
+class TestBackwardCompatHelpers:
+    """Tests for backward-compatibility helper functions."""
+
+    def test_get_type_hierarchy(self):
+        """get_type_hierarchy returns correct dict."""
+        hierarchy = get_type_hierarchy()
+        assert hierarchy["kernel"] == 0
+        assert hierarchy["log"] == 4
+
+    def test_get_valid_types(self):
+        """get_valid_types returns all type names."""
+        types = get_valid_types()
+        assert "kernel" in types
+        assert "log" in types
+        assert len(types) == 5
+
+    def test_get_valid_type_status(self):
+        """get_valid_type_status returns correct status sets."""
+        status_map = get_valid_type_status()
+        assert "active" in status_map["kernel"]
+        assert "archived" in status_map["log"]
+        assert "auto-generated" in status_map["log"]
+
+
+class TestIntegrationWithConfigDefaults:
+    """Tests for integration with ontos_config_defaults."""
+
+    def test_config_defaults_uses_ontology(self):
+        """ontos_config_defaults imports from ontology.py."""
+        from ontos_config_defaults import TYPE_DEFINITIONS, TYPE_HIERARCHY
+        assert TYPE_DEFINITIONS["kernel"]["rank"] == 0
+        assert TYPE_HIERARCHY["kernel"] == 0

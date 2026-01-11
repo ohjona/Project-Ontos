@@ -9,7 +9,7 @@ depends_on: [mission]
 
 > **GENERATED FILE - DO NOT EDIT DIRECTLY**
 >
-> Generated: 2026-01-11T22:13:19Z
+> Generated: 2026-01-11T22:48:56Z
 > Source: `.ontos/scripts/ontos/core/ontology.py`
 
 ---
@@ -36,7 +36,7 @@ depends_on: [mission]
 
 ## 2. Frontmatter Fields
 
-### Required Fields
+### Required Fields (All Types)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -44,13 +44,18 @@ depends_on: [mission]
 | `type` | enum | Document type in hierarchy |
 | `status` | enum | Document lifecycle state |
 
-### Optional Fields
+### Required Fields (Type-Specific)
 
 | Field | Type | Applies To | Description |
 |-------|------|------------|-------------|
 | `depends_on` | list | kernel, strategy, product, atom | Referenced document IDs |
-| `impacts` | list | log | Document IDs modified in this session |
 | `event_type` | enum | log | Session type |
+
+### Optional Fields
+
+| Field | Type | Applies To | Description |
+|-------|------|------------|-------------|
+| `impacts` | list | log | Document IDs modified in this session |
 | `concepts` | list | all | Abstract concepts discussed |
 | `ontos_schema` | string | all | Schema version |
 | `curation_level` | enum | all | Level of human curation |

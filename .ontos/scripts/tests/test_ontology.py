@@ -101,3 +101,26 @@ class TestIntegrationWithConfigDefaults:
         from ontos_config_defaults import TYPE_DEFINITIONS, TYPE_HIERARCHY
         assert TYPE_DEFINITIONS["kernel"]["rank"] == 0
         assert TYPE_HIERARCHY["kernel"] == 0
+
+
+class TestGeneratorFieldCategorization:
+    """Tests for field categorization (bug fix from Codex PR #38 review)."""
+
+    def test_required_universal_fields(self):
+        """Required fields with applies_to=None are universal."""
+        universal = [n for n, fd in FIELD_DEFINITIONS.items() 
+                     if fd.required and fd.applies_to is None]
+        assert set(universal) == {"id", "type", "status"}
+
+    def test_required_type_specific_fields(self):
+        """Required fields with applies_to set are type-specific."""
+        type_specific = [n for n, fd in FIELD_DEFINITIONS.items()
+                         if fd.required and fd.applies_to is not None]
+        assert set(type_specific) == {"depends_on", "event_type"}
+
+    def test_optional_fields(self):
+        """Optional fields have required=False."""
+        optional = [n for n, fd in FIELD_DEFINITIONS.items() if not fd.required]
+        assert set(optional) == {"impacts", "concepts", "ontos_schema", 
+                                  "curation_level", "describes"}
+

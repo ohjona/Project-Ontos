@@ -68,15 +68,30 @@ def generate_spec() -> str:
         "",
         "## 2. Frontmatter Fields",
         "",
-        "### Required Fields",
+        "### Required Fields (All Types)",
         "",
         "| Field | Type | Description |",
         "|-------|------|-------------|",
     ])
 
+    # Required + universal
     for name, fd in FIELD_DEFINITIONS.items():
         if fd.required and fd.applies_to is None:
             lines.append(f"| `{name}` | {fd.field_type} | {fd.description} |")
+
+    lines.extend([
+        "",
+        "### Required Fields (Type-Specific)",
+        "",
+        "| Field | Type | Applies To | Description |",
+        "|-------|------|------------|-------------|",
+    ])
+
+    # Required + type-specific
+    for name, fd in FIELD_DEFINITIONS.items():
+        if fd.required and fd.applies_to is not None:
+            applies = ", ".join(fd.applies_to)
+            lines.append(f"| `{name}` | {fd.field_type} | {applies} | {fd.description} |")
 
     lines.extend([
         "",
@@ -86,8 +101,9 @@ def generate_spec() -> str:
         "|-------|------|------------|-------------|",
     ])
 
+    # Optional only
     for name, fd in FIELD_DEFINITIONS.items():
-        if not fd.required or fd.applies_to is not None:
+        if not fd.required:
             applies = ", ".join(fd.applies_to) if fd.applies_to else "all"
             lines.append(f"| `{name}` | {fd.field_type} | {applies} | {fd.description} |")
 

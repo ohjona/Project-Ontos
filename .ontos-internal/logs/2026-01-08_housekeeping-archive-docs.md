@@ -5,7 +5,7 @@ status: active
 event_type: chore
 branch: main
 concepts: [housekeeping, archival, documentation]
-impacts: [ontos_codebase_map, ontos_deep_analysis_brief, master_plan_v4]
+impacts: [ontos_codebase_map, ontos_deep_analysis_brief, roadmap, technical_architecture]
 ---
 
 # Housekeeping: Archive Completed Work & Update Docs

@@ -2,7 +2,7 @@
 id: chief_architect_v3_0_analysis
 type: atom
 status: draft
-depends_on: [master_plan_v4, v3_0_security_requirements]
+depends_on: [technical_architecture, v3_0_security_requirements]
 concepts: [v3, mcp, architecture, analysis, strategy]
 ---
 

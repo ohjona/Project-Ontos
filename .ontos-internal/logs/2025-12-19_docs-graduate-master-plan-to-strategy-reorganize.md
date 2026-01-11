@@ -4,7 +4,7 @@ type: log
 status: active
 event_type: chore
 concepts: [governance, proposals, graduation]
-impacts: [master_plan_v4, v2_strategy]
+impacts: [roadmap, technical_architecture, philosophy]
 ---
 
 # Session Log: Docs Graduate Master Plan To Strategy Reorganize

@@ -192,7 +192,7 @@ def get_decision_history_path() -> str:
         return 'docs/strategy/decision_history.md'
     
     if is_ontos_repo():
-        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'strategy', 'decision_history.md')
+        return os.path.join(PROJECT_ROOT, '.ontos-internal', 'reference', 'decision_history.md')
     
     docs_dir = resolve_config('DOCS_DIR', 'docs')
     

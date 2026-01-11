@@ -2,13 +2,13 @@
 id: schema
 type: atom
 status: active
-depends_on: [v2_strategy]
+depends_on: [philosophy]
 ---
 
 # Project Ontos: Schema Specification
 
 ## 1. Strategy Link
-Defines data structures for the Ontos protocol as specified in [v2_strategy](../strategy/v2_strategy.md).
+Defines data structures for the Ontos protocol as specified in [philosophy](../kernel/philosophy.md).
 
 ## 2. Common Fields (All Types)
 | Field | Type | Required | Description |

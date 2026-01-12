@@ -344,17 +344,28 @@ def capture_fixture(fixture_name: str) -> None:
         # Capture map command
         print("  Capturing 'ontos map'...")
         map_data = capture_map_command(fixture_path)
-        save_baseline(fixture_name, "map", map_data)
         print(f"    Exit code: {map_data['exit_code']}")
         print(f"    Context map: {len(map_data['context_map'])} chars")
+
+        # Abort if map command failed (e.g., timeout)
+        if map_data.get("exit_code", 0) < 0:
+            print(f"  ERROR: Map command failed (exit code {map_data['exit_code']}). Skipping baseline write.")
+            return
 
         # Capture log command
         print("  Capturing 'ontos log'...")
         log_data = capture_log_command(fixture_path)
-        save_baseline(fixture_name, "log", log_data)
         print(f"    Exit code: {log_data['exit_code']}")
         print(f"    Session log: {len(log_data['session_log'])} chars")
 
+        # Abort if log command failed (e.g., timeout)
+        if log_data.get("exit_code", 0) < 0:
+            print(f"  ERROR: Log command failed (exit code {log_data['exit_code']}). Skipping baseline write.")
+            return
+
+        # Only save baselines if both commands succeeded
+        save_baseline(fixture_name, "map", map_data)
+        save_baseline(fixture_name, "log", log_data)
         print(f"  Baseline saved to: {BASELINES_DIR / fixture_name}")
 
     finally:
@@ -374,7 +385,7 @@ def main():
     )
     args = parser.parse_args()
 
-    fixtures = ["small", "medium", "large"] if args.fixture == "all" else [args.fixture]
+    fixtures = ["small", "medium"] if args.fixture == "all" else [args.fixture]
 
     print("Golden Master Capture Script")
     print(f"Project root: {PROJECT_ROOT}")

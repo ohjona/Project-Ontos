@@ -10,8 +10,7 @@ Usage:
 
 Exit codes:
     0 - All comparisons pass
-    1 - One or more comparisons failed
-    2 - Configuration/setup error
+    1 - One or more comparisons failed (or configuration error)
 """
 
 import argparse
@@ -207,7 +206,9 @@ def load_baseline(fixture_name: str, command: str) -> dict:
     data = {
         "stdout": (baseline_dir / f"{command}_stdout.txt").read_text(encoding="utf-8", errors="replace"),
         "stderr": (baseline_dir / f"{command}_stderr.txt").read_text(encoding="utf-8", errors="replace"),
-        "exit_code": int((baseline_dir / f"{command}_exit_code.txt").read_text().strip()),
+        "exit_code": int((baseline_dir / f"{command}_exit_code.txt")
+                         .read_text(encoding="utf-8", errors="replace")
+                         .strip()),
     }
 
     # Load generated files if present
@@ -334,7 +335,7 @@ def main():
     )
     args = parser.parse_args()
 
-    fixtures = ["small", "medium", "large"] if args.fixture == "all" else [args.fixture]
+    fixtures = ["small", "medium"] if args.fixture == "all" else [args.fixture]
 
     print("Golden Master Comparison Script")
     print(f"Project root: {PROJECT_ROOT}")

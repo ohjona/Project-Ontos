@@ -7,14 +7,20 @@ depends_on: [v3_0_implementation_roadmap, v3_0_technical_architecture]
 
 # Phase 0 Implementation Spec: Golden Master Testing
 
-**Version:** 1.0
+**Version:** 1.1
 **Date:** 2026-01-12
 **Author:** Claude Opus 4.5 (Chief Architect)
-**Status:** Active
+**Status:** Active (Post-LLM Review Board)
 
 **References:**
 - `V3.0-Implementation-Roadmap.md` v1.2, Section 2
 - `V3.0-Technical-Architecture.md` v1.4
+
+**Revision History:**
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0 | 2026-01-12 | Initial spec |
+| 1.1 | 2026-01-12 | LLM Review Board feedback: Added stderr/session_log comparison, `__init__.py`, git user config, `decision_history.md` handling, medium fixture templates |
 
 ---
 
@@ -52,6 +58,7 @@ From Roadmap Section 2.3:
 ```
 tests/
 ├── golden/
+│   ├── __init__.py          # Required for Python imports (v1.1)
 │   ├── fixtures/
 │   │   ├── small/           # 5-doc project
 │   │   │   ├── .ontos-internal/
@@ -85,6 +92,11 @@ tests/
 │   ├── capture_golden_master.py
 │   ├── compare_golden_master.py
 │   └── README.md
+```
+
+**File: `tests/golden/__init__.py`** (v1.1)
+```python
+"""Golden Master test infrastructure for Ontos v3.0 migration."""
 ```
 
 ### 2.2 Small Fixture (5 Documents)
@@ -244,6 +256,370 @@ strict = false
 - Concepts vocabulary usage
 - Cross-referenced impacts in logs
 
+#### 2.3.1 Medium Fixture File Templates (v1.1)
+
+**Kernel Documents (3):**
+
+```markdown
+# kernel/mission.md
+---
+id: mission
+type: kernel
+status: active
+depends_on: []
+---
+# Mission
+Our mission is to build reliable, well-documented software.
+```
+
+```markdown
+# kernel/philosophy.md
+---
+id: philosophy
+type: kernel
+status: active
+depends_on: [mission]
+---
+# Philosophy
+We believe in simplicity, clarity, and maintainability.
+```
+
+```markdown
+# kernel/constitution.md
+---
+id: constitution
+type: kernel
+status: active
+depends_on: [mission, philosophy]
+---
+# Constitution
+Rules governing how we operate and make decisions.
+```
+
+**Strategy Documents (12):**
+
+```markdown
+# strategy/core_architecture.md
+---
+id: core_architecture
+type: strategy
+status: active
+depends_on: [mission]
+---
+# Core Architecture
+Defines the foundational technical structure.
+```
+
+```markdown
+# strategy/api_design.md
+---
+id: api_design
+type: strategy
+status: active
+depends_on: [core_architecture]
+---
+# API Design
+RESTful API conventions and patterns.
+```
+
+```markdown
+# strategy/database_schema.md
+---
+id: database_schema
+type: strategy
+status: active
+depends_on: [core_architecture]
+---
+# Database Schema
+Data model and storage strategy.
+```
+
+```markdown
+# strategy/security_model.md
+---
+id: security_model
+type: strategy
+status: active
+depends_on: [core_architecture, api_design]
+---
+# Security Model
+Authentication, authorization, and data protection.
+```
+
+```markdown
+# strategy/deployment_strategy.md
+---
+id: deployment_strategy
+type: strategy
+status: active
+depends_on: [core_architecture]
+---
+# Deployment Strategy
+CI/CD and infrastructure approach.
+```
+
+```markdown
+# strategy/testing_plan.md
+---
+id: testing_plan
+type: strategy
+status: active
+depends_on: [api_design, database_schema]
+---
+# Testing Plan
+Test coverage strategy and tooling.
+```
+
+```markdown
+# strategy/documentation_guide.md
+---
+id: documentation_guide
+type: strategy
+status: active
+depends_on: [mission]
+---
+# Documentation Guide
+Standards for project documentation.
+```
+
+```markdown
+# strategy/rejected_proposal.md
+---
+id: rejected_proposal
+type: strategy
+status: rejected
+depends_on: [core_architecture]
+rejected_reason: "Superseded by api_design approach"
+---
+# Rejected: GraphQL API
+This proposal was rejected in favor of REST.
+```
+
+```markdown
+# strategy/proposals/feature_a.md
+---
+id: feature_a
+type: strategy
+status: draft
+depends_on: [api_design]
+---
+# Draft: Feature A
+Proposed new capability (under review).
+```
+
+```markdown
+# strategy/proposals/feature_b.md
+---
+id: feature_b
+type: strategy
+status: active
+depends_on: [api_design, security_model]
+---
+# Feature B
+Approved and in development.
+```
+
+```markdown
+# strategy/proposals/deprecated_idea.md
+---
+id: deprecated_idea
+type: strategy
+status: deprecated
+depends_on: [core_architecture]
+---
+# Deprecated: Old Approach
+No longer recommended; kept for historical reference.
+```
+
+```markdown
+# strategy/proposals/complete_feature.md
+---
+id: complete_feature
+type: strategy
+status: complete
+depends_on: [api_design]
+---
+# Complete: Feature C
+Successfully implemented and deployed.
+```
+
+**Atom Documents (4):**
+
+```markdown
+# atom/schema.md
+---
+id: medium_schema
+type: atom
+status: active
+depends_on: [database_schema]
+---
+# Schema Definition
+Technical schema specifications.
+```
+
+```markdown
+# atom/validation_rules.md
+---
+id: validation_rules
+type: atom
+status: active
+depends_on: [medium_schema]
+---
+# Validation Rules
+Input validation and constraints.
+```
+
+```markdown
+# atom/common_concepts.md
+---
+id: common_concepts
+type: atom
+status: active
+depends_on: [mission]
+concepts: [architecture, api, testing]
+---
+# Common Concepts
+Shared terminology and definitions.
+```
+
+```markdown
+# atom/dual_mode_matrix.md
+---
+id: dual_mode_matrix
+type: atom
+status: active
+depends_on: [core_architecture]
+---
+# Dual Mode Matrix
+Configuration options by environment.
+```
+
+**Log Documents (5):**
+
+```markdown
+# logs/2025-01-01_initial-setup.md
+---
+id: log_20250101_initial_setup
+type: log
+status: active
+event_type: feature
+concepts: [setup, architecture]
+impacts: [core_architecture]
+---
+# Initial Setup
+## Goal
+Set up the project structure.
+## Changes Made
+- Created initial documentation structure
+## Raw Session History
+` ``text
+abc1234 - Initial commit
+` ``
+```
+
+```markdown
+# logs/2025-01-15_api-design.md
+---
+id: log_20250115_api_design
+type: log
+status: active
+event_type: feature
+concepts: [api, rest]
+impacts: [api_design, security_model]
+---
+# API Design Session
+## Goal
+Design the REST API.
+## Changes Made
+- Defined API endpoints
+## Raw Session History
+` ``text
+def5678 - Add API design doc
+` ``
+```
+
+```markdown
+# logs/2025-02-01_security-hardening.md
+---
+id: log_20250201_security
+type: log
+status: active
+event_type: feature
+concepts: [security, auth]
+impacts: [security_model]
+---
+# Security Hardening
+## Goal
+Implement security measures.
+## Changes Made
+- Added authentication
+## Raw Session History
+` ``text
+ghi9012 - Security update
+` ``
+```
+
+```markdown
+# logs/2025-02-15_rejected-exploration.md
+---
+id: log_20250215_rejected
+type: log
+status: active
+event_type: exploration
+concepts: [graphql, api]
+impacts: [rejected_proposal]
+---
+# GraphQL Exploration
+## Goal
+Evaluate GraphQL as alternative.
+## Changes Made
+- Rejected in favor of REST
+## Raw Session History
+` ``text
+jkl3456 - Mark proposal rejected
+` ``
+```
+
+```markdown
+# logs/2025-03-01_feature-complete.md
+---
+id: log_20250301_complete
+type: log
+status: active
+event_type: feature
+concepts: [release]
+impacts: [complete_feature]
+---
+# Feature C Complete
+## Goal
+Finalize Feature C.
+## Changes Made
+- Marked as complete
+## Raw Session History
+` ``text
+mno7890 - Feature complete
+` ``
+```
+
+**Config File:**
+
+```toml
+# .ontos.toml
+[ontos]
+version = "3.0"
+
+[paths]
+docs_dir = ".ontos-internal"
+logs_dir = ".ontos-internal/logs"
+context_map = "Ontos_Context_Map.md"
+
+[scanning]
+skip_patterns = ["_template.md", "archive/*"]
+
+[validation]
+strict = false
+```
+
 ### 2.4 Large Fixture (100+ Documents)
 
 **Purpose:** Performance validation, scalability testing
@@ -364,6 +740,7 @@ def normalize_context_map(content: str, fixture_path: Path) -> str:
     - Provenance header timestamps
     - Mode indicator (Contributor/User)
     - Scanned directory path
+    - decision_history.md references (v1.1)
     """
     content = normalize_output(content, fixture_path)
 
@@ -378,6 +755,13 @@ def normalize_context_map(content: str, fixture_path: Path) -> str:
     content = re.sub(
         r'Mode: (Contributor|User)',
         'Mode: <MODE>',
+        content
+    )
+
+    # v1.1: Normalize decision_history.md generation timestamp
+    content = re.sub(
+        r'decision_history\.md \(generated <TIMESTAMP>\)',
+        'decision_history.md (generated <TIMESTAMP>)',
         content
     )
 
@@ -429,6 +813,7 @@ def setup_fixture(fixture_name: str) -> Path:
     shutil.copytree(fixture_src, temp_dir, dirs_exist_ok=True)
 
     # Initialize git repo (required for some commands)
+    # v1.1: Configure git user to prevent CI failures
     subprocess.run(
         ["git", "init"],
         cwd=temp_dir,
@@ -436,13 +821,14 @@ def setup_fixture(fixture_name: str) -> Path:
         check=True
     )
     subprocess.run(
-        ["git", "add", "."],
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com", "add", "."],
         cwd=temp_dir,
         capture_output=True,
         check=True
     )
     subprocess.run(
-        ["git", "commit", "-m", "Initial commit"],
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com",
+         "commit", "-m", "Initial commit"],
         cwd=temp_dir,
         capture_output=True,
         check=True
@@ -508,13 +894,14 @@ def capture_log_command(fixture_path: Path, event_type: str = "chore") -> dict:
     test_file.write_text("# Test Change\nThis triggers log creation.\n")
 
     subprocess.run(
-        ["git", "add", "."],
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com", "add", "."],
         cwd=fixture_path,
         capture_output=True,
         check=True
     )
     subprocess.run(
-        ["git", "commit", "-m", "Test change for log capture"],
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com",
+         "commit", "-m", "Test change for log capture"],
         cwd=fixture_path,
         capture_output=True,
         check=True
@@ -786,9 +1173,15 @@ def run_log_command(fixture_path: Path) -> dict:
     test_file = fixture_path / ".ontos-internal" / "test_change.md"
     test_file.write_text("# Test Change\nThis triggers log creation.\n")
 
-    subprocess.run(["git", "add", "."], cwd=fixture_path, capture_output=True, check=True)
     subprocess.run(
-        ["git", "commit", "-m", "Test change"],
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com", "add", "."],
+        cwd=fixture_path,
+        capture_output=True,
+        check=True
+    )
+    subprocess.run(
+        ["git", "-c", "user.name=Golden Master", "-c", "user.email=test@example.com",
+         "commit", "-m", "Test change"],
         cwd=fixture_path,
         capture_output=True,
         check=True
@@ -876,6 +1269,12 @@ def compare_fixture(fixture_name: str) -> bool:
                 actual_map["stdout"],
                 "map stdout"
             ),
+            # v1.1: Add stderr comparison
+            compare_text(
+                expected_map["stderr"],
+                actual_map["stderr"],
+                "map stderr"
+            ),
             compare_text(
                 expected_map.get("context_map", ""),
                 actual_map.get("context_map", ""),
@@ -915,6 +1314,18 @@ def compare_fixture(fixture_name: str) -> bool:
                 expected_log["stdout"],
                 actual_log["stdout"],
                 "log stdout"
+            ),
+            # v1.1: Add stderr comparison
+            compare_text(
+                expected_log["stderr"],
+                actual_log["stderr"],
+                "log stderr"
+            ),
+            # v1.1: Add session_log comparison
+            compare_text(
+                expected_log.get("session_log", ""),
+                actual_log.get("session_log", ""),
+                "session_log.md"
             ),
         ]
 
@@ -1026,9 +1437,9 @@ v3.0 refactoring doesn't introduce regressions.
 
 ### Running Comparisons (CI)
 
-```bash
+` ``bash
 python tests/golden/compare_golden_master.py --fixture all
-```
+` ``
 
 Exit code 0 means all tests pass. Exit code 1 means regression detected.
 
@@ -1036,7 +1447,7 @@ Exit code 0 means all tests pass. Exit code 1 means regression detected.
 
 When intentional behavior changes occur in v3.0:
 
-```bash
+` ``bash
 # Re-capture baseline for specific fixture
 python tests/golden/capture_golden_master.py --fixture small
 
@@ -1046,7 +1457,7 @@ python tests/golden/capture_golden_master.py --fixture all
 # Commit the updated baselines
 git add tests/golden/baselines/
 git commit -m "chore: update golden master baselines for v3.0 changes"
-```
+` ``
 
 ## Fixture Sizes
 
@@ -1153,11 +1564,15 @@ act push  # or push to GitHub
 
 2. **Interactive prompts**: The `ontos log` command has interactive prompts. Use `--auto` flag to bypass.
 
-3. **Deprecation warnings**: Current scripts emit FutureWarning. These are captured in stderr and normalized.
+3. **Deprecation warnings**: Current scripts emit FutureWarning. These are captured in stderr and compared (v1.1). If warnings change between Ontos versions, re-capture baselines.
 
 4. **File ordering**: Context map sections may have non-deterministic ordering. Current implementation sorts by doc_id, but verify this.
 
-5. **Decision history**: The `decision_history.md` is auto-generated. Ensure it's excluded from comparison or normalized.
+5. **Decision history**: The `decision_history.md` is auto-generated. v1.1 adds normalization for its timestamps.
+
+6. **Git user config** (v1.1): CI environments may lack git user.name/user.email. The `setup_fixture` function now configures these automatically.
+
+7. **Python imports** (v1.1): `compare_golden_master.py` imports from `capture_golden_master.py`. The `__init__.py` file ensures this works correctly.
 
 ### 7.2 Recommended Order
 
@@ -1180,6 +1595,43 @@ act push  # or push to GitHub
 | Large fixture size | 100 vs 150 vs 200 docs | 100 (sufficient for perf testing) |
 | CI matrix | Python 3.9-3.12 vs 3.11 only | 3.9-3.12 (ensure compatibility) |
 | Baseline storage | Git LFS vs regular | Regular (baselines are text, <1MB) |
+
+---
+
+## 8. LLM Review Board Feedback (v1.1)
+
+### 8.1 Reviewers
+
+| Reviewer | Recommendation | Addressed |
+|----------|----------------|-----------|
+| Codex (GPT-5) | Minor Revisions | Yes |
+| Claude Opus 4.5 | Minor Revisions | Yes |
+| Gemini CLI | Ready to Implement | Yes |
+
+### 8.2 Changes Made
+
+| Feedback | Source | Resolution |
+|----------|--------|------------|
+| Missing stderr comparison | Codex | Added to `compare_fixture()` |
+| Missing session_log comparison | Codex | Added to `compare_fixture()` |
+| Missing `__init__.py` | Gemini | Added to directory structure |
+| Git user config in scripts | Codex | Added to `setup_fixture()` |
+| `decision_history.md` handling | Claude | Added normalization pattern |
+| Medium fixture templates | Codex, Claude | Added Section 2.3.1 |
+
+### 8.3 Feedback Not Addressed (with rationale)
+
+| Feedback | Source | Rationale |
+|----------|--------|-----------|
+| JSON output capture | Codex | v3.0 feature, not v2.9.x baseline (Claude, Gemini concur) |
+| Large fixture generator | Claude | Deferred - can add during implementation if needed |
+| `.gitignore` | Gemini | Minor - can add during implementation |
+
+### 8.4 Verdict
+
+**Status:** Ready for Implementation
+
+The spec has been updated to address all blocking and high-priority feedback from the LLM Review Board. No re-review needed.
 
 ---
 

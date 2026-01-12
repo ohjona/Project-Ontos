@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2026-01-12 04:16:35 UTC
+Generated: 2026-01-12 10:49:08 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-11 23:16:35
+Generated on: 2026-01-12 05:49:08
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -40,7 +40,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **installation_ux_proposal_review** [L2] [draft] (Installation_UX_Proposal_Review_Codex.md) ~948 tokens
   - Status: draft
   - Depends On: installation_ux_proposal, philosophy, mission, ontos_manual
-- **phase0_golden_master_spec** [L2] (phase0_implementation_spec.md) ~7,900 tokens
+- **phase0_golden_master_spec** [L2] (phase0_implementation_spec.md) ~10,300 tokens
   - Status: active
   - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture
 - **v3_0_implementation_roadmap** [L2] (V3.0-Implementation-Roadmap.md) ~9,800 tokens

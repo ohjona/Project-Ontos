@@ -168,11 +168,18 @@ class TestGeneratedSpec:
 
     def test_spec_includes_schema_requirements_section(self):
         """Generated spec must include schema requirements section."""
-        import sys
+        import importlib.util
         from pathlib import Path
-        sys.path.insert(0, str(Path(__file__).parent.parent))
-        from ontos_generate_ontology_spec import generate_spec
 
-        spec = generate_spec()
+        def _load_module(module_name: str, rel_path: str):
+            module_path = Path(__file__).resolve().parent.parent / rel_path
+            spec = importlib.util.spec_from_file_location(module_name, module_path)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Cannot load {module_name} at {module_path}")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+
+        spec_module = _load_module("ontos_generate_ontology_spec", "ontos_generate_ontology_spec.py")
+        spec = spec_module.generate_spec()
         assert "## 3. Schema Requirements by Version" in spec
-

@@ -24,16 +24,22 @@ Examples:
 """
 
 import sys
+import os
 from pathlib import Path
+
+# v3.0: Get project root from env var set by cli.py
+# This is required for non-editable installs where __file__ points to site-packages
+PROJECT_ROOT = os.environ.get("ONTOS_PROJECT_ROOT", os.getcwd())
 
 # Add bundled scripts directory to path for script imports (ontos_*.py)
 SCRIPTS_DIR = Path(__file__).parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-# Also add the package root directory to ensure ontos package can be imported
-# This is the parent of the parent of _scripts (i.e., project root)
-PACKAGE_ROOT = SCRIPTS_DIR.parent.parent
-sys.path.insert(0, str(PACKAGE_ROOT))
+# Add project root to sys.path AFTER scripts so it ends up at position 0
+# This ensures: 1) ontos package is found, 2) user's ontos_config.py is found
+# sys.path will be: [PROJECT_ROOT, SCRIPTS_DIR, ...]
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 COMMANDS = {
     'log': ('ontos_end_session', 'Archive a session'),

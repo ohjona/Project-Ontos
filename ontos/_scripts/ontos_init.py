@@ -21,8 +21,9 @@ import subprocess
 import argparse
 import re
 
-# Define paths relative to script location
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# v3.0: Get project root from env var set by cli.py
+# Use CWD as fallback since cli.py also sets CWD to project root
+PROJECT_ROOT = os.environ.get("ONTOS_PROJECT_ROOT", os.getcwd())
 HOOKS_DIR = os.path.join(PROJECT_ROOT, '.git', 'hooks')
 
 

@@ -5,7 +5,6 @@ status: active
 event_type: feature
 impacts:
   - ontology_spec
-  - v2_technical_architecture
 concepts:
   - ontology
   - single-source-of-truth

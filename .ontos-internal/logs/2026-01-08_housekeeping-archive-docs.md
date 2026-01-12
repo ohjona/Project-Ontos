@@ -5,7 +5,7 @@ status: active
 event_type: chore
 branch: main
 concepts: [housekeeping, archival, documentation]
-impacts: [v2_roadmap, v2_technical_architecture]
+impacts: []
 ---
 
 # Housekeeping: Archive Completed Work & Update Docs

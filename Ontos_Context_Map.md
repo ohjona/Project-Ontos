@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2026-01-12 03:05:59 UTC
+Generated: 2026-01-12 03:12:43 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-11 22:05:59
+Generated on: 2026-01-11 22:12:43
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -40,15 +40,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **installation_ux_proposal_review** [L2] [draft] (Installation_UX_Proposal_Review_Codex.md) ~948 tokens
   - Status: draft
   - Depends On: installation_ux_proposal, philosophy, mission, ontos_manual
-- **v2_roadmap** [L2] [deprecated] (v2_roadmap.md) ~1,500 tokens
-  - Status: deprecated
-  - Depends On: mission, philosophy
-- **v2_strategy** [L2] [deprecated] (v2_strategy.md) ~947 tokens
-  - Status: deprecated
-  - Depends On: philosophy
-- **v2_technical_architecture** [L2] [deprecated] (v2_technical_architecture.md) ~835 tokens
-  - Status: deprecated
-  - Depends On: mission, philosophy, constitution
 - **v3_0_implementation_roadmap** [L2] (V3.0-Implementation-Roadmap.md) ~9,800 tokens
   - Status: active
   - Depends On: v3_0_technical_architecture, v3_0_strategy_decisions
@@ -66,9 +57,6 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **architect_synthesis_install_ux** [L2] [draft] (Architect_Synthesis_InstallUX.md) ~4,000 tokens
   - Status: draft
   - Depends On: installation_ux_proposal, claude_install_ux_review, gemini_install_ux_review, installation_ux_proposal_review
-- **chief_architect_roadmap_response** [L2] (Chief_Architect_Roadmap_Response.md) ~2,300 tokens
-  - Status: complete
-  - Depends On: v3_0_implementation_roadmap
 - **claude_install_ux_review** [L2] (Claude_InstallUX_Review.md) ~3,500 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
@@ -95,36 +83,36 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20251219_chore_maintenance_consolidate_logs_add_frontma** [L2] (2025-12-19_chore-maintenance-consolidate-logs-add-frontma.md) ~332 tokens
   - Status: active
   - Impacts: schema
-- **log_20251219_docs_graduate_master_plan_to_strategy_reorganize** [L2] (2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) ~563 tokens
+- **log_20251219_docs_graduate_master_plan_to_strategy_reorganize** [L2] (2025-12-19_docs-graduate-master-plan-to-strategy-reorganize.md) ~553 tokens
   - Status: active
-  - Impacts: v2_roadmap, v2_technical_architecture, philosophy
+  - Impacts: philosophy
 - **log_20251220_v2_7_1** [L1] (2025-12-20_v2-7-1.md) ~383 tokens  ⚠️ active
   - Status: active
   - Impacts: None
 - **log_20260107_v2_9_5_quality_release** [L1] (2026-01-07_v2-9-5-quality-release.md) ~265 tokens  ⚠️ active
   - Status: active
   - Impacts: None
-- **log_20260108_housekeeping_archive_docs** [L2] (2026-01-08_housekeeping-archive-docs.md) ~455 tokens
+- **log_20260108_housekeeping_archive_docs** [L2] (2026-01-08_housekeeping-archive-docs.md) ~446 tokens
   - Status: active
-  - Impacts: v2_roadmap, v2_technical_architecture
+  - Impacts: None
 - **log_20260111_fix_v2_9_6_correct_false_implemented_status_cl** [L1] (2026-01-11_fix-v2-9-6-correct-false-implemented-status-cl.md) ~115 tokens  ⚠️ active
   - Status: active
   - Impacts: None
 - **log_20260111_ontology_architecture_research** [L2] (2026-01-11_docs-v3-0-add-technical-architecture-and-finaliz.md) ~1,200 tokens
   - Status: active
-  - Impacts: constitution, philosophy, v2_technical_architecture, v2_strategy, schema
+  - Impacts: constitution, philosophy, schema
 - **log_20260111_v2_9_6** [L1] (2026-01-11_v2-9-6.md) ~126 tokens  ⚠️ active
   - Status: active
   - Impacts: ontology_spec
-- **log_20260111_v2_9_6_ontology_architecture** [L1] (2026-01-11_v2-9-6-ontology-architecture.md) ~141 tokens  ⚠️ active
+- **log_20260111_v2_9_6_ontology_architecture** [L1] (2026-01-11_v2-9-6-ontology-architecture.md) ~135 tokens  ⚠️ active
   - Status: active
-  - Impacts: v2_technical_architecture
+  - Impacts: None
 - **log_20260111_v2_9_6_round2_revision** [L1] (2026-01-11_v2-9-6-round2-revision.md) ~341 tokens  ⚠️ active
   - Status: active
   - Impacts: None
-- **log_20260112_feat_v2_9_6_ontology_single_source_of_truth** [L2] (2026-01-12_feat-v2-9-6-ontology-single-source-of-truth.md) ~628 tokens
+- **log_20260112_feat_v2_9_6_ontology_single_source_of_truth** [L2] (2026-01-12_feat-v2-9-6-ontology-single-source-of-truth.md) ~620 tokens
   - Status: active
-  - Impacts: ontology_spec, v2_technical_architecture
+  - Impacts: ontology_spec
 - **log_20260112_v2_9_6_cleanup** [L2] (2026-01-12_chore-v2-9-6-cleanup.md) ~312 tokens
   - Status: active
   - Impacts: None
@@ -132,7 +120,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 2. Recent Timeline
 - **2026-01-12** [feature] **Feat V2 9 6 Ontology Single Source Of Truth** (`log_20260112_feat_v2_9_6_ontology_single_source_of_truth`)
-  - Impacted: `ontology_spec`, `v2_technical_architecture`
+  - Impacted: `ontology_spec`
   - Concepts: ontology, single-source-of-truth, immutability, import-safety
 - **2026-01-12** [chore] **Chore V2 9 6 Cleanup** (`log_20260112_v2_9_6_cleanup`)
   - Concepts: cleanup, v2.9.6, housekeeping
@@ -140,13 +128,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontology_spec`
 - **2026-01-11** [chore] **V2 9 6 Round2 Revision** (`log_20260111_v2_9_6_round2_revision`)
 - **2026-01-11** [feature] **V2 9 6 Ontology Architecture** (`log_20260111_v2_9_6_ontology_architecture`)
-  - Impacted: `v2_technical_architecture`
 - **2026-01-11** [chore] **Fix V2 9 6 Correct False Implemented Status Cl** (`log_20260111_fix_v2_9_6_correct_false_implemented_status_cl`)
 - **2026-01-11** [decision] **Docs V3 0 Add Technical Architecture And Finaliz** (`log_20260111_ontology_architecture_research`)
-  - Impacted: `constitution`, `philosophy`, `v2_technical_architecture`, `v2_strategy`, `schema`
+  - Impacted: `constitution`, `philosophy`, `schema`
   - Concepts: schema, docs, architecture
 - **2026-01-08** [chore] **Housekeeping Archive Docs** (`log_20260108_housekeeping_archive_docs`)
-  - Impacted: `v2_roadmap`, `v2_technical_architecture`
   - Concepts: housekeeping, archival, documentation
 - **2026-01-07** [feature] **V2 9 5 Quality Release** (`log_20260107_v2_9_5_quality_release`)
 - **2025-12-20** [chore] **V2 7 1** (`log_20251220_v2_7_1`)
@@ -160,7 +146,6 @@ No issues found.
 | ID | Filename | Type |
 |---|---|---|
 | architect_synthesis_install_ux | [Architect_Synthesis_InstallUX.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Architect_Synthesis_InstallUX.md) | atom |
-| chief_architect_roadmap_response | [Chief_Architect_Roadmap_Response.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Chief_Architect_Roadmap_Response.md) | atom |
 | claude_install_ux_review | [Claude_InstallUX_Review.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/Install_experience/Claude_InstallUX_Review.md) | atom |
 | common_concepts | [Common_Concepts.md](docs/reference/Common_Concepts.md) | atom |
 | constitution | [constitution.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/constitution.md) | kernel |
@@ -188,9 +173,6 @@ No issues found.
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
 | philosophy | [philosophy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/kernel/philosophy.md) | kernel |
 | schema | [schema.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/atom/schema.md) | atom |
-| v2_roadmap | [v2_roadmap.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.0/v2_roadmap.md) | strategy |
-| v2_strategy | [v2_strategy.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.0/v2_strategy.md) | strategy |
-| v2_technical_architecture | [v2_technical_architecture.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v2.0/v2_technical_architecture.md) | strategy |
 | v3_0_implementation_roadmap | [V3.0-Implementation-Roadmap.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/V3.0-Implementation-Roadmap.md) | strategy |
 | v3_0_security_requirements | [v3.0_security_requirements.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/v3.0_security_requirements.md) | strategy |
 | v3_0_strategy_decisions | [V3.0-Strategy-Decisions-Final.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/V3.0-Strategy-Decisions-Final.md) | strategy |

@@ -1,6 +1,6 @@
 <!--
 Ontos Context Map
-Generated: 2026-01-12 02:46:16 UTC
+Generated: 2026-01-12 03:05:59 UTC
 Mode: Contributor
 Scanned: .ontos-internal
 -->
@@ -9,7 +9,7 @@ Scanned: .ontos-internal
 > in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-11 21:46:16
+Generated on: 2026-01-11 22:05:59
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -49,7 +49,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **v2_technical_architecture** [L2] [deprecated] (v2_technical_architecture.md) ~835 tokens
   - Status: deprecated
   - Depends On: mission, philosophy, constitution
-- **v3_0_implementation_roadmap** [L2] (V3.0-Implementation-Roadmap.md) ~9,600 tokens
+- **v3_0_implementation_roadmap** [L2] (V3.0-Implementation-Roadmap.md) ~9,800 tokens
   - Status: active
   - Depends On: v3_0_technical_architecture, v3_0_strategy_decisions
 - **v3_0_security_requirements** [L2] [draft] (v3.0_security_requirements.md) ~5,100 tokens

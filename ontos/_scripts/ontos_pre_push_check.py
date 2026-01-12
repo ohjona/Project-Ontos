@@ -10,6 +10,7 @@ on the size and nature of changes.
 import os
 import sys
 import subprocess
+from pathlib import Path
 from typing import Tuple, List
 
 # Add scripts dir to path
@@ -144,8 +145,9 @@ def regenerate_context_map() -> None:
     v2.4: Auto-regeneration prevents stale context maps.
     """
     try:
+        bundled_map = Path(__file__).resolve().parent / "ontos_generate_context_map.py"
         result = subprocess.run(
-            [sys.executable, '.ontos/scripts/ontos_generate_context_map.py'],
+            [sys.executable, str(bundled_map)],
             capture_output=True, text=True, timeout=HOOK_TIMEOUT_SECONDS,
             cwd=PROJECT_ROOT
         )
@@ -175,8 +177,9 @@ def run_auto_archive() -> bool:
         True if auto-archive succeeded, False otherwise.
     """
     try:
+        bundled_end = Path(__file__).resolve().parent / "ontos_end_session.py"
         result = subprocess.run(
-            [sys.executable, '.ontos/scripts/ontos_end_session.py', '--auto'],
+            [sys.executable, str(bundled_end), '--auto'],
             timeout=HOOK_TIMEOUT_SECONDS,
             cwd=PROJECT_ROOT
         )

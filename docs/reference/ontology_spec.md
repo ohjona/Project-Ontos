@@ -9,8 +9,9 @@ depends_on: [mission]
 
 > **GENERATED FILE - DO NOT EDIT DIRECTLY**
 >
-> Generated: 2026-01-11T21:14:31Z
+> Generated: 2026-01-12T00:02:36Z
 > Source: `.ontos/scripts/ontos/core/ontology.py`
+> Schema: v1.0–v3.0 (see schema.py for version differences)
 
 ---
 
@@ -36,7 +37,7 @@ depends_on: [mission]
 
 ## 2. Frontmatter Fields
 
-### Required Fields
+### Required Fields (All Types)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -44,17 +45,46 @@ depends_on: [mission]
 | `type` | enum | Document type in hierarchy |
 | `status` | enum | Document lifecycle state |
 
+### Required Fields (Type-Specific)
+
+| Field | Type | Applies To | Description |
+|-------|------|------------|-------------|
+
 ### Optional Fields
 
 | Field | Type | Applies To | Description |
 |-------|------|------------|-------------|
-| `depends_on` | list | kernel, strategy, product, atom | Referenced document IDs |
+| `depends_on` | list | strategy, product, atom | Referenced document IDs (required at L2 for strategy/product/atom) |
 | `impacts` | list | log | Document IDs modified in this session |
 | `event_type` | enum | log | Session type |
 | `concepts` | list | all | Abstract concepts discussed |
 | `ontos_schema` | string | all | Schema version |
 | `curation_level` | enum | all | Level of human curation |
 | `describes` | list | atom | Source files this doc describes |
+
+---
+
+## 3. Schema Requirements by Version
+
+### Schema v1.0
+- Required: id
+- Optional: type, depends_on
+
+### Schema v2.0
+- Required: id, type
+- Optional: status, depends_on, concepts, event_type, impacts
+
+### Schema v2.1
+- Required: id, type
+- Optional: status, depends_on, concepts, describes, describes_verified
+
+### Schema v2.2
+- Required: id, type, status
+- Optional: depends_on, concepts, ontos_schema, curation_level
+
+### Schema v3.0
+- Required: id, type, status, ontos_schema
+- Optional: depends_on, concepts, implements, tests, deprecates
 
 ---
 

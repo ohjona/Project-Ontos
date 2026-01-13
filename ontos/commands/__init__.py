@@ -15,6 +15,9 @@ Phase 2 modules:
 - scaffold.py: Document scaffolding (wrapper)
 - stub.py: Stub creation (wrapper)
 
+Phase 3 modules:
+- init.py: Project initialization
+
 Note: Wrapper modules delegate to bundled scripts for behavioral parity.
 Full native implementations will be completed in Phase 4.
 """
@@ -30,6 +33,13 @@ from ontos.commands.log import (
     create_session_log,
     suggest_session_impacts,
     validate_session_concepts,
+)
+
+# Phase 3: Init command
+from ontos.commands.init import (
+    InitOptions,
+    init_command,
+    ONTOS_HOOK_MARKER,
 )
 
 # Wrapper modules (delegate to bundled scripts)
@@ -86,6 +96,10 @@ __all__ = [
     "create_session_log",
     "suggest_session_impacts",
     "validate_session_concepts",
+    # Phase 3: Init
+    "InitOptions",
+    "init_command",
+    "ONTOS_HOOK_MARKER",
     # Wrappers (Phase 2, full impl Phase 4)
     "verify_document",
     "find_stale_documents",
@@ -103,3 +117,4 @@ __all__ = [
     "create_stub",
     "create_stubs_for_missing",
 ]
+

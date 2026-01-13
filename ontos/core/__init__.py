@@ -66,6 +66,18 @@ from ontos.core.config import (
     BLOCKED_BRANCH_NAMES,
     get_source,
     get_git_last_modified,
+    # Phase 3: Config System
+    ConfigError,
+    OntosConfig,
+    OntosSection,
+    PathsConfig,
+    ScanningConfig,
+    ValidationConfig,
+    WorkflowConfig,
+    HooksConfig,
+    default_config,
+    config_to_dict,
+    dict_to_config,
 )
 
 # Proposal helpers

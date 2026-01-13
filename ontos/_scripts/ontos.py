@@ -93,6 +93,13 @@ def main():
     # Resolve aliases
     command = ALIASES.get(command, command)
 
+    # Phase 3: Route init to legacy script (native init is handled in cli.py)
+    # Note: When invoked via `python -m ontos`, cli.py handles init natively
+    # This fallback is for direct script execution only
+    if command == 'init':
+        # Fall through to legacy ontos_init (this path is rarely used)
+        pass
+
     if command not in COMMANDS:
         print(f"Error: Unknown command '{sys.argv[1]}'")
         print(f"Available commands: {', '.join(sorted(COMMANDS.keys()))}")
@@ -103,7 +110,6 @@ def main():
 
     # v2.9.2: Signal to scripts that they're being called via unified CLI
     # This suppresses deprecation warnings about direct script execution
-    import os
     os.environ['ONTOS_CLI_DISPATCH'] = '1'
 
     # Import and run the module

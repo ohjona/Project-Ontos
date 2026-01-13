@@ -397,10 +397,13 @@ DEFAULT_SOURCE = "Claude Code"
 
 ### Uninstall
 ```bash
-rm -rf .ontos/
-rm -f Ontos_Context_Map.md Ontos_Agent_Instructions.md
-# Optional: remove frontmatter
+# 1. Optional: remove frontmatter (requires .ontos/)
 python3 .ontos/scripts/ontos_remove_frontmatter.py --yes
+# 2. Remove git hooks
+rm -f .git/hooks/pre-push .git/hooks/pre-commit
+# 3. Remove Ontos files
+rm -rf .ontos/
+rm -f Ontos_Context_Map.md Ontos_Agent_Instructions.md ontos_config.py
 ```
 
 ---

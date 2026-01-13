@@ -204,26 +204,52 @@ def _is_ontos_hook(path: Path) -> bool:
 
 
 def _write_shim_hook(path: Path, hook_type: str) -> None:
-    """Write minimal shim hook with marker."""
+    """
+    Write minimal shim hook with marker.
+    
+    Per Spec v1.1 Section 4.6: Python-based shim hooks with 3-method fallback:
+    1. PATH lookup (preferred)
+    2. sys.executable -m ontos
+    3. Graceful degradation (allow operation, warn)
+    """
+    import os
+    import stat
+    
     shim = f'''#!/usr/bin/env python3
 {ONTOS_HOOK_MARKER}
-"""Ontos {hook_type} hook (shim). Delegates to global CLI."""
+"""Ontos {hook_type} hook. Delegates to ontos CLI."""
 import subprocess
 import sys
 
-try:
-    sys.exit(subprocess.call(["ontos", "hook", "{hook_type}"] + sys.argv[1:]))
-except FileNotFoundError:
-    try:
-        sys.exit(subprocess.call([sys.executable, "-m", "ontos", "hook", "{hook_type}"] + sys.argv[1:]))
-    except Exception:
-        print("Warning: ontos not found. Skipping hook.", file=sys.stderr)
-        sys.exit(0)
-'''
-    path.write_text(shim)
+def run_hook():
+    """Try multiple methods to invoke ontos hook."""
+    args = ["hook", "{hook_type}"] + sys.argv[1:]
 
-    # chmod is no-op on Windows but we still call it
+    # Method 1: PATH lookup (preferred)
     try:
-        path.chmod(0o755)
-    except OSError:
-        pass  # Windows: chmod may fail, but hooks will still work
+        return subprocess.call(["ontos"] + args)
+    except FileNotFoundError:
+        pass
+
+    # Method 2: sys.executable -m ontos
+    try:
+        return subprocess.call([sys.executable, "-m", "ontos"] + args)
+    except Exception:
+        pass
+
+    # Method 3: Graceful degradation
+    print("Warning: ontos not found. Skipping hook.", file=sys.stderr)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(run_hook())
+'''
+    path.write_text(shim, encoding='utf-8')
+
+    # Set executable permission (no-op on Windows, required on Unix)
+    if os.name != 'nt':  # Not Windows
+        try:
+            current_mode = path.stat().st_mode
+            path.chmod(current_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+        except OSError:
+            pass  # Silently continue if chmod fails

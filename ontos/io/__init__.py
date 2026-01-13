@@ -29,6 +29,14 @@ from ontos.io.toml import (
     write_config,
     merge_configs,
 )
+# Phase 3: Config I/O
+from ontos.io.config import (
+    CONFIG_FILENAME,
+    find_config,
+    load_project_config,
+    save_project_config,
+    config_exists,
+)
 
 __all__ = [
     # yaml
@@ -55,4 +63,11 @@ __all__ = [
     "load_config_if_exists",
     "write_config",
     "merge_configs",
+    # config (Phase 3)
+    "CONFIG_FILENAME",
+    "find_config",
+    "load_project_config",
+    "save_project_config",
+    "config_exists",
 ]
+

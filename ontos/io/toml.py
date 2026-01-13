@@ -73,25 +73,33 @@ def write_config(path: Path, config: Dict[str, Any]) -> None:
         path: Destination path
         config: Configuration dictionary
     """
+    def _format_value(v: Any) -> str:
+        """Format a value for TOML output."""
+        if v is None:
+            return '""'  # TOML doesn't have null, use empty string
+        elif isinstance(v, bool):
+            return str(v).lower()
+        elif isinstance(v, str):
+            # Escape quotes and backslashes
+            escaped = v.replace('\\', '\\\\').replace('"', '\\"')
+            return f'"{escaped}"'
+        elif isinstance(v, (int, float)):
+            return str(v)
+        elif isinstance(v, list):
+            items = ", ".join(_format_value(item) for item in v)
+            return f'[{items}]'
+        else:
+            return str(v)
+
     lines = []
     for key, value in config.items():
-        if isinstance(value, str):
-            lines.append(f'{key} = "{value}"')
-        elif isinstance(value, bool):
-            lines.append(f'{key} = {str(value).lower()}')
-        elif isinstance(value, (int, float)):
-            lines.append(f'{key} = {value}')
-        elif isinstance(value, list):
-            items = ", ".join(f'"{v}"' if isinstance(v, str) else str(v) for v in value)
-            lines.append(f'{key} = [{items}]')
-        elif isinstance(value, dict):
+        if isinstance(value, dict):
             lines.append(f'[{key}]')
             for k, v in value.items():
-                if isinstance(v, str):
-                    lines.append(f'{k} = "{v}"')
-                else:
-                    lines.append(f'{k} = {v}')
+                lines.append(f'{k} = {_format_value(v)}')
             lines.append('')
+        else:
+            lines.append(f'{key} = {_format_value(value)}')
 
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text('\n'.join(lines) + '\n', encoding='utf-8')

@@ -93,6 +93,19 @@ def main():
     # Resolve aliases
     command = ALIASES.get(command, command)
 
+    # Phase 3: Route init to new implementation
+    if command == 'init':
+        from ontos.commands.init import init_command, InitOptions
+        options = InitOptions(
+            path=Path.cwd(),
+            force='--force' in sys.argv or '-f' in sys.argv,
+            interactive=False,  # Reserved for v3.1
+            skip_hooks='--skip-hooks' in sys.argv,
+        )
+        code, msg = init_command(options)
+        print(msg)
+        return code
+
     if command not in COMMANDS:
         print(f"Error: Unknown command '{sys.argv[1]}'")
         print(f"Available commands: {', '.join(sorted(COMMANDS.keys()))}")

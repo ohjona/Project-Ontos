@@ -3,21 +3,25 @@
 This module contains functions for v2.7 describes field validation
 and staleness detection between documentation and described atoms.
 
-IMPURE FUNCTIONS:
-    - get_file_modification_date() - calls subprocess.run for git
+PURE FUNCTIONS (after Phase 2 refactor):
+    - get_file_modification_date() - accepts optional git_mtime_provider callback
     - check_staleness() - uses get_file_modification_date()
 
 For testing, mock these functions directly:
     with patch('ontos.core.staleness.get_file_modification_date') as mock:
         mock.return_value = (date(2025, 12, 20), ModifiedSource.GIT)
         result = check_staleness(doc, ctx)
+
+For production use with git:
+    from ontos.io.git import get_file_mtime
+    result = get_file_modification_date(path, git_mtime_provider=get_file_mtime)
 """
 
 import os
-import subprocess
 from datetime import date, datetime
 from enum import Enum
-from typing import Optional, Tuple, List, Dict
+from typing import Optional, Tuple, List, Dict, Callable
+from pathlib import Path
 
 
 class ModifiedSource(Enum):
@@ -41,18 +45,27 @@ def clear_git_cache() -> None:
     _git_date_cache = {}
 
 
-def get_file_modification_date(filepath: str) -> Tuple[Optional[date], ModifiedSource]:
+def get_file_modification_date(
+    filepath: str,
+    git_mtime_provider: Optional[Callable[[Path], Optional[datetime]]] = None
+) -> Tuple[Optional[date], ModifiedSource]:
     """Get last modification date for a file with source tracking.
-    
-    IMPURE: This function calls subprocess.run() to execute git commands.
-    For testing, mock this function directly.
-    
+
+    PURE: This function accepts an optional callback for git operations.
+    When git_mtime_provider is not supplied, falls back to filesystem mtime.
+
+    For production use with git:
+        from ontos.io.git import get_file_mtime
+        result = get_file_modification_date(path, git_mtime_provider=get_file_mtime)
+
     Returns both the date and the source of that date (git, mtime, etc.)
     to indicate reliability. Uses caching for performance.
-    
+
     Args:
         filepath: Path to the file.
-        
+        git_mtime_provider: Optional callback that takes a Path and returns
+            a datetime from git history. If None, only filesystem mtime is used.
+
     Returns:
         (date, source) where source indicates reliability:
         - GIT: From git log (reliable)
@@ -62,50 +75,53 @@ def get_file_modification_date(filepath: str) -> Tuple[Optional[date], ModifiedS
     """
     # Normalize path for cache key
     cache_key = os.path.abspath(filepath)
-    
+
     # Check cache first (C1)
     if cache_key in _git_date_cache:
         return _git_date_cache[cache_key]
-    
-    result = _fetch_last_modified(filepath)
+
+    result = _fetch_last_modified(filepath, git_mtime_provider)
     _git_date_cache[cache_key] = result
     return result
 
 
-def _fetch_last_modified(filepath: str) -> Tuple[Optional[date], ModifiedSource]:
+def _fetch_last_modified(
+    filepath: str,
+    git_mtime_provider: Optional[Callable[[Path], Optional[datetime]]] = None
+) -> Tuple[Optional[date], ModifiedSource]:
     """Internal function to fetch last modified date.
-    
-    IMPURE: Uses subprocess.run for git commands.
+
+    PURE: Accepts optional callback for git operations.
+    When git_mtime_provider is None, falls back to filesystem mtime only.
+
+    Args:
+        filepath: Path to the file.
+        git_mtime_provider: Optional callback that takes a Path and returns
+            a datetime from git history.
+
+    Returns:
+        (date, source) tuple indicating the date and its reliability.
     """
     # Handle missing file
     if not os.path.exists(filepath):
         return (None, ModifiedSource.MISSING)
-    
-    try:
-        result = subprocess.run(
-            ["git", "log", "-1", "--format=%ci", "--", filepath],
-            capture_output=True, text=True, timeout=5
-        )
-        
-        if result.returncode == 0 and result.stdout.strip():
-            # Git has history for this file
-            # Format: "2025-12-19 14:30:00 -0800" → extract "2025-12-19"
-            date_str = result.stdout.strip().split()[0]
-            return (date.fromisoformat(date_str), ModifiedSource.GIT)
-        else:
-            # File exists but no git history (uncommitted) - treat as today (R2)
-            return (date.today(), ModifiedSource.UNCOMMITTED)
-    
-    except FileNotFoundError:
-        # Git not installed (R3) - fall back to mtime
-        # Note: warning suppressed, caller should handle via source type
-        mtime = os.path.getmtime(filepath)
-        return (date.fromtimestamp(mtime), ModifiedSource.MTIME)
-    
-    except subprocess.TimeoutExpired:
-        # Git command hung - fall back to mtime
-        mtime = os.path.getmtime(filepath)
-        return (date.fromtimestamp(mtime), ModifiedSource.MTIME)
+
+    # Try git via provider if available
+    if git_mtime_provider is not None:
+        try:
+            git_datetime = git_mtime_provider(Path(filepath))
+            if git_datetime is not None:
+                return (git_datetime.date(), ModifiedSource.GIT)
+            else:
+                # File exists but no git history (uncommitted) - treat as today (R2)
+                return (date.today(), ModifiedSource.UNCOMMITTED)
+        except Exception:
+            # Provider failed - fall back to mtime
+            pass
+
+    # Fall back to filesystem mtime (no git provider or provider failed)
+    mtime = os.path.getmtime(filepath)
+    return (date.fromtimestamp(mtime), ModifiedSource.MTIME)
 
 
 def normalize_describes(value) -> List[str]:
@@ -307,40 +323,47 @@ def check_staleness(
     doc_path: str,
     describes: List[str],
     describes_verified: Optional[date],
-    id_to_path: Dict[str, str]
+    id_to_path: Dict[str, str],
+    git_mtime_provider: Optional[Callable[[Path], Optional[datetime]]] = None
 ) -> Optional[StalenessInfo]:
     """Check if a document is stale (described atoms changed after verification).
-    
-    IMPURE: Uses get_file_modification_date which calls git subprocess.
-    
+
+    PURE: Accepts optional callback for git operations via git_mtime_provider.
+
+    For production use with git:
+        from ontos.io.git import get_file_mtime
+        result = check_staleness(..., git_mtime_provider=get_file_mtime)
+
     Args:
         doc_id: ID of the document.
         doc_path: Path to the document.
         describes: List of IDs this doc describes.
         describes_verified: Date when doc was last verified.
         id_to_path: Dict mapping atom ID -> file path.
-        
+        git_mtime_provider: Optional callback that takes a Path and returns
+            a datetime from git history.
+
     Returns:
         StalenessInfo if stale, None otherwise.
     """
     if not describes or not describes_verified:
         return None
-    
+
     stale_atoms = []
-    
+
     for atom_id in describes:
         if atom_id not in id_to_path:
             continue  # Skip unknown (validation error caught elsewhere)
-        
+
         atom_path = id_to_path[atom_id]
-        atom_modified, source = get_file_modification_date(atom_path)
-        
+        atom_modified, source = get_file_modification_date(atom_path, git_mtime_provider)
+
         if atom_modified is None:
             continue  # Can't determine, skip
-        
+
         if atom_modified > describes_verified:
             stale_atoms.append((atom_id, atom_modified))
-    
+
     if stale_atoms:
         return StalenessInfo(
             doc_id=doc_id,
@@ -349,5 +372,5 @@ def check_staleness(
             verified_date=describes_verified,
             stale_atoms=stale_atoms
         )
-    
+
     return None

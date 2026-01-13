@@ -2,36 +2,151 @@
 
 This module contains pure functions for parsing and validating
 YAML frontmatter in Ontos documents.
+
+PURE FUNCTIONS (Phase 2 refactor):
+    - parse_frontmatter() - accepts optional yaml_parser callback
+    - normalize_depends_on() - pure string/list normalization
+    - normalize_type() - pure string normalization
+    - load_common_concepts() - file reading only
+
+For production use with PyYAML:
+    from ontos.io.yaml import parse_yaml
+    frontmatter = parse_frontmatter(filepath, yaml_parser=parse_yaml)
 """
 
 import os
 import re
-import yaml
-from typing import Optional, List
+from typing import Optional, List, Dict, Any, Callable
 
 
-def parse_frontmatter(filepath: str) -> Optional[dict]:
+def parse_frontmatter(
+    filepath: str,
+    yaml_parser: Optional[Callable[[str], Dict[str, Any]]] = None
+) -> Optional[dict]:
     """Parse YAML frontmatter from a markdown file.
+
+    PURE: Accepts optional callback for YAML parsing.
+    When yaml_parser is None, returns raw frontmatter string split only.
+
+    For production use with PyYAML:
+        from ontos.io.yaml import parse_yaml
+        frontmatter = parse_frontmatter(filepath, yaml_parser=parse_yaml)
 
     Args:
         filepath: Path to the markdown file.
+        yaml_parser: Optional callback that takes a YAML string and returns
+            a dictionary. If None, attempts to use fallback parsing.
 
     Returns:
         Dictionary of frontmatter fields, or None if no valid frontmatter.
     """
-    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
-        content = f.read()
+    try:
+        with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+    except (IOError, OSError):
+        return None
 
-    if content.startswith('---'):
+    if not content.startswith('---'):
+        return None
+
+    try:
+        parts = content.split('---', 2)
+        if len(parts) < 3:
+            return None
+
+        yaml_content = parts[1].strip()
+        if not yaml_content:
+            return {}
+
+        # Use provided parser if available
+        if yaml_parser is not None:
+            try:
+                result = yaml_parser(yaml_content)
+                return result if isinstance(result, dict) else None
+            except Exception:
+                return None
+
+        # Fallback: basic key-value parsing for simple frontmatter
+        # This handles common cases without PyYAML dependency
+        return _fallback_yaml_parse(yaml_content)
+
+    except Exception:
+        return None
+
+
+def _fallback_yaml_parse(content: str) -> Optional[Dict[str, Any]]:
+    """Fallback YAML parser for simple key-value frontmatter.
+    
+    Handles basic cases like:
+        id: some_id
+        type: atom
+        status: active
+        depends_on: [dep1, dep2]
+    
+    For complex YAML, use the yaml_parser callback with PyYAML.
+    
+    Args:
+        content: YAML content string.
+        
+    Returns:
+        Dictionary of parsed values, or None if parsing fails.
+    """
+    result = {}
+    
+    for line in content.split('\n'):
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+            
+        if ':' not in line:
+            continue
+            
+        key, _, value = line.partition(':')
+        key = key.strip()
+        value = value.strip()
+        
+        if not key:
+            continue
+        
+        # Handle empty values
+        if not value or value in ('null', '~', 'None'):
+            result[key] = None
+            continue
+        
+        # Handle inline lists: [item1, item2]
+        if value.startswith('[') and value.endswith(']'):
+            items = value[1:-1].split(',')
+            result[key] = [item.strip().strip('"\'') for item in items if item.strip()]
+            continue
+        
+        # Handle quoted strings
+        if (value.startswith('"') and value.endswith('"')) or \
+           (value.startswith("'") and value.endswith("'")):
+            result[key] = value[1:-1]
+            continue
+        
+        # Handle booleans
+        if value.lower() in ('true', 'yes'):
+            result[key] = True
+            continue
+        if value.lower() in ('false', 'no'):
+            result[key] = False
+            continue
+        
+        # Handle numbers
         try:
-            parts = content.split('---', 2)
-            if len(parts) >= 3:
-                frontmatter = yaml.safe_load(parts[1])
-                return frontmatter
-        except yaml.YAMLError:
-            # Silently return None - caller should handle
+            if '.' in value:
+                result[key] = float(value)
+            else:
+                result[key] = int(value)
+            continue
+        except ValueError:
             pass
-    return None
+        
+        # Default: string value
+        result[key] = value
+    
+    return result if result else None
 
 
 def normalize_depends_on(value) -> List[str]:

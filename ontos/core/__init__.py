@@ -3,7 +3,7 @@
 This module contains pure functions and classes that do NOT perform I/O,
 except for functions explicitly marked as IMPURE in their docstrings.
 
-IMPURE functions:
+IMPURE functions (Phase 1 legacy - to be refactored):
     - staleness.get_file_modification_date() - calls git subprocess
     - staleness.check_staleness() - uses get_file_modification_date()
     - config.get_source() - calls git subprocess
@@ -84,3 +84,47 @@ from ontos.core.ontology import (
     get_valid_types,
     get_valid_type_status,
 )
+
+# Phase 2 additions: Types
+from ontos.core.types import (
+    DocumentType,
+    DocumentStatus,
+    ValidationErrorType,
+    DocumentData,
+    ValidationError,
+    ValidationResult,
+    TEMPLATES,
+    SECTION_TEMPLATES,
+    CurationLevel,  # Re-exported from curation.py
+)
+
+# Phase 2 additions: Token estimation
+from ontos.core.tokens import (
+    estimate_tokens,
+    format_token_count,
+)
+
+# Phase 2 additions: Graph
+from ontos.core.graph import (
+    GraphNode,
+    DependencyGraph,
+    build_graph,
+    detect_cycles,
+    detect_orphans,
+    calculate_depths,
+)
+
+# Phase 2 additions: Suggestions
+from ontos.core.suggestions import (
+    load_document_index,
+    load_common_concepts as load_common_concepts_from_map,
+    suggest_impacts,
+    validate_concepts,
+)
+
+# Phase 2 additions: Validation
+from ontos.core.validation import (
+    ValidationOrchestrator,
+    validate_describes_field as validate_describes_field_v2,
+)
+

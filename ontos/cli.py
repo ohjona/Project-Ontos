@@ -297,10 +297,10 @@ def _cmd_wrapper(args) -> int:
     # Find the legacy script
     scripts_dir = Path(__file__).parent / "_scripts"
     script_map = {
-        "verify": "ontos_verify_describes.py",
+        "verify": "ontos_verify.py",
         "query": "ontos_query.py",
         "migrate": "ontos_migrate_schema.py",
-        "consolidate": "ontos_consolidate_logs.py",
+        "consolidate": "ontos_consolidate.py",
         "promote": "ontos_promote.py",
         "scaffold": "ontos_scaffold.py",
         "stub": "ontos_stub.py",

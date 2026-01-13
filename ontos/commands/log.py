@@ -97,6 +97,9 @@ def create_session_log(
     try:
         from ontos_config import LOGS_DIR
         logs_dir = Path(LOGS_DIR)
+        # Align relative path with project_root to prevent CWD-dependent output
+        if not logs_dir.is_absolute():
+            logs_dir = project_root / logs_dir
     except ImportError:
         logs_dir = project_root / "docs" / "logs"
     

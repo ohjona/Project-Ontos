@@ -32,30 +32,21 @@ from ontos_config import (
     is_ontos_repo
 )
 
-from ontos_lib import (
-    parse_frontmatter,
-    normalize_depends_on,
-    normalize_type,
-    load_common_concepts,
-    resolve_config,
-    get_logs_dir,
-    get_log_count,
-    get_logs_older_than,
-    get_git_last_modified,
-    load_decision_history_entries,
-    get_decision_history_path,
-    get_archive_logs_dir,
-    # v2.7 imports
+from ontos.core.frontmatter import parse_frontmatter, normalize_depends_on, normalize_type, load_common_concepts
+from ontos.core.paths import resolve_config, get_logs_dir, get_log_count, get_logs_older_than, get_decision_history_path, get_archive_logs_dir
+from ontos.core.config import get_git_last_modified
+from ontos.core.proposals import load_decision_history_entries
+from ontos.core.staleness import (
     normalize_describes,
     parse_describes_verified,
     validate_describes_field,
     detect_describes_cycles,
     check_staleness,
-    generate_decision_history,
     DescribesValidationError,
     DescribesWarning,
     StalenessInfo,
 )
+from ontos.core.history import generate_decision_history
 
 from ontos_config_defaults import (
     VALID_STATUS,

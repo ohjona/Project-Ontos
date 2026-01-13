@@ -160,34 +160,34 @@ class TestSharedHelpers:
     """Test shared helper functions in ontos_lib."""
     
     def test_get_logs_dir_returns_path(self):
-        from ontos_lib import get_logs_dir
+        from ontos.core.paths import get_logs_dir
         
         result = get_logs_dir()
         assert result is not None
         assert isinstance(result, str)
     
     def test_get_log_count_returns_int(self):
-        from ontos_lib import get_log_count
+        from ontos.core.paths import get_log_count
         
         result = get_log_count()
         assert isinstance(result, int)
         assert result >= 0
     
     def test_get_logs_older_than_returns_list(self):
-        from ontos_lib import get_logs_older_than
+        from ontos.core.paths import get_logs_older_than
         
         result = get_logs_older_than(30)
         assert isinstance(result, list)
     
     def test_get_archive_dir_returns_path(self):
-        from ontos_lib import get_archive_dir
+        from ontos.core.paths import get_archive_dir
         
         result = get_archive_dir()
         assert result is not None
         assert isinstance(result, str)
     
     def test_get_decision_history_path_returns_path(self):
-        from ontos_lib import get_decision_history_path
+        from ontos.core.paths import get_decision_history_path
         
         result = get_decision_history_path()
         assert result is not None

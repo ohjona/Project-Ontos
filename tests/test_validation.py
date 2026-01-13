@@ -24,7 +24,8 @@ from ontos_config_defaults import (
     PROPOSAL_STALE_DAYS,
     REJECTED_REASON_MIN_LENGTH,
 )
-from ontos_lib import load_decision_history_entries, get_git_last_modified
+from ontos.core.proposals import load_decision_history_entries
+from ontos.core.config import get_git_last_modified
 from ontos_generate_context_map import validate_v26_status, get_status_indicator
 
 

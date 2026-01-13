@@ -18,7 +18,7 @@ from unittest.mock import patch, MagicMock
 # Add scripts directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scripts'))
 
-from ontos_lib import (
+from ontos.core.staleness import (
     ModifiedSource,
     clear_git_cache,
     get_file_modification_date,

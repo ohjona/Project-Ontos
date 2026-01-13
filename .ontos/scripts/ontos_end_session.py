@@ -15,19 +15,11 @@ from ontos.ui.output import OutputHandler
 
 from ontos_config import __version__, LOGS_DIR, CONTEXT_MAP_FILE, PROJECT_ROOT
 
-from ontos_lib import (
-    BLOCKED_BRANCH_NAMES,
-    find_last_session_date,
-    load_common_concepts,
-    resolve_config,
-    get_proposals_dir,
-    get_decision_history_path,
-    # v2.7 imports for staleness check
-    check_staleness,
-    normalize_describes,
-    parse_describes_verified,
-    parse_frontmatter,
-)
+from ontos.core.config import BLOCKED_BRANCH_NAMES
+from ontos.core.paths import find_last_session_date, get_proposals_dir, get_decision_history_path
+from ontos.core.frontmatter import load_common_concepts, parse_frontmatter
+from ontos.core.paths import resolve_config
+from ontos.core.staleness import check_staleness, normalize_describes, parse_describes_verified
 
 # v2.4: Use resolve_config for mode-aware settings
 REQUIRE_SOURCE_IN_LOGS = resolve_config('REQUIRE_SOURCE_IN_LOGS', True)

@@ -9,7 +9,7 @@ from ontos.core.config import (
     dict_to_config,
     config_to_dict,
 )
-from ontos.io.toml import load_config_if_exists, write_config
+from ontos.io.toml import load_config, write_config
 
 CONFIG_FILENAME = ".ontos.toml"
 
@@ -28,21 +28,32 @@ def load_project_config(
     config_path: Optional[Path] = None,
     repo_root: Optional[Path] = None,
 ) -> OntosConfig:
-    """Load config from file, or return defaults if not found."""
+    """Load config from file, or return defaults if not found.
+    
+    Args:
+        config_path: Explicit path to config file, or None to search
+        repo_root: Repository root for path validation
+        
+    Returns:
+        OntosConfig instance
+        
+    Raises:
+        ConfigError: If config file exists but is malformed
+    """
     if config_path is None:
         config_path = find_config()
 
     if config_path is None:
         return default_config()
-
-    # Error handling for malformed TOML
-    try:
-        data = load_config_if_exists(config_path)
-    except Exception as e:
-        raise ConfigError(f"Failed to parse {config_path}: {e}") from e
-
-    if data is None:
+    
+    if not config_path.exists():
         return default_config()
+
+    # M1 Fix: Raise ConfigError on malformed TOML (don't silently default)
+    try:
+        data = load_config(config_path)
+    except (ValueError, FileNotFoundError) as e:
+        raise ConfigError(f"Failed to parse {config_path}: {e}") from e
 
     # Use config file's parent as repo root if not specified
     effective_repo_root = repo_root or config_path.parent

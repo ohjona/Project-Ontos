@@ -58,6 +58,28 @@ ontos map
 
 ---
 
+### Q1.4: Cross-LLM Compatibility
+
+**Question:** Does Ontos work reliably across different LLM CLIs?
+
+**Known Issues:**
+- **Gemini CLI:** API error when parallel file reads have mixed success/failure
+  - Error: "number of function response parts must equal function call parts"
+  - Triggered when one file not found alongside successful reads
+- **Codex:** Unknown — needs testing
+
+**Context:**
+- Ontos claims to be "tool-agnostic"
+- But activation flow depends on LLM tool-calling behavior
+- Different LLMs handle errors differently
+
+**To Research:**
+- Test activation on Claude Code, Gemini CLI, Codex
+- Document compatibility matrix
+- Identify workarounds for each platform
+
+---
+
 ## 2. Value & Effectiveness
 
 ### Q2.1: Does Ontos Actually Help?

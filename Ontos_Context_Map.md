@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-14 04:28:22 UTC"
+generated: "2026-01-14 04:45:11 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-13 23:28:22
+Generated on: 2026-01-13 23:45:11
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -50,6 +50,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **obsidian_compatibility_proposal** [L2] [draft] (Obsidian_Compatibility_Proposal.md) ~2,200 tokens
   - Status: draft
   - Depends On: v3_0_implementation_roadmap
+- **ontos_strategic_analysis** [L2] (Ontos-Strategic-Analysis.md) ~3,400 tokens
+  - Status: active
+  - Depends On: mission, philosophy, ontology_spec, v3_0_technical_architecture
 - **phase0_golden_master_spec** [L2] (phase0_implementation_spec.md) ~10,300 tokens
   - Status: active
   - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture
@@ -148,6 +151,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **installation_experience_report** [L2] (Ontos_Installation_Experience_Report.md) ~2,200 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
+- **ontos_technical_architecture_map** [L2] (Ontos-Technical-Architecture-Map.md) ~2,300 tokens
+  - Status: active
+  - Depends On: ontology_spec, v3_0_technical_architecture
 - **schema** [L2] (schema.md) ~450 tokens
   - Status: active
   - Depends On: philosophy
@@ -207,6 +213,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20260112_v2_9_6_cleanup** [L2] (2026-01-12_chore-v2-9-6-cleanup.md) ~312 tokens
   - Status: active
   - Impacts: None
+- **log_20260113_analysis_docs_generation** [L2] (2026-01-13_analysis-docs-generation.md) ~339 tokens
+  - Status: active
+  - Impacts: ontos_strategic_analysis, ontos_technical_architecture_map
 - **log_20260113_phase2_v3_0_beta** [L1] (2026-01-13_phase2-v3-0-beta.md) ~192 tokens  ⚠️ auto-generated
   - Status: auto-generated
   - Impacts: None
@@ -239,6 +248,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontos_manual`, `cli`, `json_output`, `hook`, `doctor`, `export`
   - Concepts: argparse_cli, json_output, shim_hooks, legacy_cleanup
 - **2026-01-13** [chore] **Phase2 V3 0 Beta** (`log_20260113_phase2_v3_0_beta`)
+- **2026-01-13** [feature] **Analysis Docs Generation** (`log_20260113_analysis_docs_generation`)
+  - Impacted: `ontos_strategic_analysis`, `ontos_technical_architecture_map`
+  - Concepts: strategy, architecture, ontology
 - **2026-01-12** [chore] **Phase2 Core Decomposition** (`log_20260112_phase2_core_decomposition`)
   - Impacted: `ontos`
 - **2026-01-12** [feature] **Phase1 V3 0 Alpha** (`log_20260112_phase1_v3_0_alpha`)
@@ -254,10 +266,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Concepts: ontology, single-source-of-truth, immutability, import-safety
 - **2026-01-12** [chore] **Chore V2 9 6 Cleanup** (`log_20260112_v2_9_6_cleanup`)
   - Concepts: cleanup, v2.9.6, housekeeping
-- **2026-01-11** [feature] **V2 9 6** (`log_20260111_v2_9_6`)
-  - Impacted: `ontology_spec`
 
-*Showing 10 of 21 sessions*
+*Showing 10 of 22 sessions*
 
 ## 3. Dependency Audit
 - [BROKEN LINK] **phase4_chief_architect_response** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase4/Phase4_Chief_Architect_Response.md) references missing ID: `phase4_spec_review_consolidation`
@@ -292,17 +302,17 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
 - [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
   Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
-- [DEPTH] **phase3_pr_review_chief_architect** has dependency depth 9 (max: 5)
+- [DEPTH] **claude_opus_4_5_phase1_review_round2** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **phase3_implementation_prompt_antigravity** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **claude_opus_4_5_phase1_review** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **claude_opus_4_5_phase1_review_round2** has dependency depth 7 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
+- [DEPTH] **phase3_pr_review_chief_architect** has dependency depth 9 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **phase3_review_consolidation** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **phase3_implementation_prompt_antigravity** has dependency depth 8 (max: 5)
+- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [ARCHITECTURE] **phase3_review_consolidation** (strategy) depends on **claude_opus_4_5_phase3_alignment_review** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
@@ -375,6 +385,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20260112_phase1_v3_0_alpha | [2026-01-12_phase1-v3-0-alpha.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_phase1-v3-0-alpha.md) | log |
 | log_20260112_phase2_core_decomposition | [2026-01-12_phase2-core-decomposition.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_phase2-core-decomposition.md) | log |
 | log_20260112_v2_9_6_cleanup | [2026-01-12_chore-v2-9-6-cleanup.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_chore-v2-9-6-cleanup.md) | log |
+| log_20260113_analysis_docs_generation | [2026-01-13_analysis-docs-generation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_analysis-docs-generation.md) | log |
 | log_20260113_phase2_v3_0_beta | [2026-01-13_phase2-v3-0-beta.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_phase2-v3-0-beta.md) | log |
 | log_20260113_phase4_cli_release | [2026-01-13_phase4_cli_release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_phase4_cli_release.md) | log |
 | log_20260113_v3_0_1_release | [2026-01-13_v3_0_1_release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_v3_0_1_release.md) | log |
@@ -384,6 +395,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | ontology_spec | [ontology_spec.md](docs/reference/ontology_spec.md) | kernel |
 | ontos_agent_instructions | [Ontos_Agent_Instructions.md](docs/reference/Ontos_Agent_Instructions.md) | kernel |
 | ontos_manual | [Ontos_Manual.md](docs/reference/Ontos_Manual.md) | kernel |
+| ontos_strategic_analysis | [Ontos-Strategic-Analysis.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/analysis/Ontos-Strategic-Analysis.md) | strategy |
+| ontos_technical_architecture_map | [Ontos-Technical-Architecture-Map.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/analysis/Ontos-Technical-Architecture-Map.md) | atom |
 | phase0_golden_master_spec | [phase0_implementation_spec.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase0/phase0_implementation_spec.md) | strategy |
 | phase1_package_structure_spec | [phase1_implementation_spec.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase1/phase1_implementation_spec.md) | strategy |
 | phase2_godscript_reduction_instructions_antigravity | [Phase2_GodScript_Reduction_Instructions_Antigravity.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Phase2_GodScript_Reduction_Instructions_Antigravity.md) | strategy |

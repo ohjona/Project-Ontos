@@ -66,17 +66,40 @@ ontos map
 - **Gemini CLI:** API error when parallel file reads have mixed success/failure
   - Error: "number of function response parts must equal function call parts"
   - Triggered when one file not found alongside successful reads
-- **Codex:** Unknown — needs testing
+- **Codex:** Doesn't recognize "Activate Ontos" command
+  - Searches for `AGENTS.md` file (AI agent instruction convention)
+  - Looks for explicit "activate" command in docs
+  - Falls back to asking user what they meant
 
 **Context:**
 - Ontos claims to be "tool-agnostic"
 - But activation flow depends on LLM tool-calling behavior
 - Different LLMs handle errors differently
+- Each LLM CLI has its own instruction file convention
+
+**LLM Instruction File Conventions:**
+| LLM CLI | Instruction File | Status in Ontos |
+|---------|-----------------|-----------------|
+| Claude Code | `CLAUDE.md`, hooks | **Missing** - works by inference only |
+| Codex | `AGENTS.md` | **Missing** - doesn't recognize command |
+| Gemini CLI | Unknown | **Missing** - tries but hits API errors |
+| Cursor | `.cursorrules` | **Exists** - has explicit activation instructions |
+
+**Current State:** Only Cursor has explicit activation instructions (`.cursorrules`). Claude Code works because Claude infers what to do from codebase context, but this is fragile.
+
+**Proposed Solution: Export Templates**
+- Single Ontos configuration as source of truth
+- `ontos export --format=claude` → generates `CLAUDE.md`
+- `ontos export --format=codex` → generates `AGENTS.md`
+- `ontos export --format=cursor` → generates `.cursorrules`
+- Templates would include activation instructions, context map reference, workflow guidance
 
 **To Research:**
 - Test activation on Claude Code, Gemini CLI, Codex
 - Document compatibility matrix
 - Identify workarounds for each platform
+- Design export template system
+- Determine what content each LLM format needs
 
 ---
 
@@ -197,7 +220,32 @@ ontos map
 
 ## 5. Technical Debt
 
-### Q5.1: Architecture Violation
+### Q5.1: Archive Handling Strategy
+
+**Question:** Should archived documents be excluded from validation/scanning, or kept in the ontology but loaded conditionally?
+
+**Context:**
+- Current SKIP_PATTERNS includes `'archive/'` in contributor mode
+- Despite this, 39 validation errors appear from archived documents during "Activate Ontos"
+- Archived docs have broken dependencies (e.g., `spec_unified_cli` references removed documents)
+
+**Trade-offs:**
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| Skip entirely | Clean validation, no errors | Lose historical context |
+| Keep but don't validate | Preserve history, no errors | Inconsistent ontology state |
+| Keep and validate | Complete ontology | Must maintain old docs |
+| Conditional loading | Best of both | More complexity |
+
+**To Research:**
+- What's the purpose of the archive?
+- Do we need to query historical documents?
+- Should archived docs be queryable but not validated?
+
+---
+
+### Q5.2: Architecture Violation
 
 **Issue:** `ontos/core/config.py:229` imports from `ontos.io.git`
 
@@ -239,11 +287,14 @@ ontos map
 | **High** | Does Ontos actually help? | Value |
 | **High** | Open source decision | Business |
 | **High** | Package contents exposure | Publishing |
+| **High** | Cross-LLM compatibility + Export templates | Feature |
 | **Medium** | How does activation work? | Usage |
 | **Medium** | CLI documentation | Usage |
 | **Medium** | PyPI name ownership | Publishing |
+| **Medium** | Archive handling strategy | Tech Debt |
 | **Low** | Architecture violation | Tech Debt |
 | **Low** | Golden test expansion | Tech Debt |
+| **Low** | Test count reduction | Tech Debt |
 
 ---
 

@@ -6,6 +6,7 @@ Full argparse implementation per Spec v1.1 Section 4.1.
 """
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -13,6 +14,22 @@ from typing import List, Optional
 
 import ontos
 from ontos.ui.json_output import emit_json, emit_error, validate_json_output
+
+
+def _get_subprocess_env() -> dict:
+    """Get environment for subprocess calls with PYTHONPATH set.
+    
+    Ensures subprocesses can import from ontos package in source checkouts
+    by adding the project root to PYTHONPATH.
+    """
+    env = os.environ.copy()
+    project_root = str(Path(__file__).parent.parent)
+    existing_pythonpath = env.get('PYTHONPATH', '')
+    if existing_pythonpath:
+        env['PYTHONPATH'] = f"{project_root}{os.pathsep}{existing_pythonpath}"
+    else:
+        env['PYTHONPATH'] = project_root
+    return env
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -202,28 +219,16 @@ def _cmd_init(args) -> int:
 def _cmd_map(args) -> int:
     """Handle map command.
     
-    Delegates to legacy script for now since native function
-    requires docs/config collection that the script handles.
+    Uses -m module invocation for proper package imports in source checkouts.
     """
-    # Build command for the wrapper
-    scripts_dir = Path(__file__).parent / "_scripts"
-    script_path = scripts_dir / "ontos_generate_context_map.py"
-    
-    if not script_path.exists():
-        if args.json:
-            emit_error("Map script not found", "E_NOT_FOUND")
-        else:
-            print("Error: Map script not found", file=sys.stderr)
-        return 5
-    
-    cmd = [sys.executable, str(script_path)]
+    cmd = [sys.executable, "-m", "ontos._scripts.ontos_generate_context_map"]
     if args.strict:
         cmd.append("--strict")
     if args.output:
         cmd.extend(["--output", str(args.output)])
     
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=_get_subprocess_env(), cwd=str(Path(__file__).parent.parent))
         
         if args.json:
             # Wrap output in JSON format
@@ -371,7 +376,7 @@ def _cmd_wrapper(args) -> int:
 
     # Run the wrapper
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=_get_subprocess_env(), cwd=str(Path(__file__).parent.parent))
 
         # JSON validation per Decision
         if args.json:

@@ -12,7 +12,8 @@ from typing import Optional, List, Tuple
 # Add scripts dir to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from ontos_lib import parse_frontmatter, find_last_session_date
+from ontos.core.frontmatter import parse_frontmatter
+from ontos.core.paths import find_last_session_date
 from ontos_config import __version__, PROJECT_ROOT, is_ontos_repo
 from ontos.core.context import SessionContext
 from ontos.ui.output import OutputHandler

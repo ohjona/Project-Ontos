@@ -18,7 +18,7 @@ import shutil
 # Add scripts directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.ontos', 'scripts'))
 
-from ontos_lib import (
+from ontos.core.history import (
     get_log_date,
     ParsedLog,
     parse_log_for_history,

@@ -35,12 +35,12 @@ class TestResolveConfig:
     
     def test_resolve_config_import(self):
         """Verify resolve_config is importable."""
-        from ontos_lib import resolve_config
+        from ontos.core.paths import resolve_config
         assert callable(resolve_config)
     
     def test_resolve_config_mode_preset_automated(self):
         """Test that automated mode preset returns correct values."""
-        from ontos_lib import resolve_config
+        from ontos.core.paths import resolve_config
         from ontos_config_defaults import MODE_PRESETS
         
         # Verify preset exists and has expected values
@@ -69,7 +69,7 @@ class TestResolveConfig:
     
     def test_resolve_config_default_fallback(self):
         """Test that default parameter is used when setting not found."""
-        from ontos_lib import resolve_config
+        from ontos.core.paths import resolve_config
         
         result = resolve_config('NON_EXISTENT_SETTING', 'my_default')
         assert result == 'my_default'

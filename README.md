@@ -1,6 +1,7 @@
 # Project Ontos
 
 [![CI](https://github.com/ohjona/Project-Ontos/actions/workflows/ci.yml/badge.svg)](https://github.com/ohjona/Project-Ontos/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/ontos.svg)](https://pypi.org/project/ontos/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
@@ -80,16 +81,23 @@ Or simpler: **your project's memory that works everywhere.**
 
 ## Quick Start
 
-**Install** (paste into Claude Code, Cursor, or any agentic CLI):
+**Install** via pip (recommended for v3.0+):
 
 ```bash
-# Install Project Ontos in this repository
-curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
-python3 install.py
+pip install ontos
+ontos init
 ```
 
-> **Security Note:** The installer verifies SHA256 checksums of all downloaded assets.
-> See the [Ontos Manual](docs/reference/Ontos_Manual.md) for details.
+Or for development/custom installations:
+
+```bash
+git clone https://github.com/ohjona/Project-Ontos.git
+cd Project-Ontos
+pip install -e .
+ontos init
+```
+
+> **v3.0 Update:** Ontos is now a proper Python package. Use `ontos` CLI commands instead of direct script execution.
 
 **Use it** - once installed, tell your Agent:
 
@@ -142,11 +150,12 @@ Your `ontos_config.py` customizations are automatically preserved.
 For air-gapped environments:
 
 ```bash
-# Download on a connected machine
-curl -LO https://github.com/ohjona/Project-Ontos/releases/download/v2.9.4/ontos-bundle.tar.gz
+# Download wheel on a connected machine
+pip download ontos -d ./packages
 
-# Get checksum from releases page, then install
-python3 install.py --bundle ./ontos-bundle.tar.gz --checksum <SHA256>
+# Install offline
+pip install --no-index --find-links=./packages ontos
+ontos init
 ```
 
 ---
@@ -180,6 +189,7 @@ CI/CD validation catches broken links, circular dependencies, and architectural 
 
 - **[Ontos Manual](docs/reference/Ontos_Manual.md)**: Complete reference — installation, workflow, configuration, errors
 - **[Agent Instructions](docs/reference/Ontos_Agent_Instructions.md)**: Commands for AI agents
+- **[Migration Guide v2→v3](docs/reference/Migration_v2_to_v3.md)**: Upgrading from v2.x to v3.0
 - **[Minimal Example](examples/minimal/README.md)**: 3-file quick start
 - **[Changelog](Ontos_CHANGELOG.md)**: Version history
 

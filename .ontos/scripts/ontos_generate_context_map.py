@@ -32,30 +32,21 @@ from ontos_config import (
     is_ontos_repo
 )
 
-from ontos_lib import (
-    parse_frontmatter,
-    normalize_depends_on,
-    normalize_type,
-    load_common_concepts,
-    resolve_config,
-    get_logs_dir,
-    get_log_count,
-    get_logs_older_than,
-    get_git_last_modified,
-    load_decision_history_entries,
-    get_decision_history_path,
-    get_archive_logs_dir,
-    # v2.7 imports
+from ontos.core.frontmatter import parse_frontmatter, normalize_depends_on, normalize_type, load_common_concepts
+from ontos.core.paths import resolve_config, get_logs_dir, get_log_count, get_logs_older_than, get_decision_history_path, get_archive_logs_dir
+from ontos.core.config import get_git_last_modified
+from ontos.core.proposals import load_decision_history_entries
+from ontos.core.staleness import (
     normalize_describes,
     parse_describes_verified,
     validate_describes_field,
     detect_describes_cycles,
     check_staleness,
-    generate_decision_history,
     DescribesValidationError,
     DescribesWarning,
     StalenessInfo,
 )
+from ontos.core.history import generate_decision_history
 
 from ontos_config_defaults import (
     VALID_STATUS,
@@ -406,19 +397,21 @@ def generate_provenance_header() -> str:
         
     timestamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    header = f"""<!--
-Ontos Context Map
-Generated: {timestamp}
-Mode: {mode}
-Scanned: {scanned_dir}
--->"""
+    # v3.0.1: YAML frontmatter for machine-readable provenance
+    header = f"""---
+type: generated
+generator: ontos_generate_context_map
+generated: "{timestamp}"
+mode: {mode}
+scanned: {scanned_dir}
+---
+"""
 
     # Add notice for Project Ontos repo (serves as example for users)
     if is_ontos_repo():
         header += """
 > **Note for users:** This context map documents Project Ontos's own development.
-> When you run `python3 ontos_init.py` or `python3 .ontos/scripts/ontos_generate_context_map.py`
-> in your project, this file will be overwritten with your project's context.
+> When you run `ontos map` in your project, this file will be overwritten with your project's context.
 """
 
     return header

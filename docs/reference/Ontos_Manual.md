@@ -5,7 +5,7 @@ status: active
 depends_on: []
 ---
 
-# Ontos Manual v2.9
+# Ontos Manual v3.0
 
 *The complete reference for Project Ontos*
 
@@ -14,15 +14,15 @@ depends_on: []
 ## Quick Start
 
 ```bash
-# Install Ontos in your project
-curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
-python3 install.py
+# Install Ontos via pip
+pip install ontos
+ontos init
 
 # Activate
 # Tell your AI: "Ontos"
 ```
 
-> **Security Note:** The installer verifies SHA256 checksums of all downloaded assets.
+> **v3.0 Note:** Ontos is now a proper Python package. See the [Migration Guide](Migration_v2_to_v3.md) for v2.x users.
 
 ---
 
@@ -332,38 +332,24 @@ Uses OAuth2 with JWT tokens.
 - Python 3.9+
 - Git
 
-### Standard Install (v2.9+)
-
-Run this one-liner in your project root:
+### Standard Install (v3.0+)
 
 ```bash
-curl -sO https://raw.githubusercontent.com/ohjona/Project-Ontos/v2.9.4/install.py
-python3 install.py
-```
-
-The installer will:
-1. Verify SHA256 checksums of all assets (security first)
-2. Download and extract the Ontos bundle
-3. Run initialization (`ontos init`)
-
-### Manual Install (Legacy)
-```bash
-# Copy scripts
-cp -r /path/to/ontos/.ontos your-project/
-
-# Create docs directory
-mkdir -p docs/reference
-
-# Copy agent instructions
-cp /path/to/ontos/docs/reference/Ontos_Agent_Instructions.md your-project/docs/reference/
-
-# Copy common concepts (v2.2+)
-cp /path/to/ontos/.ontos-internal/reference/Common_Concepts.md your-project/docs/reference/
-
-# Initialize (installs hooks, generates context map)
-cd your-project
+pip install ontos
 ontos init
 ```
+
+For development:
+```bash
+git clone https://github.com/ohjona/Project-Ontos.git
+cd Project-Ontos
+pip install -e .
+ontos init
+```
+
+### Upgrading from v2.x
+
+See the [Migration Guide](Migration_v2_to_v3.md) for step-by-step instructions.
 
 ### Configuration
 

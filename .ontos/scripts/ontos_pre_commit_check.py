@@ -14,7 +14,7 @@ import subprocess
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from ontos_lib import (
+from ontos.core.paths import (
     resolve_config,
     get_logs_dir,
     get_log_count,

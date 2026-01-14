@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-14 04:45:14 UTC"
+generated: "2026-01-14 04:45:19 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-13 23:45:14
+Generated on: 2026-01-13 23:45:19
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -216,6 +216,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20260113_analysis_docs_generation** [L2] (2026-01-13_analysis-docs-generation.md) ~339 tokens
   - Status: active
   - Impacts: ontos_strategic_analysis, ontos_technical_architecture_map
+- **log_20260113_integrate_analysis_docs** [L1] (2026-01-13_integrate-analysis-docs.md) ~118 tokens  ⚠️ active
+  - Status: active
+  - Impacts: ontos_strategic_analysis, ontos_technical_architecture_map
 - **log_20260113_phase2_v3_0_beta** [L1] (2026-01-13_phase2-v3-0-beta.md) ~192 tokens  ⚠️ auto-generated
   - Status: auto-generated
   - Impacts: None
@@ -248,6 +251,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Impacted: `ontos_manual`, `cli`, `json_output`, `hook`, `doctor`, `export`
   - Concepts: argparse_cli, json_output, shim_hooks, legacy_cleanup
 - **2026-01-13** [chore] **Phase2 V3 0 Beta** (`log_20260113_phase2_v3_0_beta`)
+- **2026-01-13** [chore] **Integrate Analysis Docs** (`log_20260113_integrate_analysis_docs`)
+  - Impacted: `ontos_strategic_analysis`, `ontos_technical_architecture_map`
 - **2026-01-13** [feature] **Analysis Docs Generation** (`log_20260113_analysis_docs_generation`)
   - Impacted: `ontos_strategic_analysis`, `ontos_technical_architecture_map`
   - Concepts: strategy, architecture, ontology
@@ -264,10 +269,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2026-01-12** [feature] **Feat V2 9 6 Ontology Single Source Of Truth** (`log_20260112_feat_v2_9_6_ontology_single_source_of_truth`)
   - Impacted: `ontology_spec`
   - Concepts: ontology, single-source-of-truth, immutability, import-safety
-- **2026-01-12** [chore] **Chore V2 9 6 Cleanup** (`log_20260112_v2_9_6_cleanup`)
-  - Concepts: cleanup, v2.9.6, housekeeping
 
-*Showing 10 of 22 sessions*
+*Showing 10 of 23 sessions*
 
 ## 3. Dependency Audit
 - [BROKEN LINK] **phase4_chief_architect_response** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase4/Phase4_Chief_Architect_Response.md) references missing ID: `phase4_spec_review_consolidation`
@@ -302,9 +305,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
 - [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
   Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
-- [DEPTH] **phase3_pr_review_chief_architect** has dependency depth 9 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **phase3_review_consolidation** has dependency depth 6 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **claude_opus_4_5_phase1_review** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
@@ -312,7 +315,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **phase3_implementation_prompt_antigravity** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
+- [DEPTH] **phase3_pr_review_chief_architect** has dependency depth 9 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [ARCHITECTURE] **phase3_review_consolidation** (strategy) depends on **claude_opus_4_5_phase3_alignment_review** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
@@ -386,6 +389,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20260112_phase2_core_decomposition | [2026-01-12_phase2-core-decomposition.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_phase2-core-decomposition.md) | log |
 | log_20260112_v2_9_6_cleanup | [2026-01-12_chore-v2-9-6-cleanup.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-12_chore-v2-9-6-cleanup.md) | log |
 | log_20260113_analysis_docs_generation | [2026-01-13_analysis-docs-generation.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_analysis-docs-generation.md) | log |
+| log_20260113_integrate_analysis_docs | [2026-01-13_integrate-analysis-docs.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_integrate-analysis-docs.md) | log |
 | log_20260113_phase2_v3_0_beta | [2026-01-13_phase2-v3-0-beta.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_phase2-v3-0-beta.md) | log |
 | log_20260113_phase4_cli_release | [2026-01-13_phase4_cli_release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_phase4_cli_release.md) | log |
 | log_20260113_v3_0_1_release | [2026-01-13_v3_0_1_release.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-13_v3_0_1_release.md) | log |

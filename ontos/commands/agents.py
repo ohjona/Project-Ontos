@@ -66,13 +66,16 @@ If `AGENTS.md` is older than the context map or logs, regenerate with `ontos age
 '''
 
 
-def find_repo_root() -> Path:
+def find_repo_root() -> Optional[Path]:
     """
     Find the repository root using 3-method fallback.
     
     1. Find .ontos.toml in current or parent dirs
     2. Use git rev-parse --show-toplevel
     3. Fall back to .git directory walk
+    
+    Returns:
+        Path to repo root, or None if no repository found.
     """
     current = Path.cwd()
     
@@ -99,7 +102,8 @@ def find_repo_root() -> Path:
         if (parent / ".git").exists():
             return parent
     
-    return current
+    # No repo found - return None instead of cwd to prevent arbitrary writes
+    return None
 
 
 def gather_stats(repo_root: Path) -> Tuple[str, str]:
@@ -149,7 +153,6 @@ def gather_stats(repo_root: Path) -> Tuple[str, str]:
         if logs_dir.exists():
             for log_file in logs_dir.glob("*.md"):
                 mtimes.append(log_file.stat().st_mtime)
-                break  # Just check first log for performance
         
         if mtimes:
             max_mtime = max(mtimes)
@@ -251,10 +254,9 @@ def agents_command(options: AgentsOptions) -> Tuple[int, str]:
         1: File exists (use --force)
         2: Configuration error
     """
-    try:
-        repo_root = find_repo_root()
-    except Exception as e:
-        return 2, f"Configuration error: {e}"
+    repo_root = find_repo_root()
+    if repo_root is None:
+        return 2, "Error: No repository found. Run from within a git repository or Ontos project."
     
     messages = []
     

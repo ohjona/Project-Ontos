@@ -368,7 +368,14 @@ def check_cli_availability() -> CheckResult:
 
 def check_agents_staleness() -> CheckResult:
     """Check 8: AGENTS.md is not stale relative to source files."""
-    agents_path = Path.cwd() / "AGENTS.md"
+    # Use shared repo-root helper (M2 fix)
+    from ontos.commands.agents import find_repo_root
+    
+    repo_root = find_repo_root()
+    if repo_root is None:
+        repo_root = Path.cwd()  # Fallback for doctor — still check if possible
+    
+    agents_path = repo_root / "AGENTS.md"
     
     if not agents_path.exists():
         return CheckResult(
@@ -388,13 +395,13 @@ def check_agents_staleness() -> CheckResult:
         try:
             from ontos.io.config import load_project_config
             config = load_project_config()
-            context_map = Path.cwd() / config.paths.context_map
-            logs_dir = Path.cwd() / config.paths.logs_dir
+            context_map = repo_root / config.paths.context_map
+            logs_dir = repo_root / config.paths.logs_dir
         except Exception:
-            context_map = Path.cwd() / "Ontos_Context_Map.md"
-            logs_dir = Path.cwd() / ".ontos-internal" / "logs"
+            context_map = repo_root / "Ontos_Context_Map.md"
+            logs_dir = repo_root / ".ontos-internal" / "logs"
         
-        config_path = Path.cwd() / ".ontos.toml"
+        config_path = repo_root / ".ontos.toml"
         
         # Collect existing source file mtimes
         source_mtimes = []
@@ -408,10 +415,11 @@ def check_agents_staleness() -> CheckResult:
             source_paths.append(config_path.name)
         
         if logs_dir.exists():
-            # Check most recent log file
-            log_files = sorted(logs_dir.glob("*.md"), key=lambda p: p.stat().st_mtime, reverse=True)
+            # M5 fix: Use max() for O(n) instead of sorted() O(n log n)
+            log_files = list(logs_dir.glob("*.md"))
             if log_files:
-                source_mtimes.append(log_files[0].stat().st_mtime)
+                max_log_mtime = max(f.stat().st_mtime for f in log_files)
+                source_mtimes.append(max_log_mtime)
                 source_paths.append(f"{logs_dir.name}/")
         
         if not source_mtimes:

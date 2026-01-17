@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-17 22:27:19 UTC"
+generated: "2026-01-17 23:23:03 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-17 17:27:19
+Generated on: 2026-01-17 18:23:03
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -249,6 +249,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **log_20260116_version_rename** [L1] (2026-01-16_version-rename.md) ~140 tokens  ⚠️ active
   - Status: active
   - Impacts: None
+- **log_20260117_archive-pr-48-approval-and-push** [L1] (2026-01-17_archive-pr-48-approval-and-push.md) ~73 tokens  ⚠️ active
+  - Status: active
+  - Impacts: None
 - **log_20260117_readme-and-license-update-for-v3-0-0** [L1] (2026-01-17_readme-and-license-update-for-v3-0-0.md) ~75 tokens  ⚠️ active
   - Status: active
   - Impacts: None
@@ -280,6 +283,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Concepts: activation, agents, pypi, cli
 - **2026-01-17** [chore] **V3 0 0 Readme License And Log Fix** (`log_20260117_v3-0-0-readme-license-and-log-fix`)
 - **2026-01-17** [chore] **Readme And License Update For V3 0 0** (`log_20260117_readme-and-license-update-for-v3-0-0`)
+- **2026-01-17** [chore] **Archive Pr 48 Approval And Push** (`log_20260117_archive-pr-48-approval-and-push`)
 - **2026-01-16** [chore] **Version Rename** (`log_20260116_version_rename`)
 - **2026-01-15** [chore] **Philosophy Docs Update** (`log_20260115_philosophy_docs_update`)
 - **2026-01-14** [chore] **Philosophy Research And Tech Debt** (`log_20260114_philosophy_research_and_tech_debt`)
@@ -290,16 +294,14 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 - **2026-01-13** [chore] **Phase4 Cli Release** (`log_20260113_phase4_cli_release`)
   - Concepts: argparse_cli, json_output, shim_hooks, legacy_cleanup
 - **2026-01-13** [chore] **Phase2 V3 0 Beta** (`log_20260113_phase2_v3_0_beta`)
-- **2026-01-13** [chore] **Integrate Analysis Docs** (`log_20260113_integrate_analysis_docs`)
-  - Impacted: `ontos_strategic_analysis`, `ontos_technical_architecture_map`
 
-*Showing 10 of 29 sessions*
+*Showing 10 of 30 sessions*
 
 ## 3. Dependency Audit
-- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
-  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
 - [ORPHAN] **phase3_implementation_spec_review_codex** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3-Implementation-Spec-Review-Codex.md) has no dependents
   Fix: Add `phase3_implementation_spec_review_codex` to another document's depends_on, or delete if unused
+- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
+  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
 - [ARCHITECTURE] **phase2_implementation_instructions_antigravity** (strategy) depends on **chief_architect_round2_critical_analysis** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
 - [ARCHITECTURE] **phase5_implementation_spec** (strategy) depends on **phase4_final_approval_chief_architect** (approval)
@@ -357,6 +359,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 | log_20260114_philosophy_research_and_tech_debt | [2026-01-14_philosophy-research-and-tech-debt.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-14_philosophy-research-and-tech-debt.md) | log |
 | log_20260115_philosophy_docs_update | [2026-01-15_philosophy-docs-update.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-15_philosophy-docs-update.md) | log |
 | log_20260116_version_rename | [2026-01-16_version-rename.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-16_version-rename.md) | log |
+| log_20260117_archive-pr-48-approval-and-push | [2026-01-17_archive-pr-48-approval-and-push.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-17_archive-pr-48-approval-and-push.md) | log |
 | log_20260117_readme-and-license-update-for-v3-0-0 | [2026-01-17_readme-and-license-update-for-v3-0-0.md](docs/logs/2026-01-17_readme-and-license-update-for-v3-0-0.md) | log |
 | log_20260117_v3-0-0-readme-license-and-log-fix | [2026-01-17_v3-0-0-readme-license-and-log-fix.md](docs/logs/2026-01-17_v3-0-0-readme-license-and-log-fix.md) | log |
 | log_20260117_v3_0_0_activation_survival | [2026-01-17_v3_0_0_activation_survival.md](/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/logs/2026-01-17_v3_0_0_activation_survival.md) | log |

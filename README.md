@@ -214,9 +214,16 @@ v3.0 transformed Ontos from repo-injected scripts into a pip-installable package
 
 ---
 
-## Contributing
+## Feedback
 
-Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+This is a source-available project. The code is public for transparency, not contribution.
+
+**Welcome:**
+- Bug reports and feature requests via [GitHub Issues](https://github.com/ohjona/Project-Ontos/issues)
+- Questions and feedback
+
+**Not accepted:**
+- Pull requests (proprietary codebase)
 
 ---
 

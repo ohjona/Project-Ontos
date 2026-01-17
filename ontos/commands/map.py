@@ -120,26 +120,40 @@ generated_at: {timestamp}
 This document provides a navigable index of all tracked documents in the knowledge graph."""
 
 
+def _escape_markdown_table_cell(value: str) -> str:
+    """Escape special characters for markdown table cells.
+
+    Escapes pipe characters and backslashes that would break table formatting.
+    """
+    if not value:
+        return value
+    # Escape backslashes first, then pipes
+    return value.replace("\\", "\\\\").replace("|", "\\|")
+
+
 def _generate_document_table(docs: Dict[str, DocumentData]) -> str:
     """Generate document listing table."""
     if not docs:
         return "## Documents\n\nNo documents found."
-    
+
     lines = [
         "## Documents",
         "",
         "| Path | ID | Type | Status |",
         "|------|-----|------|--------|",
     ]
-    
+
     # Sort docs by path
     sorted_docs = sorted(docs.values(), key=lambda d: str(d.filepath))
-    
+
     for doc in sorted_docs:
         doc_type = doc.type.value if hasattr(doc.type, 'value') else str(doc.type)
         doc_status = doc.status.value if hasattr(doc.status, 'value') else str(doc.status)
-        lines.append(f"| {doc.filepath} | {doc.id} | {doc_type} | {doc_status} |")
-    
+        # Escape special characters to prevent table breakage
+        filepath = _escape_markdown_table_cell(str(doc.filepath))
+        doc_id = _escape_markdown_table_cell(doc.id)
+        lines.append(f"| {filepath} | {doc_id} | {doc_type} | {doc_status} |")
+
     return "\n".join(lines)
 
 

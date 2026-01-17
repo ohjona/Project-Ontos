@@ -256,6 +256,14 @@ def main() -> int:
         filepath = Path(params['output'])
         if not filepath.is_absolute():
             filepath = Path(PROJECT_ROOT) / filepath
+
+        # Path safety validation: ensure output is within project root
+        try:
+            filepath.resolve().relative_to(Path(PROJECT_ROOT).resolve())
+        except ValueError:
+            output.error(f"Output path must be within project root ({PROJECT_ROOT})")
+            return 1
+
         return 0 if write_stub_file(filepath, frontmatter, output=output) else 1
     else:
         print_stub_to_stdout(frontmatter, output)

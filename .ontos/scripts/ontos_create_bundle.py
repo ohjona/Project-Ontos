@@ -196,6 +196,17 @@ def main() -> int:
     project_root = script_dir.parent.parent
     
     output_dir = Path(args.output)
+
+    # Path safety validation: ensure output is within project root
+    try:
+        output_dir.resolve().relative_to(project_root.resolve())
+    except ValueError:
+        print(f"Warning: Output directory '{output_dir}' is outside project root.")
+        confirm = input("Continue anyway? [y/N] ").strip().lower()
+        if confirm != 'y':
+            print("Aborted.")
+            return 1
+
     if not args.dry_run:
         output_dir.mkdir(exist_ok=True)
     

@@ -122,6 +122,18 @@ class TestAgentsCommand:
         assert exit_code == 2
         assert "within repository root" in message
 
+    def test_rejects_path_traversal_attack(self, tmp_path, monkeypatch):
+        """Should reject path traversal attempts like ../../etc/passwd."""
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".ontos.toml").write_text("[ontos]\nversion = '3.0'")
+
+        # Attempt path traversal
+        options = AgentsOptions(output_path=Path("../../etc/passwd"))
+        exit_code, message = agents_command(options)
+
+        assert exit_code == 2
+        assert "within repository root" in message
+
     def test_custom_output_path_within_repo(self, tmp_path, monkeypatch):
         """Should allow custom output path within repo."""
         monkeypatch.chdir(tmp_path)

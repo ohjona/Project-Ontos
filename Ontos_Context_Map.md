@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-17 13:21:52 UTC"
+generated: "2026-01-17 14:57:46 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-17 08:21:52
+Generated on: 2026-01-17 09:57:46
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -46,10 +46,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: v3_0_implementation_roadmap, installation_ux_proposal
 - **installation_ux_proposal** [L2] [draft] (Installation_UX_Proposal.md) ~7,100 tokens
   - Status: draft
-  - Depends On: philosophy, mission, ontos_manual
-- **installation_ux_proposal_review** [L2] [draft] (Installation_UX_Proposal_Review_Codex.md) ~948 tokens
+  - Depends On: philosophy, mission
+- **installation_ux_proposal_review** [L2] [draft] (Installation_UX_Proposal_Review_Codex.md) ~944 tokens
   - Status: draft
-  - Depends On: installation_ux_proposal, philosophy, mission, ontos_manual
+  - Depends On: installation_ux_proposal, philosophy, mission
 - **maintain_command_v3_proposal** [L2] [draft] (Maintain_Command_v3_Proposal.md) ~1,800 tokens
   - Status: draft
   - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture
@@ -58,10 +58,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: v3_0_implementation_roadmap
 - **ontos_strategic_analysis** [L2] (Ontos-Strategic-Analysis.md) ~3,400 tokens
   - Status: active
-  - Depends On: mission, philosophy, ontology_spec, v3_0_technical_architecture
+  - Depends On: mission, philosophy, v3_0_technical_architecture
 - **ontos_strategic_analysis_codex** [L2] (Ontos-Strategic-Analysis-Codex.md) ~3,400 tokens
   - Status: active
-  - Depends On: mission, philosophy, ontology_spec, v3_0_technical_architecture
+  - Depends On: mission, philosophy, v3_0_technical_architecture
 - **phase0_golden_master_spec** [L2] (phase0_implementation_spec.md) ~10,300 tokens
   - Status: active
   - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture
@@ -70,28 +70,28 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: phase0_golden_master_spec, v3_0_implementation_roadmap
 - **phase2_godscript_reduction_instructions_antigravity** [L2] (Phase2_GodScript_Reduction_Instructions_Antigravity.md) ~4,900 tokens
   - Status: active
-  - Depends On: phase2_implementation_spec, phase2_implementation_instructions_antigravity
+  - Depends On: phase2_implementation_instructions_antigravity
 - **phase2_implementation_instructions_antigravity** [L2] (Phase2_Implementation_Instructions_Antigravity.md) ~3,500 tokens
   - Status: active
-  - Depends On: phase2_implementation_spec, v3_0_technical_architecture, v3_0_implementation_roadmap, chief_architect_round2_critical_analysis
-- **phase3_final_approval_chief_architect** [L2] (Phase3_Final_Approval_Chief_Architect.md) ~933 tokens
+  - Depends On: v3_0_technical_architecture, v3_0_implementation_roadmap, chief_architect_round2_critical_analysis
+- **phase3_final_approval_chief_architect** [L1] (Phase3_Final_Approval_Chief_Architect.md) ~909 tokens  ⚠️ complete
   - Status: complete
-  - Depends On: phase3_code_verification_codex, phase3_fix_summary_antigravity, phase3_code_review_consolidation
+  - Depends On: None
 - **phase3_implementation_prompt_antigravity** [L2] (Phase3_Implementation_Prompt_Antigravity.md) ~8,000 tokens
   - Status: active
   - Depends On: phase3_implementation_spec, chief_architect_phase3_response
 - **phase3_implementation_spec** [L2] (Phase3-Implementation-Spec.md) ~7,500 tokens
   - Status: active
-  - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture, phase2_implementation_spec
+  - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture
 - **phase3_pr_review_chief_architect** [L2] (Phase3_PR_Review_Chief_Architect.md) ~3,600 tokens
   - Status: active
   - Depends On: phase3_implementation_spec, phase3_implementation_prompt_antigravity
 - **phase3_review_consolidation** [L2] (Phase3-Review-Consolidation.md) ~5,100 tokens
   - Status: complete
-  - Depends On: phase3_implementation_spec, phase3_review_report_gemini, claude_opus_4_5_phase3_alignment_review, phase3_implementation_spec_review_codex
-- **phase4_chief_architect_response** [L2] (Phase4_Chief_Architect_Response.md) ~3,700 tokens
+  - Depends On: phase3_implementation_spec, claude_opus_4_5_phase3_alignment_review, phase3_implementation_spec_review_codex
+- **phase4_chief_architect_response** [L1] (Phase4_Chief_Architect_Response.md) ~3,700 tokens  ⚠️ complete
   - Status: complete
-  - Depends On: phase4_spec_review_consolidation
+  - Depends On: None
 - **phase4_code_review_claude** [L2] (Phase4_Code_Review_Claude.md) ~2,100 tokens
   - Status: complete
   - Depends On: phase4_implementation_spec
@@ -129,7 +129,7 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: installation_ux_proposal, claude_install_ux_review, gemini_install_ux_review, installation_ux_proposal_review
 - **chief_architect_round2_critical_analysis** [L2] (Chief_Architect_Round2_Critical_Analysis.md) ~1,800 tokens
   - Status: complete
-  - Depends On: phase2_implementation_spec, phase2_spec_verification_review_gemini, phase2_implementation_spec_verification_review_codex_round2, claude_opus_4_5_phase2_verification_review
+  - Depends On: claude_opus_4_5_phase2_verification_review
 - **claude_install_ux_review** [L2] (Claude_InstallUX_Review.md) ~3,500 tokens
   - Status: complete
   - Depends On: installation_ux_proposal
@@ -141,10 +141,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: phase1_package_structure_spec, claude_opus_4_5_phase1_review
 - **claude_opus_4_5_phase2_alignment_review** [L2] (Claude_Opus_4.5_Phase2_Alignment_Review.md) ~3,100 tokens
   - Status: complete
-  - Depends On: phase2_implementation_spec, v3_0_implementation_roadmap, v3_0_technical_architecture, v3_0_strategy_decisions
-- **claude_opus_4_5_phase2_verification_review** [L2] (Claude_Opus_4.5_Phase2_Verification_Review.md) ~1,000 tokens
+  - Depends On: v3_0_implementation_roadmap, v3_0_technical_architecture, v3_0_strategy_decisions
+- **claude_opus_4_5_phase2_verification_review** [L1] (Claude_Opus_4.5_Phase2_Verification_Review.md) ~1,000 tokens  ⚠️ complete
   - Status: complete
-  - Depends On: phase2_implementation_spec, phase2_implementation_spec_review_consolidation, chief_architect_phase2_response
+  - Depends On: None
 - **claude_opus_4_5_phase3_alignment_review** [L2] (Claude_Opus_4.5_Phase3_Alignment_Review.md) ~3,200 tokens
   - Status: complete
   - Depends On: phase3_implementation_spec, v3_0_implementation_roadmap, v3_0_technical_architecture, v3_0_strategy_decisions
@@ -162,10 +162,10 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   - Depends On: installation_ux_proposal
 - **ontos_technical_architecture_map** [L2] (Ontos-Technical-Architecture-Map.md) ~2,300 tokens
   - Status: active
-  - Depends On: ontology_spec, v3_0_technical_architecture
+  - Depends On: v3_0_technical_architecture
 - **ontos_technical_architecture_map_codex** [L2] (Ontos-Technical-Architecture-Map-Codex.md) ~2,100 tokens
   - Status: active
-  - Depends On: ontology_spec, v3_0_technical_architecture
+  - Depends On: v3_0_technical_architecture
 - **schema** [L2] (schema.md) ~450 tokens
   - Status: active
   - Depends On: philosophy
@@ -291,49 +291,19 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 *Showing 10 of 26 sessions*
 
 ## 3. Dependency Audit
-- [BROKEN LINK] **phase4_chief_architect_response** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase4/Phase4_Chief_Architect_Response.md) references missing ID: `phase4_spec_review_consolidation`
-  Fix: Add a document with `id: phase4_spec_review_consolidation` or remove it from depends_on
-- [BROKEN LINK] **phase3_final_approval_chief_architect** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3_Final_Approval_Chief_Architect.md) references missing ID: `phase3_code_verification_codex`
-  Fix: Add a document with `id: phase3_code_verification_codex` or remove it from depends_on
-- [BROKEN LINK] **phase3_final_approval_chief_architect** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3_Final_Approval_Chief_Architect.md) references missing ID: `phase3_fix_summary_antigravity`
-  Fix: Add a document with `id: phase3_fix_summary_antigravity` or remove it from depends_on
-- [BROKEN LINK] **phase3_final_approval_chief_architect** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3_Final_Approval_Chief_Architect.md) references missing ID: `phase3_code_review_consolidation`
-  Fix: Add a document with `id: phase3_code_review_consolidation` or remove it from depends_on
-- [BROKEN LINK] **phase3_implementation_spec** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3-Implementation-Spec.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
-- [BROKEN LINK] **phase3_review_consolidation** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3-Review-Consolidation.md) references missing ID: `phase3_review_report_gemini`
-  Fix: Add a document with `id: phase3_review_report_gemini` or remove it from depends_on
-- [BROKEN LINK] **claude_opus_4_5_phase2_alignment_review** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Claude_Opus_4.5_Phase2_Alignment_Review.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
-- [BROKEN LINK] **claude_opus_4_5_phase2_verification_review** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Claude_Opus_4.5_Phase2_Verification_Review.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
-- [BROKEN LINK] **claude_opus_4_5_phase2_verification_review** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Claude_Opus_4.5_Phase2_Verification_Review.md) references missing ID: `phase2_implementation_spec_review_consolidation`
-  Fix: Add a document with `id: phase2_implementation_spec_review_consolidation` or remove it from depends_on
-- [BROKEN LINK] **claude_opus_4_5_phase2_verification_review** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Claude_Opus_4.5_Phase2_Verification_Review.md) references missing ID: `chief_architect_phase2_response`
-  Fix: Add a document with `id: chief_architect_phase2_response` or remove it from depends_on
-- [BROKEN LINK] **chief_architect_round2_critical_analysis** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Chief_Architect_Round2_Critical_Analysis.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
-- [BROKEN LINK] **chief_architect_round2_critical_analysis** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Chief_Architect_Round2_Critical_Analysis.md) references missing ID: `phase2_spec_verification_review_gemini`
-  Fix: Add a document with `id: phase2_spec_verification_review_gemini` or remove it from depends_on
-- [BROKEN LINK] **chief_architect_round2_critical_analysis** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Chief_Architect_Round2_Critical_Analysis.md) references missing ID: `phase2_implementation_spec_verification_review_codex_round2`
-  Fix: Add a document with `id: phase2_implementation_spec_verification_review_codex_round2` or remove it from depends_on
-- [BROKEN LINK] **phase2_godscript_reduction_instructions_antigravity** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Phase2_GodScript_Reduction_Instructions_Antigravity.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
-- [BROKEN LINK] **phase2_implementation_instructions_antigravity** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase2/Phase2_Implementation_Instructions_Antigravity.md) references missing ID: `phase2_implementation_spec`
-  Fix: Add a document with `id: phase2_implementation_spec` or remove it from depends_on
 - [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
   Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
-- [DEPTH] **phase3_review_consolidation** has dependency depth 6 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **claude_opus_4_5_phase1_review_round2** has dependency depth 7 (max: 5)
+- [DEPTH] **claude_opus_4_5_phase1_review** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **phase3_implementation_prompt_antigravity** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **chief_architect_phase3_response** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **phase3_pr_review_chief_architect** has dependency depth 9 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **claude_opus_4_5_phase1_review** has dependency depth 6 (max: 5)
+- [DEPTH] **claude_opus_4_5_phase1_review_round2** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **phase3_review_consolidation** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [ARCHITECTURE] **phase3_review_consolidation** (strategy) depends on **claude_opus_4_5_phase3_alignment_review** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types

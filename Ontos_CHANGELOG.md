@@ -21,6 +21,22 @@ All notable changes to **Project Ontos itself** (the protocol and tooling) will 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.2] - 2026-01-17
+
+### Theme: "Test Infrastructure"
+
+Test and CI fixes for v3.0 architecture.
+
+### Fixed
+- **CLI tests** — Updated to use `python -m ontos` instead of deleted `ontos.py`
+- **Golden master scripts** — Updated for v3.0 CLI invocation
+
+### Changed
+- **Golden master tests** — Temporarily skipped until baselines recaptured for v3.0
+- **README** — Added GitHub badge, updated Contributing → Feedback section
+
+---
+
 ## [3.0.1] - 2026-01-17
 
 ### Theme: "Root Cleanup"

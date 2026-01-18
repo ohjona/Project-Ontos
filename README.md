@@ -4,6 +4,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/ontos.svg)](https://pypi.org/project/ontos/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-Source-black?logo=github)](https://github.com/ohjona/Project-Ontos)
 
 **Portable context for the agentic era.**
 

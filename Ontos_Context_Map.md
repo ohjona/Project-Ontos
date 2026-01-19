@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-19 01:44:14 UTC"
+generated: "2026-01-19 02:19:51 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-18 20:44:14
+Generated on: 2026-01-18 21:19:51
 Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -338,12 +338,12 @@ Scanned Directory: `/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal, docs`
   Fix: Add a document with `id: v3_0_2_implementation_spec` or remove it from depends_on
 - [CYCLE] Circular dependency: v3_1_0_implementation_plan -> v3_1_0_sidecar_pattern -> v3_1_0_implementation_plan
   Fix: Remove one of the depends_on links to break the cycle
+- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
+  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
 - [ORPHAN] **phase3_implementation_spec_review_codex** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/v3.0/Phase3/Phase3-Implementation-Spec-Review-Codex.md) has no dependents
   Fix: Add `phase3_implementation_spec_review_codex` to another document's depends_on, or delete if unused
 - [ORPHAN] **v3_0_2_implementation_spec_v1_1** (/Users/jonathanoh/Dev/Project-Ontos/.ontos-internal/strategy/proposals/v3.0.2/v3.0.2-Implementation-Spec-v1.1.md) has no dependents
   Fix: Add `v3_0_2_implementation_spec_v1_1` to another document's depends_on, or delete if unused
-- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
-  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
 - [ARCHITECTURE] **phase2_implementation_instructions_antigravity** (strategy) depends on **chief_architect_round2_critical_analysis** (atom)
   Fix: strategy should not depend on atom. Invert the dependency or change document types
 - [ARCHITECTURE] **phase5_implementation_spec** (strategy) depends on **phase4_final_approval_chief_architect** (approval)

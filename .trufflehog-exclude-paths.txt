@@ -1,0 +1,1 @@
+^\.ontos-internal/strategy/v2\.5/V2_Claude_on_v2\.5\.md$

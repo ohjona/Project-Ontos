@@ -179,6 +179,7 @@ ontos agents       # Regenerate AGENTS.md and .cursorrules
 - **Curate, don't hoard.** Not every session needs a log. Archive the ones with decisions that matter.
 - **Review scaffold output.** Auto-tagging proposes; you decide. The human judgment is the point.
 - **Run `ontos doctor` periodically.** Catch broken links and dependency issues before they compound.
+- **Scan for secrets before release.** Use `gitleaks detect` and `trufflehog git file://. --no-update` (see `.trufflehog-exclude-paths.txt`).
 
 ---
 

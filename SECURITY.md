@@ -48,6 +48,7 @@ Project Ontos processes local markdown files. Key security considerations:
 1. **Don't run scripts on untrusted directories** - Only use Ontos on your own projects
 2. **Review generated files** - Always review `Ontos_Context_Map.md` before committing
 3. **Keep dependencies updated** - Run `pip install --upgrade pyyaml`
+4. **Scan for secrets before releases** - Run `gitleaks detect` and `trufflehog git file://. --no-update`
 
 ## Scope
 

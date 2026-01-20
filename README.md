@@ -3,7 +3,7 @@
 [![CI](https://github.com/ohjona/Project-Ontos/actions/workflows/ci.yml/badge.svg)](https://github.com/ohjona/Project-Ontos/actions/workflows/ci.yml)
 [![PyPI version](https://img.shields.io/pypi/v/ontos.svg)](https://pypi.org/project/ontos/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](https://github.com/ohjona/Project-Ontos/blob/main/LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-Source-black?logo=github)](https://github.com/ohjona/Project-Ontos)
 
 **Portable context for the agentic era.**
@@ -26,6 +26,9 @@
 - [What Ontos Is NOT](#what-ontos-is-not)
 - [Roadmap](#roadmap)
 - [Documentation](#documentation)
+- [Known Issues](#known-issues-v304)
+- [Feedback](#feedback)
+- [License](#license)
 
 ---
 
@@ -110,7 +113,7 @@ The litmus test: *Can a new person (or AI) become productive in under 10 minutes
 ## Use Cases
 
 ### Multi-AI Workflows
-Switch between Claude Code, Cursor, ChatGPT, and Gemini without re-explaining your project. Ontos generates `AGENTS.md` and `.cursorrules` so your context activates automatically.
+Switch between Claude Code, Cursor, ChatGPT, and Gemini without re-explaining your project. Ontos can generate `AGENTS.md` and `.cursorrules` so your context activates automatically when supported.
 
 ### Prototype → Production
 Built a demo in Streamlit? When you rewrite in FastAPI or Next.js, your atoms are disposable but your strategy survives. Three weeks of product decisions don't vanish with the old code.
@@ -142,17 +145,21 @@ cd your-project
 ontos init
 ```
 
-This creates your config, generates the context map, installs git hooks, and creates `AGENTS.md` for AI agent activation.
+This creates your config, generates the context map, and optionally installs git hooks and creates `AGENTS.md` for AI agent activation.
 
-**Activate:** Tell any AI agent:
+**Activate:** Tell any AI agent that supports Ontos activation:
 
 > **"Ontos"** (or "Activate Ontos")
 
-The agent reads `AGENTS.md`, regenerates the context map, loads relevant files, and confirms what context it has.
+If configured, the agent reads `AGENTS.md`, regenerates the context map, loads relevant files, and confirms what context it has.
 
 ---
 
 ## Workflow
+
+### Agent Prompts
+
+Use these phrases with an AI agent that supports Ontos activation. They are not shell commands.
 
 | Command | What It Does |
 |---------|--------------|
@@ -198,7 +205,7 @@ If you want automatic context capture, use a vector database. If you want reliab
 
 | Version | Status | Highlights |
 |---------|--------|------------|
-| **v3.0.0** | ✅ Current | `ontos agents` generates AGENTS.md + .cursorrules, JSON output |
+| **v3.0.4** | ✅ Current | CLI wrapper commands fixed, documentation link fixes |
 | **v3.1** | Next | Obsidian compatibility, `ontos deinit`, concepts → tags mapping |
 | **v4.0** | Vision | MCP as primary interface, full template system, daemon mode |
 
@@ -206,29 +213,21 @@ v3.0 transformed Ontos from repo-injected scripts into a pip-installable package
 
 ---
 
-## Known Issues (v3.0.2)
+## Known Issues (v3.0.4)
 
-| Command | Status | Workaround |
-|---------|--------|------------|
-| `ontos verify` | Broken | Use `python3 -m ontos doctor` for basic validation |
-| `ontos query` | Broken | Manual grep/search |
-| `ontos consolidate` | Broken | Manual log archival |
-
-**Legacy script limitation:** Commands `scaffold`, `stub`, `promote`, `migrate`
-ignore `.ontos.toml` configuration. Use native CLI commands (`init`, `map`, `doctor`,
-`agents`) which respect config settings.
-
-These issues are tracked for v3.0.3.
+No known critical issues as of 2026-01-19. See [Changelog](https://github.com/ohjona/Project-Ontos/blob/main/Ontos_CHANGELOG.md) and [Issues](https://github.com/ohjona/Project-Ontos/issues) for updates.
 
 ---
 
 ## Documentation
 
-- **[Ontos Manual](docs/reference/Ontos_Manual.md)**: Complete reference—installation, workflow, configuration, errors
-- **[Agent Instructions](docs/reference/Ontos_Agent_Instructions.md)**: Commands for AI agents
-- **[Migration Guide v2→v3](docs/reference/Migration_v2_to_v3.md)**: Upgrading from v2.x
-- **[Minimal Example](examples/minimal/README.md)**: 3-file quick start
-- **[Changelog](Ontos_CHANGELOG.md)**: Version history
+> *Note: Documentation links below point to the latest source on GitHub and may reflect features not yet released.*
+
+- **[Ontos Manual](https://github.com/ohjona/Project-Ontos/blob/main/docs/reference/Ontos_Manual.md)**: Complete reference—installation, workflow, configuration, errors
+- **[Agent Instructions](https://github.com/ohjona/Project-Ontos/blob/main/docs/reference/Ontos_Agent_Instructions.md)**: Commands for AI agents
+- **[Migration Guide v2→v3](https://github.com/ohjona/Project-Ontos/blob/main/docs/reference/Migration_v2_to_v3.md)**: Upgrading from v2.x
+- **[Minimal Example](https://github.com/ohjona/Project-Ontos/blob/main/examples/minimal/README.md)**: 3-file quick start
+- **[Changelog](https://github.com/ohjona/Project-Ontos/blob/main/Ontos_CHANGELOG.md)**: Version history
 
 ---
 
@@ -241,10 +240,10 @@ This is a source-available project. The code is public for transparency, not con
 - Questions and feedback
 
 **Not accepted:**
-- Pull requests (proprietary codebase)
+- Pull requests (proprietary codebase; roadmap and implementation are managed privately)
 
 ---
 
 ## License
 
-Proprietary. All rights reserved. See [LICENSE](LICENSE) for details.
+Proprietary. All rights reserved. See [LICENSE](https://github.com/ohjona/Project-Ontos/blob/main/LICENSE) for details.

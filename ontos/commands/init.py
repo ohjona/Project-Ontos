@@ -18,6 +18,47 @@ class InitOptions:
     force: bool = False
     interactive: bool = False  # Reserved for v3.1
     skip_hooks: bool = False
+    yes: bool = False
+
+
+def _confirm_hooks(options: InitOptions) -> bool:
+    """Confirm hook installation with user in TTY contexts.
+
+    Returns:
+        True if hooks should be installed, False otherwise.
+
+    Raises:
+        KeyboardInterrupt: If user presses Ctrl+C (aborts entire init)
+
+    Behavioral matrix:
+        skip_hooks=True  -> False (user explicitly skipped)
+        yes=True         -> True  (non-interactive mode)
+        non-TTY          -> True  (CI/scripts proceed)
+        TTY              -> prompt user
+    """
+    if options.skip_hooks:
+        return False  # User explicitly skipped
+    if options.yes:
+        return True   # Non-interactive mode
+    if not sys.stdin.isatty():
+        return True   # Non-TTY: proceed (CI/scripts)
+
+    # Print preflight message
+    print("\nGit hooks to be installed:")
+    print("  - pre-commit: Validates documentation before commits")
+    print("  - pre-push: Ensures context map exists before push")
+    print("\nHooks location: .git/hooks/")
+    print("Use --skip-hooks to skip installation.\n")
+
+    try:
+        response = input("Install git hooks? [Y/n] ").strip().lower()
+        return response in ('', 'y', 'yes')
+    except EOFError:
+        print("\nSkipping hooks.")
+        return False
+    except KeyboardInterrupt:
+        print("\nAborted.")
+        raise  # Re-raise to abort init entirely
 
 
 def init_command(options: InitOptions) -> Tuple[int, str]:
@@ -60,8 +101,19 @@ def init_command(options: InitOptions) -> Tuple[int, str]:
     # 6. Generate initial context map
     _generate_initial_context_map(project_root, config)
 
-    # 7. Install hooks (with collision safety)
-    hooks_status = _install_hooks(project_root, options)
+    # 7. Install hooks (with collision safety and consent)
+    try:
+        if _confirm_hooks(options):
+            hooks_status = _install_hooks(project_root, options)
+        else:
+            hooks_status = 0  # Skipped by user choice
+    except KeyboardInterrupt:
+        # Cleanup partial initialization on Ctrl+C
+        config_path = project_root / ".ontos.toml"
+        if config_path.exists():
+            config_path.unlink()
+        print("Init aborted. No changes made.")
+        return 130, "Aborted by user"  # Standard SIGINT exit code
 
     # 8. Auto-generate AGENTS.md (non-fatal on failure)
     _generate_agents_file(project_root)

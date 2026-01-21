@@ -175,4 +175,57 @@ class TestHookInstallation:
 
         # Hook should now be ours
         content = foreign_hook.read_text()
-        assert ONTOS_HOOK_MARKER in content
+
+class TestHookConfirmation:
+    """Tests for hook confirmation flow (v3.0.5 UX-1)."""
+
+    def test_skip_hooks_flag_skips_confirmation(self, git_repo):
+        """--skip-hooks bypasses confirmation entirely."""
+        options = InitOptions(path=git_repo, skip_hooks=True)
+        code, _ = init_command(options)
+
+        assert code == 0
+        # No hooks should be installed
+        pre_commit = git_repo / ".git" / "hooks" / "pre-commit"
+        if pre_commit.exists():
+            assert ONTOS_HOOK_MARKER not in pre_commit.read_text()
+
+    def test_yes_flag_skips_confirmation(self, git_repo):
+        """--yes installs hooks without prompting."""
+        options = InitOptions(path=git_repo, yes=True)
+        code, _ = init_command(options)
+
+        assert code in (0, 3)  # 0 success, 3 if collision
+        # In clean repo, hooks should be installed
+        if code == 0:
+            pre_commit = git_repo / ".git" / "hooks" / "pre-commit"
+            assert pre_commit.exists()
+            assert ONTOS_HOOK_MARKER in pre_commit.read_text()
+
+    def test_skip_hooks_wins_over_yes(self, git_repo):
+        """--skip-hooks takes precedence over --yes."""
+        options = InitOptions(path=git_repo, skip_hooks=True, yes=True)
+        code, _ = init_command(options)
+
+        assert code == 0
+        pre_commit = git_repo / ".git" / "hooks" / "pre-commit"
+        if pre_commit.exists():
+            assert ONTOS_HOOK_MARKER not in pre_commit.read_text()
+
+    def test_ctrl_c_aborts_init(self, git_repo, monkeypatch):
+        """Ctrl+C during hook confirmation aborts entire init."""
+        # Simulate KeyboardInterrupt during input()
+        def mock_input(prompt):
+            raise KeyboardInterrupt()
+        monkeypatch.setattr('builtins.input', mock_input)
+        monkeypatch.setattr('sys.stdin.isatty', lambda: True)
+
+        options = InitOptions(path=git_repo)
+        code, msg = init_command(options)
+
+        # Should return SIGINT exit code
+        assert code == 130
+        assert "Aborted" in msg
+
+        # Config should NOT exist (init aborted and cleaned up)
+        assert not (git_repo / ".ontos.toml").exists()

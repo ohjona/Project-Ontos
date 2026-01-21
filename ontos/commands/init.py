@@ -91,28 +91,57 @@ def init_command(options: InitOptions) -> Tuple[int, str]:
     if legacy_path.exists():
         print("Warning: Legacy .ontos/scripts/ detected. Consider migrating.", file=sys.stderr)
 
-    # 4. Create default config
-    config = default_config()
-    save_project_config(config, config_path)
+    # Track created items for cleanup on abort
+    created_paths = []
 
-    # 5. Create directory structure
-    _create_directories(project_root, config)
-
-    # 6. Generate initial context map
-    _generate_initial_context_map(project_root, config)
-
-    # 7. Install hooks (with collision safety and consent)
     try:
+        # 4. Create default config
+        config = default_config()
+        if not config_path.exists():
+            created_paths.append(config_path)
+        save_project_config(config, config_path)
+
+        # 5. Create directory structure
+        dirs = [
+            config.paths.docs_dir,
+            config.paths.logs_dir,
+            f"{config.paths.docs_dir}/strategy",
+            f"{config.paths.docs_dir}/reference",
+            f"{config.paths.docs_dir}/archive",
+        ]
+        for d in dirs:
+            p = project_root / d
+            if not p.exists():
+                # Track newly created directories for cleanup
+                # We track the deepest nonexistent parent to avoid orphaned folders
+                created_paths.append(p)
+            p.mkdir(parents=True, exist_ok=True)
+
+        # 6. Generate initial context map
+        context_map_path = project_root / config.paths.context_map
+        if not context_map_path.exists():
+            created_paths.append(context_map_path)
+        _generate_initial_context_map(project_root, config)
+
+        # 7. Install hooks (with collision safety and consent)
         if _confirm_hooks(options):
             hooks_status = _install_hooks(project_root, options)
         else:
             hooks_status = 0  # Skipped by user choice
+
     except KeyboardInterrupt:
-        # Cleanup partial initialization on Ctrl+C
-        config_path = project_root / ".ontos.toml"
-        if config_path.exists():
-            config_path.unlink()
-        print("Init aborted. No changes made.")
+        # Cleanup partial initialization on Ctrl+C (reverse order)
+        for p in reversed(created_paths):
+            try:
+                if p.is_file():
+                    p.unlink()
+                elif p.is_dir():
+                    # Only remove if empty to avoid accidental data loss
+                    if not any(p.iterdir()):
+                        p.rmdir()
+            except Exception:
+                pass
+        print("\nInit aborted. Cleanup complete.")
         return 130, "Aborted by user"  # Standard SIGINT exit code
 
     # 8. Auto-generate AGENTS.md (non-fatal on failure)

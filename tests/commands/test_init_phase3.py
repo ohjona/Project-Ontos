@@ -167,14 +167,16 @@ class TestHookInstallation:
         foreign_hook = hooks_dir / "pre-commit"
         foreign_hook.write_text("#!/bin/sh\necho 'foreign hook'\n")
 
-        options = InitOptions(path=git_repo, force=True)
+        options = InitOptions(path=git_repo, force=True, yes=True)
         code, _ = init_command(options)
 
         # Should succeed
         assert code == 0
 
-        # Hook should now be ours
+        # Hook should now be ours and the foreign content should be gone
         content = foreign_hook.read_text()
+        assert ONTOS_HOOK_MARKER in content
+        assert "foreign hook" not in content
 
 class TestHookConfirmation:
     """Tests for hook confirmation flow (v3.0.5 UX-1)."""
@@ -212,8 +214,8 @@ class TestHookConfirmation:
         if pre_commit.exists():
             assert ONTOS_HOOK_MARKER not in pre_commit.read_text()
 
-    def test_ctrl_c_aborts_init(self, git_repo, monkeypatch):
-        """Ctrl+C during hook confirmation aborts entire init."""
+    def test_ctrl_c_aborts_init_and_cleans_up(self, git_repo, monkeypatch):
+        """Ctrl+C during hook confirmation aborts entire init and cleans up all changes."""
         # Simulate KeyboardInterrupt during input()
         def mock_input(prompt):
             raise KeyboardInterrupt()
@@ -227,5 +229,36 @@ class TestHookConfirmation:
         assert code == 130
         assert "Aborted" in msg
 
-        # Config should NOT exist (init aborted and cleaned up)
+        # Verification of complete cleanup
         assert not (git_repo / ".ontos.toml").exists()
+        assert not (git_repo / "docs").exists()
+        assert not (git_repo / "Ontos_Context_Map.md").exists()
+
+    def test_ctrl_d_skips_hooks(self, git_repo, monkeypatch):
+        """EOF (Ctrl+D) during hook confirmation skips hooks but proceeds with init."""
+        # Simulate EOFError during input()
+        def mock_input(prompt):
+            raise EOFError()
+        monkeypatch.setattr('builtins.input', mock_input)
+        monkeypatch.setattr('sys.stdin.isatty', lambda: True)
+
+        options = InitOptions(path=git_repo)
+        code, msg = init_command(options)
+
+        assert code == 0
+        assert (git_repo / ".ontos.toml").exists()
+        # Hooks should NOT be installed
+        pre_commit = git_repo / ".git" / "hooks" / "pre-commit"
+        if pre_commit.exists():
+            assert ONTOS_HOOK_MARKER not in pre_commit.read_text()
+
+    def test_non_tty_auto_installs_hooks(self, git_repo, monkeypatch):
+        """Non-TTY (CI) environment auto-installs hooks."""
+        monkeypatch.setattr('sys.stdin.isatty', lambda: False)
+        
+        options = InitOptions(path=git_repo)
+        code, _ = init_command(options)
+
+        assert code == 0
+        assert (git_repo / ".git" / "hooks" / "pre-commit").exists()
+        assert ONTOS_HOOK_MARKER in (git_repo / ".git" / "hooks" / "pre-commit").read_text()

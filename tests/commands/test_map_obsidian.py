@@ -15,6 +15,24 @@ def test_format_doc_link_obsidian_different_name():
     # [[filename|id]] if filename != id
     assert _format_doc_link("doc1", Path("notes/my_note.md"), True) == "[[my_note|doc1]]"
 
+def test_filename_with_spaces():
+    """Filenames with spaces should produce correct wikilink."""
+    result = _format_doc_link(
+        doc_id="my_document",
+        doc_path=Path("docs/my document.md"),
+        obsidian_mode=True
+    )
+    assert result == "[[my document|my_document]]"
+
+def test_unicode_filename():
+    """Unicode filenames should produce correct wikilink."""
+    result = _format_doc_link(
+        doc_id="japanese_doc",
+        doc_path=Path("docs/日本語.md"),
+        obsidian_mode=True
+    )
+    assert result == "[[日本語|japanese_doc]]"
+
 def test_read_file_lenient_bom(tmp_path):
     p = tmp_path / "bom.md"
     # UTF-8 BOM is \xef\xbb\xbf

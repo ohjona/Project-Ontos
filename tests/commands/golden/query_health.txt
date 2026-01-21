@@ -1,0 +1,22 @@
+📊 Graph Health Report
+========================================
+Total documents: 266
+
+By type:
+  approval: 1
+  atom: 73
+  decision: 6
+  implementation: 1
+  kernel: 4
+  log: 99
+  review: 10
+  spec: 2
+  strategy: 68
+  tech-debt: 1
+  unknown: 1
+
+Connectivity: 35.7% reachable from kernel
+Orphans: 64
+  → ontos_technical_architecture_map, ontos_technical_architecture_map_codex, self_dev_protocol, v2_9_6_critic_review_round_2_opus, gemini_review_v2_9_6_spec_round_2
+Logs with empty impacts: 42
+  → log_20251220_v2_8_version_bump, log_20251213_version_fix, log_20251217_v2_6_changelog, log_20251217_pr_18_staging_fix, log_20251217_pr_19_review_fixes

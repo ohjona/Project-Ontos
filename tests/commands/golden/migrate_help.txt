@@ -1,0 +1,20 @@
+usage: ontos_migrate_schema.py [-h] (--check | --dry-run | --apply)
+                               [--dirs DIRS [DIRS ...]] [--quiet] [--version]
+
+Migrate Ontos documents to use explicit ontos_schema field.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --check               Check which files need migration
+  --dry-run             Preview changes without applying
+  --apply               Apply schema migrations
+  --dirs DIRS [DIRS ...]
+                        Directories to scan (default: docs, .ontos-internal)
+  --quiet, -q           Reduce output verbosity
+  --version, -V         Show version and exit
+
+Examples:
+  ontos_migrate_schema.py --check              Check which files need migration
+  ontos_migrate_schema.py --dry-run            Preview changes without applying
+  ontos_migrate_schema.py --apply              Apply migrations
+  ontos_migrate_schema.py --apply --dirs docs  Migrate specific directory

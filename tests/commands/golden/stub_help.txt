@@ -1,0 +1,18 @@
+usage: ontos_stub.py [-h] [--goal GOAL]
+                     [--type {atom,kernel,log,product,strategy}] [--id ID]
+                     [--output OUTPUT] [--depends-on DEPENDS_ON] [--quiet]
+
+Create Level 1 stub documents.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --goal GOAL, -g GOAL  Goal description for the document
+  --type {atom,kernel,log,product,strategy}, -t {atom,kernel,log,product,strategy}
+                        Document type
+  --id ID               Document ID (auto-generated from --output if not
+                        specified)
+  --output OUTPUT, -o OUTPUT
+                        Output file path
+  --depends-on DEPENDS_ON, -d DEPENDS_ON
+                        Comma-separated list of dependency IDs
+  --quiet, -q           Minimal output

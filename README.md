@@ -8,7 +8,9 @@
 
 **Portable context for the agentic era.**
 
-*Never explain twice. Own your context.* Source available at [github.com/ohjona/Project-Ontos](https://github.com/ohjona/Project-Ontos).
+*Never explain twice. Own your context.*
+
+*Source available at [github.com/ohjona/Project-Ontos](https://github.com/ohjona/Project-Ontos).*
 
 ---
 

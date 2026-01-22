@@ -185,8 +185,12 @@ def promote_command(options: PromoteOptions) -> Tuple[int, str]:
     # 3. Handle --check
     if options.check:
         output.info(f"Found {len(promotable)} document(s) that can be promoted:\n")
+        root_resolved = root.resolve()
         for f, fm, info in promotable:
-            rel = f.relative_to(root)
+            try:
+                rel = f.resolve().relative_to(root_resolved)
+            except ValueError:
+                rel = f # Fallback to absolute if not under root
             marker = level_marker(info.level)
             ready = "✓ ready" if info.promotable else "○ needs work"
             print(f"  {marker} {fm.get('id'):<30} {ready}")
@@ -221,7 +225,10 @@ def promote_command(options: PromoteOptions) -> Tuple[int, str]:
         print(f"\n{'='*60}")
         output.info(f"Promoting: {doc_id} ({level_marker(info.level)} → [L2])")
         print(f"  Type: {doc_type}")
-        print(f"  Path: {f.relative_to(root)}")
+        try:
+            print(f"  Path: {f.resolve().relative_to(root.resolve())}")
+        except ValueError:
+            print(f"  Path: {f}")
         
         if info.promotion_blockers:
             print(f"\n  Blockers to resolve:")

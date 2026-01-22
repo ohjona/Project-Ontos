@@ -1,0 +1,24 @@
+usage: ontos_consolidate.py [-h] [--version] [--count COUNT] [--by-age]
+                            [--days DAYS] [--dry-run] [--quiet] [--all]
+
+Consolidate old session logs into decision history.
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --version, -V  show program's version number and exit
+  --count COUNT  Number of newest logs to keep (default: 15)
+  --by-age       Use age-based instead of count-based (legacy)
+  --days DAYS    Age threshold in days, requires --by-age (default: 30)
+  --dry-run, -n  Preview without making changes
+  --quiet, -q    Suppress output
+  --all, -a      Process all logs without prompting
+
+This script consolidates logs that exceed the retention threshold: 1. Finds
+logs exceeding retention count (default: keep newest 15) 2. Shows summary for
+each 3. Prompts for confirmation 4. Archives log and updates
+decision_history.md (History Ledger table) Example: python3
+ontos_consolidate.py # Keep newest 15, consolidate rest python3
+ontos_consolidate.py --dry-run # Preview what would happen python3
+ontos_consolidate.py --count 10 # Keep newest 10 logs python3
+ontos_consolidate.py --by-age # Use age-based (legacy, 30 days) python3
+ontos_consolidate.py --all # Process all without prompting

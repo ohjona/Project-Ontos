@@ -1,0 +1,16 @@
+usage: ontos_verify.py [-h] [--all] [--date DATE] [--version] [filepath]
+
+Verify documentation as current (update describes_verified)
+
+positional arguments:
+  filepath       Path to document to verify
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --all          Interactively verify all stale documents
+  --date DATE    Set specific date (YYYY-MM-DD), default: today
+  --version, -V  show program's version number and exit
+
+Examples: python3 ontos_verify.py docs/reference/Ontos_Manual.md # Single file
+python3 ontos_verify.py --all # Interactive: all stale docs python3
+ontos_verify.py docs/manual.md --date 2025-12-15 # Backdate

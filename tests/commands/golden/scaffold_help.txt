@@ -1,0 +1,12 @@
+usage: ontos_scaffold.py [-h] [--apply] [--dry-run] [--quiet] [files ...]
+
+Generate Level 0 scaffold frontmatter for untagged files.
+
+positional arguments:
+  files        Specific files to scaffold (default: scan all)
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --apply      Apply scaffolding (required to modify files)
+  --dry-run    Preview changes without applying (default)
+  --quiet, -q  Minimal output

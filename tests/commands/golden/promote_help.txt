@@ -1,0 +1,12 @@
+usage: ontos_promote.py [-h] [--check] [--all-ready] [--quiet] [files ...]
+
+Promote documents from Level 0/1 to Level 2.
+
+positional arguments:
+  files        Specific files to promote
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --check      Show promotable documents without changing anything
+  --all-ready  Batch promote all documents that are ready
+  --quiet, -q  Minimal output

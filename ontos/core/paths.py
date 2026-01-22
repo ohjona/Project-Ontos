@@ -28,7 +28,10 @@ def resolve_config(setting_name: str, default=None):
     Returns:
         Resolved configuration value.
     """
-    import ontos_config_defaults as defaults
+    try:
+        from ontos._scripts import ontos_config_defaults as defaults
+    except ImportError:
+        import ontos_config_defaults as defaults
     
     # 1. Try explicit override in user config
     try:
@@ -96,7 +99,10 @@ def get_logs_dir() -> str:
     
     # Get PROJECT_ROOT for relative path resolution
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         # Fallback if config not available
         return 'docs/logs'
@@ -166,7 +172,10 @@ def get_archive_dir() -> str:
         Absolute path to archive directory.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/archive'
     
@@ -187,7 +196,10 @@ def get_decision_history_path() -> str:
         Absolute path to decision_history.md.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/strategy/decision_history.md'
     
@@ -218,7 +230,10 @@ def get_proposals_dir() -> str:
         Absolute path to proposals directory.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/strategy/proposals'
     
@@ -239,7 +254,10 @@ def get_archive_logs_dir() -> str:
         Absolute path to archive/logs directory.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/archive/logs'
     
@@ -272,7 +290,10 @@ def get_archive_proposals_dir() -> str:
         Absolute path to archive/proposals directory.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/archive/proposals'
     
@@ -293,7 +314,10 @@ def get_concepts_path() -> str:
         Absolute path to Common_Concepts.md.
     """
     try:
-        from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        try:
+            from ontos._scripts.ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
+        except ImportError:
+            from ontos_config_defaults import PROJECT_ROOT, is_ontos_repo
     except ImportError:
         return 'docs/reference/Common_Concepts.md'
     

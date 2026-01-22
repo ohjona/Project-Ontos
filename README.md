@@ -24,9 +24,9 @@
 - [Workflow](#workflow)
 - [Best Practices](#best-practices)
 - [What Ontos Is NOT](#what-ontos-is-not)
+- [FAQ](#faq)
 - [Roadmap](#roadmap)
 - [Documentation](#documentation)
-- [Known Issues](#known-issues-v305)
 - [Feedback](#feedback)
 - [License](#license)
 
@@ -216,41 +216,25 @@ If you want automatic context capture, use a vector database. If you want reliab
 
 ---
 
+## FAQ
+
+### Why does Ontos start at version 3?
+
+Versions 1 and 2 were internal. I built Ontos as a personal tool to manage context across AI sessions and tech stack migrations. After using it for months and seeing others struggle with the same problems—re-explaining projects to each new AI, losing decisions when prototypes get rewritten—I packaged the workflow as a Python library.
+
+Version 3 is when Ontos became public. The earlier versions live on in the design decisions and battle-tested workflows, just not in a public release.
+
+---
+
 ## Roadmap
 
 | Version | Status | Highlights |
 |---------|--------|------------|
-| **v3.0.5** | ✅ Current | Tech debt patch, UX improvements (init hooks consent) |
-| **v3.1** | Next | Obsidian compatibility, `ontos deinit`, concepts → tags mapping |
+| **v3.1.0** | ✅ Current | Obsidian compatibility, native commands, token efficiency |
+| **v3.2** | Next | Edge case fixes, improved validation |
 | **v4.0** | Vision | MCP as primary interface, full template system, daemon mode |
 
-v3.0 transformed Ontos from repo-injected scripts into a pip-installable package with modular CLI architecture.
-
----
-
-## Known Issues (v3.0.5)
-
-### Wrapper Commands
-
-Some commands delegate to legacy scripts and may have limitations:
-
-| Command | Status | Notes |
-|---------|--------|-------|
-| `verify` | ⚠️ | Legacy script requires explicit path. Subparser lacks positional argument support. |
-| `query` | ⚠️ | Requires legacy flags (e.g., `--health`, `--stale`). |
-| `consolidate` | ⚠️ | Requires `.ontos-internal/strategy/decision_history.md` to exist. |
-| `migrate` | ✅ | Functional delegation. |
-| `promote` | ✅ | Functional delegation. |
-| `scaffold` | ❌ | Broken: rejects positional arguments in unified CLI. |
-| `stub` | ✅ | Functional delegation. |
-
-**Workaround:** For full functionality, use native commands: `map`, `doctor`, `agents`, `log`, `init`.
-
-### Configuration
-
-Legacy wrapper commands do not honor `.ontos.toml` configuration. This will be addressed in v3.1.
-
-See [Changelog](https://github.com/ohjona/Project-Ontos/blob/main/Ontos_CHANGELOG.md) and [Issues](https://github.com/ohjona/Project-Ontos/issues) for updates.
+v3.0 transformed Ontos from repo-injected scripts into a pip-installable package. v3.1 made all CLI commands native Python (no subprocess overhead) and fixed the broken scaffold command.
 
 ---
 

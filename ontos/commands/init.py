@@ -93,23 +93,20 @@ def _prompt_scaffold(project_root: Path, config, options: InitOptions):
     if not sys.stdin.isatty():
         return None
 
-    # Detect untagged files in docs_dir
+    # Detect untagged files in ENTIRE repo (X-H1)
     try:
         from ontos.commands.scaffold import find_untagged_files
-        untagged = find_untagged_files(paths=[docs_path])
+        all_untagged = find_untagged_files(root=project_root)
     except Exception:
         return None
 
-    if not untagged:
+    if not all_untagged:
         return None
 
-    # Large file count warning
-    count = len(untagged)
-    if count > 50:
-        print(f"\nNote: Found {count} untagged files. This may take a moment.", file=sys.stderr)
+    total_count = len(all_untagged)
 
-    # Prompt for confirmation
-    print(f"\nFound {count} untagged markdown file(s).")
+    # Prompt for confirmation with total repo count
+    print(f"\nFound {total_count} untagged markdown file(s).")
     print("Scaffold adds YAML headers to identify each file.")
     try:
         response = input("Would you like to scaffold them? [y/N] ").strip().lower()
@@ -130,8 +127,9 @@ def _prompt_scaffold(project_root: Path, config, options: InitOptions):
     except (EOFError, KeyboardInterrupt):
         return None
 
+    selected_paths = []
     if choice == '2':
-        return [project_root]
+        selected_paths = [project_root]
     elif choice == '3':
         try:
             custom_input = input("Path (relative to project root): ").strip()
@@ -139,28 +137,41 @@ def _prompt_scaffold(project_root: Path, config, options: InitOptions):
             return None
 
         if not custom_input:
-            return [docs_path]
+            selected_paths = [docs_path]
+        else:
+            custom_path = Path(custom_input)
+            if not custom_path.is_absolute():
+                custom_path = project_root / custom_path
+            resolved = custom_path.resolve()
 
-        custom_path = Path(custom_input)
-        if not custom_path.is_absolute():
-            custom_path = project_root / custom_path
-        resolved = custom_path.resolve()
+            # Path escape guard (B2)
+            if not resolved.is_relative_to(project_root.resolve()):
+                print("Error: Path must be within project root.", file=sys.stderr)
+                return None
 
-        # Path escape guard (B2)
-        if not resolved.is_relative_to(project_root.resolve()):
-            print("Error: Path must be within project root.", file=sys.stderr)
-            return None
+            if not resolved.exists():
+                print(f"Error: Path '{custom_input}' does not exist.", file=sys.stderr)
+                return None
+            selected_paths = [resolved]
+    else:  # Choice 1 or empty/invalid
+        if choice not in ('1', '', '2', '3'):
+            print("Invalid choice, using docs/ directory.", file=sys.stderr)
+        selected_paths = [docs_path]
 
-        if not resolved.exists():
-            print(f"Error: Path '{custom_input}' does not exist.", file=sys.stderr)
-            return None
+    # Large file count warning (X-H2) - Move to after scope selection
+    try:
+        scope_untagged = find_untagged_files(paths=selected_paths, root=project_root)
+        scope_count = len(scope_untagged)
+        if scope_count > 50:
+            print(f"\nNote: {scope_count} files will be scaffolded. This may take a moment.", file=sys.stderr)
+        elif choice == '2' and scope_count != total_count:
+            # Re-count if somehow find_untagged_files(project_root) differ from
+            # subsequent call, but generally they should match.
+            pass
+    except Exception:
+        pass
 
-        return [resolved]
-    elif choice in ('1', ''):
-        return [docs_path]
-    else:
-        print("Invalid choice, using docs/ directory.", file=sys.stderr)
-        return [docs_path]
+    return selected_paths
 
 
 def _run_scaffold(project_root: Path, paths) -> None:

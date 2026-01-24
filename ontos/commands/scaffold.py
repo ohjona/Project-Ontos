@@ -31,16 +31,17 @@ class ScaffoldOptions:
     json_output: bool = False
 
 
-def find_untagged_files(paths: Optional[List[Path]] = None) -> List[Path]:
+def find_untagged_files(paths: Optional[List[Path]] = None, root: Optional[Path] = None) -> List[Path]:
     """Find markdown files without valid frontmatter.
 
     Args:
         paths: Specific files/directories, or None for default scan
+        root: Project root to use (falls back to search)
 
     Returns:
         List of paths needing scaffolding
     """
-    root = find_project_root()
+    root = root or find_project_root()
     if paths:
         # Filter only existing markdown files from provided paths
         search_paths = []

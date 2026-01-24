@@ -194,6 +194,54 @@ class TestScaffoldPrompt:
         # Init should still succeed (scaffold skipped, not aborted)
         assert code in (0, 3)
 
+    def test_prompt_shows_when_docs_empty_but_repo_has_files(self, git_repo, monkeypatch, capsys):
+        """Prompt appears when untagged files exist outside docs/."""
+        # Setup: empty docs/, untagged file in notes/
+        docs = git_repo / "docs"
+        docs.mkdir()
+        notes = git_repo / "notes"
+        notes.mkdir()
+        (notes / "readme.md").write_text("# Notes")
+        
+        input_prompts = []
+        def mock_input(prompt):
+            input_prompts.append(prompt)
+            return 'n'
+            
+        monkeypatch.setattr('builtins.input', mock_input)
+        monkeypatch.setattr('sys.stdin.isatty', lambda: True)
+        
+        options = InitOptions(path=git_repo, skip_hooks=True)
+        init_command(options)
+        
+        captured = capsys.readouterr()
+        # Should see prompt (not skip silently)
+        assert "untagged markdown file" in captured.out
+
+    def test_warning_count_matches_selected_scope(self, git_repo, monkeypatch, capsys):
+        """The >50 warning reflects the selected scope, not just docs/."""
+        # Setup: 10 files in docs/, 60 files in notes/
+        docs = git_repo / "docs"
+        docs.mkdir()
+        notes = git_repo / "notes"
+        notes.mkdir()
+        for i in range(10):
+            (docs / f"doc{i}.md").write_text(f"# Doc {i}")
+        for i in range(60):
+            (notes / f"note{i}.md").write_text(f"# Note {i}")
+        
+        # Accept, then select Choice 2 (entire repo) which has 70 files (>50)
+        inputs = iter(['y', '2'])
+        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+        monkeypatch.setattr('sys.stdin.isatty', lambda: True)
+        
+        init_command(InitOptions(path=git_repo, skip_hooks=True))
+        
+        captured = capsys.readouterr()
+        # Should see count of 70 and the "may take a moment" warning
+        assert "70" in captured.out or "70" in captured.err
+        assert "This may take a moment" in captured.out or "This may take a moment" in captured.err
+
 
 class TestScaffoldSafety:
     """Tests for scaffold safety guards."""

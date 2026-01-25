@@ -162,7 +162,18 @@ cd your-project
 ontos init
 ```
 
-This creates your config, generates the context map, and optionally installs git hooks and creates `AGENTS.md` for AI agent activation.
+This creates:
+- `.ontos.toml` configuration file
+- `docs/` directory with full type hierarchy (`kernel/`, `strategy/`, `product/`, `atom/`, `logs/`, `reference/`, `archive/`)
+- `Ontos_Context_Map.md` document graph
+- Git hooks (optional)
+- `AGENTS.md` for AI agent activation (optional)
+
+**Scaffold existing docs:** If you have existing markdown files, init will prompt to add Ontos metadata:
+```bash
+ontos init --scaffold    # Auto-scaffold docs/ without prompting
+ontos init --no-scaffold # Skip scaffold prompt entirely
+```
 
 **Activate:** Tell any AI agent that supports Ontos activation:
 

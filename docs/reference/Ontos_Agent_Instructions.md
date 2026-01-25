@@ -13,6 +13,21 @@ depends_on: [ontos_manual]
 
 ## Commands
 
+### "Initialize Ontos" (New Projects)
+
+For projects without Ontos:
+```bash
+ontos init
+```
+
+Creates the full directory structure (`docs/kernel/`, `strategy/`, `product/`, `atom/`, etc.) and configuration.
+
+**With existing markdown files:**
+```bash
+ontos init --scaffold    # Auto-add metadata to docs/
+ontos init --no-scaffold # Skip scaffold prompt
+```
+
 ### "Ontos" (Activate)
 1. Check for `Ontos_Context_Map.md`
 2. If missing: `ontos map`
@@ -32,7 +47,7 @@ depends_on: [ontos_manual]
 
 **Step 1: Check for auto-generated log first (v2.4)**
 ```bash
-python3 ontos.py log --enhance
+ontos log --enhance
 ```
 
 Exit codes:
@@ -49,7 +64,7 @@ Exit codes:
 6. Commit the enriched log
 
 **Step 2b: If no auto-generated log (exit 1)**
-1. Run: `python3 ontos.py log -e <type> -s "Agent Name"`
+1. Run: `ontos log -e <type> -s "Agent Name"`
 2. Read generated log and fill in sections
 3. Commit
 
@@ -60,14 +75,14 @@ Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`, `decision`
 **RULE:** Never use `git push --no-verify` without explicit user approval.
 
 ### "Curate Ontos" (v2.9)
-1. `python3 ontos.py scaffold` — Preview scaffolds for untagged files
-2. `python3 ontos.py scaffold --apply` — Create Level 0 scaffolds
-3. `python3 ontos.py stub --goal "..." --type product` — Create Level 1 stub
-4. `python3 ontos.py promote --check` — Check for documents ready to promote
-5. `python3 ontos.py promote <file>` — Interactive promotion to Level 2
+1. `ontos scaffold` — Preview scaffolds for untagged files
+2. `ontos scaffold --apply` — Create Level 0 scaffolds
+3. `ontos stub --goal "..." --type product` — Create Level 1 stub
+4. `ontos promote --check` — Check for documents ready to promote
+5. `ontos promote <file>` — Interactive promotion to Level 2
 
 ### "Maintain Ontos" (Weekly)
-1. `python3 ontos.py maintain`
+1. `ontos maintain`
 2. This runs five steps:
    - Migrate untagged files
    - Regenerate context map
@@ -78,8 +93,8 @@ Event types: `feature`, `fix`, `refactor`, `exploration`, `chore`, `decision`
 4. Commit context map if changed
 
 ### "Update Ontos"
-1. `python3 ontos.py update`
-2. `python3 ontos.py migrate --check` (Check for schema updates)
+1. `ontos update`
+2. `ontos migrate --check` (Check for schema updates)
 
 ### "Install Ontos" (v2.9.3+)
 For fresh installations:
@@ -98,32 +113,32 @@ Config customizations are automatically preserved during upgrade.
 
 ### "Create Scaffold" (v2.9.1+)
 Auto-scaffold untagged markdown files:
-1. `python3 ontos.py scaffold --dry-run` — Preview changes
-2. `python3 ontos.py scaffold --apply` — Apply scaffolds (L0)
+1. `ontos scaffold --dry-run` — Preview changes
+2. `ontos scaffold --apply` — Apply scaffolds (L0)
 3. Review and promote scaffolds to L1/L2
 
 ### "Create Stub" (v2.9.1+)
 Create minimal L1 documents (goal only):
 ```bash
-python3 ontos.py stub docs/feature.md
+ontos stub docs/feature.md
 ```
 
 ### "Promote Document" (v2.9.1+)
 Elevate curation level:
-1. `python3 ontos.py promote docs/feature.md` — L0→L1 or L1→L2
+1. `ontos promote docs/feature.md` — L0→L1 or L1→L2
 2. Fill in required fields for target level
 3. Re-run promote after editing
 
 ### "Check Schema Migration" (v2.9.0+)
 Check documents for schema updates:
 ```bash
-python3 ontos.py migrate --check
+ontos migrate --check
 ```
 
 ### "Verify Ontos" (v2.7)
 Mark documentation as current after reviewing described atoms:
-1. `python3 ontos.py verify <path>` — Single file
-2. `python3 ontos.py verify --all` — Interactive: all stale docs
+1. `ontos verify <path>` — Single file
+2. `ontos verify --all` — Interactive: all stale docs
 
 **When to verify:**
 - After updating code that a document describes
@@ -182,7 +197,7 @@ When user asks to review a proposal:
 ### Recalling Rejected Ideas
 Rejected proposals are **excluded by default** to save tokens. To recall:
 ```bash
-python3 ontos.py map --include-rejected
+ontos map --include-rejected
 ```
 
 **Why rejected proposals matter:**

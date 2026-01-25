@@ -347,6 +347,41 @@ pip install -e .
 ontos init
 ```
 
+### What `ontos init` Creates (v3.1.1+)
+
+**Directory Structure:**
+```
+your-project/
+├── .ontos.toml           # Configuration
+├── Ontos_Context_Map.md  # Document graph
+├── AGENTS.md             # AI agent instructions
+└── docs/
+    ├── kernel/           # Core principles (rank 0)
+    ├── strategy/         # Strategic documents (rank 1)
+    ├── product/          # Product specifications (rank 2)
+    ├── atom/             # Atomic utilities (rank 3)
+    ├── logs/             # Session logs (rank 4)
+    ├── reference/        # Reference materials
+    └── archive/          # Archived documents
+```
+
+**Init Flags:**
+| Flag | Effect |
+|------|--------|
+| `--scaffold` | Auto-scaffold untagged files in docs/ without prompting |
+| `--no-scaffold` | Skip scaffold prompt entirely |
+| `--skip-hooks` | Don't install git hooks |
+| `--yes` / `-y` | Accept all defaults (non-interactive) |
+| `--force` / `-f` | Overwrite existing config and hooks |
+
+**Interactive Scaffold Prompt:**
+If untagged markdown files exist in `docs/`, init prompts:
+1. "Would you like to scaffold them? [y/N]"
+2. Scope selection: (1) docs/ only, (2) entire repo, (3) custom path
+
+**Safety:** The following directories are never scaffolded:
+`node_modules`, `.venv`, `venv`, `vendor`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `dist`, `build`, `.tox`, `.eggs`
+
 ### Upgrading from v2.x
 
 See the [Migration Guide](Migration_v2_to_v3.md) for step-by-step instructions.

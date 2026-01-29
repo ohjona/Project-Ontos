@@ -34,6 +34,7 @@ class DocumentSnapshot:
     validation_result: ValidationResult
     git_commit: Optional[str] = None
     ontos_version: str = ""
+    warnings: List[str] = field(default_factory=list)
 
     @property
     def by_type(self) -> Dict[str, List[DocumentData]]:
@@ -126,6 +127,7 @@ def create_snapshot(
 
     # Load documents
     documents: Dict[str, DocumentData] = {}
+    warnings: List[str] = []
     for path in doc_paths:
         try:
             content = path.read_text(encoding='utf-8')
@@ -148,8 +150,9 @@ def create_snapshot(
                         aliases=doc.aliases,
                     )
                 documents[doc.id] = doc
-        except Exception:
-            # Skip unparseable files
+        except Exception as e:
+            # S2: Log warnings on parse failure instead of silent skip
+            warnings.append(f"Skipped {path}: {e}")
             continue
 
     # Build graph
@@ -175,4 +178,5 @@ def create_snapshot(
         validation_result=validation_result,
         git_commit=git_commit,
         ontos_version=ontos.__version__,
+        warnings=warnings,
     )

@@ -96,24 +96,32 @@ def _generate_markdown_report(report: MigrationReport, project_name: str) -> str
             lines.append(f"| {c.id} | {c.doc_type} | (extract from content) |")
         lines.extend(["", "---", ""])
 
-    # Override warnings
-    override_warnings = [w for w in report.warnings if w.get("type") == "override_downgrade"]
-    if override_warnings:
+    # Warnings (S3)
+    if report.warnings:
         lines.extend([
-            "## Override Warnings",
+            "## Warnings",
             "",
-            "Documents where manual override downgrades risk:",
+            "The following issues were identified during analysis:",
             "",
-            "| ID | Inferred | Override | Reason |",
-            "|----|----------|----------|--------|",
+            "| ID | Type | Message |",
+            "|----|------|---------|",
         ])
-        for w in override_warnings:
-            c = report.classifications.get(w["id"])
-            if c:
-                lines.append(f"| {c.id} | {c.inferred_status} | {c.override} | {c.override_reason or '-'} |")
+        for w in report.warnings:
+            doc_id = w.get("id", "-")
+            w_type = w.get("type", "warning")
+            message = w.get("message", "-")
+            
+            # Special handling for override_downgrade to be more descriptive
+            if w_type == "override_downgrade":
+                inferred = w.get("inferred", "?")
+                override = w.get("override", "?")
+                message = f"Manual override ({override}) downgrades inferred status ({inferred})"
+            
+            lines.append(f"| {doc_id} | {w_type} | {message} |")
+        
         lines.extend([
             "",
-            "**Warning:** Override downgrades inferred classification. Verify this is intentional.",
+            "**Note:** Please review all warnings to ensure migration safety.",
         ])
 
     return "\n".join(lines)
@@ -180,8 +188,12 @@ def migration_report_command(options: MigrationReportOptions) -> Tuple[int, str]
 
     # Output
     if options.output_path:
-        options.output_path.parent.mkdir(parents=True, exist_ok=True)
-        options.output_path.write_text(output, encoding='utf-8')
+        try:
+            options.output_path.parent.mkdir(parents=True, exist_ok=True)
+            options.output_path.write_text(output, encoding='utf-8')
+        except (IOError, OSError) as e:
+            # S1: Improved error handling
+            return 1, f"Error writing migration report to {options.output_path}: {e}"
         return 0, f"Generated migration report: {options.output_path}"
     else:
         return 0, output

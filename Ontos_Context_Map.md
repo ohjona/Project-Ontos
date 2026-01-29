@@ -1,7 +1,7 @@
 ---
 type: generated
 generator: ontos_generate_context_map
-generated: "2026-01-29 02:09:24 UTC"
+generated: "2026-01-29 05:12:35 UTC"
 mode: Contributor
 scanned: .ontos-internal
 ---
@@ -10,7 +10,7 @@ scanned: .ontos-internal
 > When you run `ontos map` in your project, this file will be overwritten with your project's context.
 
 # Ontos Context Map
-Generated on: 2026-01-28 21:09:24
+Generated on: 2026-01-29 00:12:35
 Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 
 ## 1. Hierarchy Tree
@@ -194,12 +194,18 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 - **v3_2_candidate_suggestions_exploration** [L1] [draft] (candidate_suggestions_exploration.md) ~1,900 tokens  ⚠️ draft
   - Status: draft
   - Depends On: None
+- **v3_2_code_review_consolidation** [L2] (v3.2_Code_Review_Consolidation.md) ~1,400 tokens
+  - Status: active
+  - Depends On: v3_2_pr_review_chief_architect, v3_2_code_review_claude, v3_2_code_review_codex
 - **v3_2_environment_manifest_detection_proposal** [L2] [draft] (v3.2_Environment_Manifest_Detection_Proposal.md) ~3,600 tokens
   - Status: draft
   - Depends On: mission, constitution, ontos_agent_instructions
 - **v3_2_implementation_spec** [L2] [draft] (v3.2_Re-Architecture_Support_Implementation_Spec.md) ~5,800 tokens
   - Status: draft
   - Depends On: v3_2_proposal_finalization_ca
+- **v3_2_pr_review_chief_architect** [L2] (v3.2_PR_Review_Chief_Architect.md) ~1,500 tokens
+  - Status: active
+  - Depends On: v3_2_antigravity_implementation_prompt
 - **v3_2_proposal_finalization_ca** [L2] (v3.2_Proposal_Finalization_CA.md) ~3,500 tokens
   - Status: active
   - Depends On: v3_2_ca_response_consolidation
@@ -280,6 +286,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 - **v3_1_1_spec_review_claude** [L2] (v3.1.1_Spec_Review_Claude.md) ~2,900 tokens
   - Status: complete
   - Depends On: v3_1_1_init_improvements_proposal, ontos_philosophy_and_ontology, dual_mode_matrix
+- **v3_2_code_review_claude** [L2] (v3.2_Code_Review_Claude.md) ~1,900 tokens
+  - Status: complete
+  - Depends On: v3_2_implementation_spec
 
 ### LOG
 - **log_20251218_v2_6_1_graduation** [L1] (2025-12-18_v2-6-1-graduation.md) ~971 tokens  ⚠️ active
@@ -484,6 +493,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 ## 3. Dependency Audit
 - [BROKEN LINK] **v3_2_antigravity_implementation_prompt** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Antigravity_Implementation_Prompt.md) references missing ID: `v3_2_re_architecture_support_implementation_spec`
   Fix: Add a document with `id: v3_2_re_architecture_support_implementation_spec` or remove it from depends_on
+- [BROKEN LINK] **v3_2_code_review_consolidation** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Code_Review_Consolidation.md) references missing ID: `v3_2_code_review_codex`
+  Fix: Add a document with `id: v3_2_code_review_codex` or remove it from depends_on
 - [BROKEN LINK] **v3_0_2_hybrid_review_alignment_claude** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.3/v3.0.3_Hybrid_Review_Alignment_Claude.md) references missing ID: `v3.0.3_Implementation_Spec`
   Fix: Add a document with `id: v3.0.3_Implementation_Spec` or remove it from depends_on
 - [BROKEN LINK] **v3_0_3_hybrid_review_adversarial_codex** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.3/v3.0.3_Hybrid_Review_Adversarial_Codex.md) references missing ID: `v3.0.3_Implementation_Spec`
@@ -532,57 +543,61 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
   Fix: Add a document with `id: v3_1_0_spec_review_gpt5` or remove it from depends_on
 - [BROKEN LINK] **v3_1_0_track_b_pr_review_chief_architect** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_B_PR_Review_Chief_Architect.md) references missing ID: `v3_1_0_track_b_implementation_prompt_antigravity`
   Fix: Add a document with `id: v3_1_0_track_b_implementation_prompt_antigravity` or remove it from depends_on
-- [ORPHAN] **v3_0_2_implementation_spec_v1_1** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.3/v3.0.3-Implementation-Spec-v1.1.md) has no dependents
-  Fix: Add `v3_0_2_implementation_spec_v1_1` to another document's depends_on, or delete if unused
-- [ORPHAN] **v3_0_5_pr_review_chief_architect** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.5/v3.0.5_PR_Review_Chief_Architect.md) has no dependents
-  Fix: Add `v3_0_5_pr_review_chief_architect` to another document's depends_on, or delete if unused
-- [ORPHAN] **v3_1_0_track_a_code_review_consolidation** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_A_Code_Review_Consolidation.md) has no dependents
-  Fix: Add `v3_1_0_track_a_code_review_consolidation` to another document's depends_on, or delete if unused
-- [ORPHAN] **v3_1_0_track_b_code_review_consolidation** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_B_Code_Review_Consolidation.md) has no dependents
-  Fix: Add `v3_1_0_track_b_code_review_consolidation` to another document's depends_on, or delete if unused
 - [ORPHAN] **phase3_implementation_spec_review_codex** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.0/Phase3/Phase3-Implementation-Spec-Review-Codex.md) has no dependents
   Fix: Add `phase3_implementation_spec_review_codex` to another document's depends_on, or delete if unused
-- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
-  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
+- [ORPHAN] **v3_1_0_track_a_final_approval_d6a** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_A_Final_Approval_D6a.md) has no dependents
+  Fix: Add `v3_1_0_track_a_final_approval_d6a` to another document's depends_on, or delete if unused
+- [ORPHAN] **v3_1_0_track_b_code_review_consolidation** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_B_Code_Review_Consolidation.md) has no dependents
+  Fix: Add `v3_1_0_track_b_code_review_consolidation` to another document's depends_on, or delete if unused
 - [ORPHAN] **v3_1_0_chief_architect_response** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Chief_Architect_Response.md) has no dependents
   Fix: Add `v3_1_0_chief_architect_response` to another document's depends_on, or delete if unused
 - [ORPHAN] **v3_0_4_chief_architect_response** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.4/v3.0.4_Chief_Architect_Response.md) has no dependents
   Fix: Add `v3_0_4_chief_architect_response` to another document's depends_on, or delete if unused
-- [ORPHAN] **v3_1_0_track_a_final_approval_d6a** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_A_Final_Approval_D6a.md) has no dependents
-  Fix: Add `v3_1_0_track_a_final_approval_d6a` to another document's depends_on, or delete if unused
-- [DEPTH] **v3_1_0_track_a_code_review_consolidation** has dependency depth 10 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_2_implementation_spec** has dependency depth 6 (max: 5)
+- [ORPHAN] **v3_1_0_track_a_code_review_consolidation** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.1/v3_1_0_Track_A_Code_Review_Consolidation.md) has no dependents
+  Fix: Add `v3_1_0_track_a_code_review_consolidation` to another document's depends_on, or delete if unused
+- [ORPHAN] **migration_v2_to_v3** (docs/reference/Migration_v2_to_v3.md) has no dependents
+  Fix: Add `migration_v2_to_v3` to another document's depends_on, or delete if unused
+- [ORPHAN] **v3_0_2_implementation_spec_v1_1** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.3/v3.0.3-Implementation-Spec-v1.1.md) has no dependents
+  Fix: Add `v3_0_2_implementation_spec_v1_1` to another document's depends_on, or delete if unused
+- [ORPHAN] **v3_0_5_pr_review_chief_architect** (/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.0.5/v3.0.5_PR_Review_Chief_Architect.md) has no dependents
+  Fix: Add `v3_0_5_pr_review_chief_architect` to another document's depends_on, or delete if unused
+- [DEPTH] **v3_1_0_audit_triage_chief_architect** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_1_pr_review_chief_architect** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_track_a_pr_review_chief_architect** has dependency depth 9 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_track_a_implementation_prompt** has dependency depth 8 (max: 5)
+- [DEPTH] **v3_2_implementation_spec** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_0_spec_review_consolidation** has dependency depth 10 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_chief_architect_response** has dependency depth 11 (max: 5)
+- [DEPTH] **v3_1_0_research_review_chief_architect** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_2_code_review_consolidation** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_1_implementation_prompt_antigravity** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_1_final_approval** has dependency depth 7 (max: 5)
+- [DEPTH] **v3_1_0_spec_review_claude** has dependency depth 9 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_research_review_chief_architect** has dependency depth 7 (max: 5)
+- [DEPTH] **v3_1_0_track_a_final_approval_d6a** has dependency depth 11 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_final_decision_chief_architect** has dependency depth 7 (max: 5)
+- [DEPTH] **v3_2_code_review_claude** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_0_track_a_implementation_prompt** has dependency depth 8 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_0_sidecar_pattern** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_0_track_a_pr_review_chief_architect** has dependency depth 9 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_0_chief_architect_response** has dependency depth 11 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_0_implementation_spec** has dependency depth 6 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_0_final_decision_chief_architect** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_0_track_a_code_review_consolidation** has dependency depth 10 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
+- [DEPTH] **v3_1_1_final_approval** has dependency depth 7 (max: 5)
+  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [DEPTH] **v3_1_0_track_a_ca_rulings_d3a** has dependency depth 10 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_spec_review_claude** has dependency depth 9 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_audit_triage_chief_architect** has dependency depth 8 (max: 5)
-  Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
-- [DEPTH] **v3_1_0_track_a_final_approval_d6a** has dependency depth 11 (max: 5)
   Fix: Refactor to reduce nesting or increase MAX_DEPENDENCY_DEPTH in ontos_config.py
 - [ARCHITECTURE] **v3_2_backlog** (strategy) depends on **v3_1_0_track_b_final_approval_chief_architect** (approval)
   Fix: strategy should not depend on approval. Invert the dependency or change document types
@@ -590,6 +605,8 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
   Fix: strategy should not depend on atom. Invert the dependency or change document types
 - [ARCHITECTURE] **phase5_implementation_spec** (strategy) depends on **phase4_final_approval_chief_architect** (approval)
   Fix: strategy should not depend on approval. Invert the dependency or change document types
+- [ARCHITECTURE] **v3_2_code_review_consolidation** (strategy) depends on **v3_2_code_review_claude** (atom)
+  Fix: strategy should not depend on atom. Invert the dependency or change document types
 - [ARCHITECTURE] **v3_0_4_chief_architect_notes** (strategy) depends on **phase_v3_0_4_implementation_spec** (spec)
   Fix: strategy should not depend on spec. Invert the dependency or change document types
 - [ARCHITECTURE] **v3.0.4_Code_Review_Claude** (atom) depends on **phase_v3_0_4_implementation_spec** (spec)
@@ -606,7 +623,9 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 - [LINT] **phase4_implementation_spec**: Invalid status 'approved'. Use one of: active, archived, complete, deprecated, draft, pending_curation, rejected, scaffold
 - [LINT] **v3_2_re_architecture_ca_response**: Active document in proposals/. Graduate to strategy/.
 - [LINT] **v3_2_ca_response_consolidation**: Active document in proposals/. Graduate to strategy/.
+- [LINT] **v3_2_pr_review_chief_architect**: Active document in proposals/. Graduate to strategy/.
 - [LINT] **v3_2_antigravity_implementation_prompt**: Active document in proposals/. Graduate to strategy/.
+- [LINT] **v3_2_code_review_consolidation**: Active document in proposals/. Graduate to strategy/.
 - [LINT] **v3_2_proposal_finalization_ca**: Active document in proposals/. Graduate to strategy/.
 - [LINT] **v3_1_1_final_approval**: Invalid status 'approved'. Use one of: active, archived, complete, deprecated, draft, pending_curation, rejected, scaffold
 - [LINT] **v3_1_1_implementation_prompt_antigravity**: Invalid status 'approved'. Use one of: active, archived, complete, deprecated, draft, pending_curation, rejected, scaffold
@@ -767,8 +786,11 @@ Scanned Directory: `/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal, docs`
 | v3_2_backlog | [v3_2_backlog.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/v3.2/v3_2_backlog.md) | strategy |
 | v3_2_ca_response_consolidation | [v3.2_CA_Response_Review_Consolidation.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_CA_Response_Review_Consolidation.md) | strategy |
 | v3_2_candidate_suggestions_exploration | [candidate_suggestions_exploration.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/candidate_suggestions_exploration.md) | strategy |
+| v3_2_code_review_claude | [v3.2_Code_Review_Claude.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Code_Review_Claude.md) | atom |
+| v3_2_code_review_consolidation | [v3.2_Code_Review_Consolidation.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Code_Review_Consolidation.md) | strategy |
 | v3_2_environment_manifest_detection_proposal | [v3.2_Environment_Manifest_Detection_Proposal.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_Environment_Manifest_Detection_Proposal.md) | strategy |
 | v3_2_implementation_spec | [v3.2_Re-Architecture_Support_Implementation_Spec.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Re-Architecture_Support_Implementation_Spec.md) | strategy |
+| v3_2_pr_review_chief_architect | [v3.2_PR_Review_Chief_Architect.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_PR_Review_Chief_Architect.md) | strategy |
 | v3_2_proposal_finalization_ca | [v3.2_Proposal_Finalization_CA.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Proposal_Finalization_CA.md) | strategy |
 | v3_2_re_architecture_ca_response | [v3.2_Re-Architecture_CA_Response.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Re-Architecture_CA_Response.md) | strategy |
 | v3_2_re_architecture_support_proposal | [v3.2_Re-Architecture_Support_Proposal.md](/Users/jonathanoh/Dev/Ontos-dev/.ontos-internal/strategy/proposals/v3.2/v3.2_rearchitecting/v3.2_Re-Architecture_Support_Proposal.md) | strategy |

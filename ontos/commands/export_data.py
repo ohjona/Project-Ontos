@@ -49,13 +49,23 @@ def _snapshot_to_json(
     """Convert snapshot to JSON-serializable dict."""
     import ontos
 
+    from ontos.core.snapshot import _matches_filter
+    from ontos.core.migration import classify_documents
+
     # Get migration classifications
     report = classify_documents(snapshot)
-
+ 
     # Build documents list
     documents = []
+    included_ids = set()
     for doc_id in sorted(snapshot.documents.keys()) if deterministic else snapshot.documents.keys():
         doc = snapshot.documents[doc_id]
+        
+        # Apply filters during serialization (B2)
+        if not _matches_filter(doc, filters):
+            continue
+
+        included_ids.add(doc_id)
         classification = report.classifications.get(doc_id)
 
         doc_type = doc.type.value if hasattr(doc.type, 'value') else str(doc.type)
@@ -83,12 +93,18 @@ def _snapshot_to_json(
     # Build graph edges
     edges = []
     for doc_id in sorted(snapshot.graph.edges.keys()) if deterministic else snapshot.graph.edges.keys():
+        if doc_id not in included_ids:
+            continue
         for dep_id in sorted(snapshot.graph.edges[doc_id]) if deterministic else snapshot.graph.edges[doc_id]:
-            edges.append({
-                "from": doc_id,
-                "to": dep_id,
-                "type": "depends_on"
-            })
+            # Optional: should we include edges to non-exported docs?
+            # Re-Architecture spec says: classification reflects position in COMPLETE graph.
+            # But the export should probably only show edges between exported docs for clarity.
+            if dep_id in included_ids:
+                edges.append({
+                    "from": doc_id,
+                    "to": dep_id,
+                    "type": "depends_on"
+                })
 
     # Build provenance
     provenance = {
@@ -98,10 +114,11 @@ def _snapshot_to_json(
         "project_root": str(snapshot.project_root),
     }
 
-    # Build summary
+    # Build summary (only for included documents)
     by_type: Dict[str, int] = {}
     by_status: Dict[str, int] = {}
-    for doc in snapshot.documents.values():
+    for doc_id in included_ids:
+        doc = snapshot.documents[doc_id]
         doc_type = doc.type.value if hasattr(doc.type, 'value') else str(doc.type)
         doc_status = doc.status.value if hasattr(doc.status, 'value') else str(doc.status)
         by_type[doc_type] = by_type.get(doc_type, 0) + 1
@@ -122,10 +139,14 @@ def _snapshot_to_json(
         },
         "documents": documents,
         "graph": {
-            "nodes": sorted(list(snapshot.graph.nodes.keys())) if deterministic else list(snapshot.graph.nodes.keys()),
+            "nodes": sorted(list(included_ids)) if deterministic else list(included_ids),
             "edges": edges,
         },
     }
+
+    # S2: Include parse warnings if any
+    if snapshot.warnings:
+        result["summary"]["warnings"] = snapshot.warnings
 
     return result
 
@@ -147,22 +168,20 @@ def export_data_command(options: ExportDataOptions) -> Tuple[int, str]:
         if options.output_path.exists() and not options.force:
             return 1, f"Error: Output file exists: {options.output_path}. Use --force to overwrite."
 
-    # Build filters
+    # Create FULL snapshot first for accurate migration classification (B2)
+    full_snapshot = create_snapshot(
+        root=root,
+        include_content=not options.no_content,
+        filters=None,  # Get everything
+    )
+
+    # Convert to JSON with filters applied during serialization
     filters = SnapshotFilters(
         types=_parse_csv(options.types),
         status=_parse_csv(options.status),
         concepts=_parse_csv(options.concepts),
     )
-
-    # Create snapshot
-    snapshot = create_snapshot(
-        root=root,
-        include_content=not options.no_content,
-        filters=filters,
-    )
-
-    # Convert to JSON
-    data = _snapshot_to_json(snapshot, filters, options.deterministic)
+    data = _snapshot_to_json(full_snapshot, filters, options.deterministic)
 
     # Serialize
     if options.deterministic:
@@ -172,9 +191,13 @@ def export_data_command(options: ExportDataOptions) -> Tuple[int, str]:
 
     # Output
     if options.output_path:
-        options.output_path.parent.mkdir(parents=True, exist_ok=True)
-        options.output_path.write_text(json_str, encoding='utf-8')
-        return 0, f"Exported {len(snapshot.documents)} documents to {options.output_path}"
+        try:
+            options.output_path.parent.mkdir(parents=True, exist_ok=True)
+            options.output_path.write_text(json_str, encoding='utf-8')
+        except (IOError, OSError) as e:
+            # S1: Improved error handling
+            return 1, f"Error writing to {options.output_path}: {e}"
+        return 0, f"Exported {len(data['documents'])} documents to {options.output_path}"
     else:
         # Print to stdout (handled by CLI layer)
         return 0, json_str

@@ -79,13 +79,15 @@ class TestCLICommands:
         assert "verbose" in result.stdout.lower()
 
     def test_export_help(self):
-        """export --help should work."""
+        """export --help should work (v3.2: subcommand pattern)."""
         result = subprocess.run(
             [sys.executable, "-m", "ontos", "export", "--help"],
             capture_output=True, text=True
         )
         assert result.returncode == 0
-        assert "force" in result.stdout.lower()
+        # v3.2: export now has subcommands (data, claude)
+        assert "data" in result.stdout.lower()
+        assert "claude" in result.stdout.lower()
 
     def test_hook_help(self):
         """hook --help should work."""

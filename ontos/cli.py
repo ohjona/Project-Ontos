@@ -655,6 +655,12 @@ def _cmd_export_deprecated(args) -> int:
     print("Warning: 'ontos export' is deprecated. Use 'ontos export claude' or 'ontos export data'.", file=sys.stderr)
     print("This alias will be removed in v3.4.", file=sys.stderr)
 
+    # Ensure args has required attributes for _cmd_export_claude
+    if not hasattr(args, 'output'):
+        setattr(args, 'output', None)
+    if not hasattr(args, 'force'):
+        setattr(args, 'force', False)
+
     # Delegate to export claude
     return _cmd_export_claude(args)
 

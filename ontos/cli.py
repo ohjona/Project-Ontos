@@ -84,15 +84,18 @@ def create_parser() -> argparse.ArgumentParser:
     _register_log(subparsers, global_parser)
     _register_doctor(subparsers, global_parser)
     _register_agents(subparsers, global_parser)
-    _register_export(subparsers, global_parser)  # Deprecated alias
+    _register_agent_export(subparsers, global_parser)  # Deprecated alias
+    _register_export(subparsers, global_parser)
     _register_hook(subparsers, global_parser)
     _register_verify(subparsers, global_parser)
     _register_query(subparsers, global_parser)
-    _register_migrate(subparsers, global_parser)
+    _register_schema_migrate(subparsers, global_parser)
     _register_consolidate(subparsers, global_parser)
     _register_promote(subparsers, global_parser)
     _register_scaffold(subparsers, global_parser)
     _register_stub(subparsers, global_parser)
+    _register_migration_report(subparsers, global_parser)
+    _register_migrate_convenience(subparsers, global_parser)
 
     return parser
 
@@ -178,14 +181,65 @@ def _register_agents(subparsers, parent):
     p.set_defaults(func=_cmd_agents)
 
 
-def _register_export(subparsers, parent):
-    """Register export command (deprecated alias for agents)."""
-    p = subparsers.add_parser("export", help="(Deprecated) Use 'ontos agents' instead", parents=[parent])
+def _register_agent_export(subparsers, parent):
+    """Register agent-export command (deprecated alias for agents)."""
+    p = subparsers.add_parser("agent-export", help="(Deprecated) Use 'ontos agents' instead", parents=[parent])
     p.add_argument("--force", "-f", action="store_true",
                    help="Overwrite existing file")
     p.add_argument("--output", "-o", type=Path,
                    help="Output path")
-    p.set_defaults(func=_cmd_export)
+    p.set_defaults(func=_cmd_agent_export)
+
+
+def _register_export(subparsers, parent):
+    """Register export command with subcommands."""
+    export_parser = subparsers.add_parser(
+        "export",
+        help="Export documents (use 'export data' or 'export claude')",
+        parents=[parent]
+    )
+    export_subparsers = export_parser.add_subparsers(
+        dest="export_command",
+        title="export commands",
+        metavar="<command>"
+    )
+
+    # export data
+    data_parser = export_subparsers.add_parser(
+        "data",
+        help="Export documents as structured JSON",
+        parents=[parent]
+    )
+    data_parser.add_argument("-o", "--output", type=Path,
+                             help="Output file path")
+    data_parser.add_argument("--type",
+                             help="Filter by document type (comma-separated)")
+    data_parser.add_argument("--status",
+                             help="Filter by status (comma-separated)")
+    data_parser.add_argument("--concept",
+                             help="Filter by concept (comma-separated)")
+    data_parser.add_argument("--no-content", action="store_true",
+                             help="Exclude document content")
+    data_parser.add_argument("--deterministic", action="store_true",
+                             help="Stable output for testing")
+    data_parser.add_argument("--force", "-f", action="store_true",
+                             help="Overwrite existing file")
+    data_parser.set_defaults(func=_cmd_export_data)
+
+    # export claude
+    claude_parser = export_subparsers.add_parser(
+        "claude",
+        help="Generate CLAUDE.md file",
+        parents=[parent]
+    )
+    claude_parser.add_argument("-o", "--output", type=Path,
+                               help="Output path (default: CLAUDE.md)")
+    claude_parser.add_argument("--force", "-f", action="store_true",
+                               help="Overwrite existing file")
+    claude_parser.set_defaults(func=_cmd_export_claude)
+
+    # Deprecated: bare 'export' defaults to 'export claude' with warning
+    export_parser.set_defaults(func=_cmd_export_deprecated)
 
 
 def _register_hook(subparsers, parent):
@@ -248,10 +302,10 @@ def _register_query(subparsers, parent):
     p.set_defaults(func=_cmd_query)
 
 
-def _register_migrate(subparsers, parent):
-    """Register migrate command."""
+def _register_schema_migrate(subparsers, parent):
+    """Register schema migration command."""
     p = subparsers.add_parser(
-        "migrate",
+        "schema-migrate",
         help="Migrate document schema versions",
         parents=[parent]
     )
@@ -265,7 +319,7 @@ def _register_migrate(subparsers, parent):
     
     p.add_argument("--dirs", nargs="+", type=Path,
                    help="Directories to scan")
-    p.set_defaults(func=_cmd_migrate)
+    p.set_defaults(func=_cmd_schema_migrate)
 
 
 def _register_consolidate(subparsers, parent):
@@ -358,6 +412,36 @@ def _register_stub(subparsers, parent):
     p.add_argument("--output", "-o", type=Path, help="Output file path")
     p.add_argument("--depends-on", "-d", help="Comma-separated list of dependencies")
     p.set_defaults(func=_cmd_stub)
+
+
+def _register_migration_report(subparsers, parent):
+    """Register migration-report command."""
+    p = subparsers.add_parser(
+        "migration-report",
+        help="Analyze documents for migration safety",
+        parents=[parent]
+    )
+    p.add_argument("-o", "--output", type=Path,
+                   help="Output file path")
+    p.add_argument("--format", choices=["md", "json"], default="md",
+                   help="Output format (default: md)")
+    p.add_argument("--force", "-f", action="store_true",
+                   help="Overwrite existing file")
+    p.set_defaults(func=_cmd_migration_report)
+
+
+def _register_migrate_convenience(subparsers, parent):
+    """Register migrate convenience command."""
+    p = subparsers.add_parser(
+        "migrate",
+        help="Generate migration artifacts (snapshot + report)",
+        parents=[parent]
+    )
+    p.add_argument("--out-dir", type=Path, default=Path("./migration/"),
+                   help="Output directory (default: ./migration/)")
+    p.add_argument("--force", "-f", action="store_true",
+                   help="Overwrite existing files")
+    p.set_defaults(func=_cmd_migrate_convenience)
 
 
 # ============================================================================
@@ -479,6 +563,102 @@ def _cmd_agents(args) -> int:
     return exit_code
 
 
+def _cmd_agent_export(args) -> int:
+    """Handle agent-export command (deprecated - delegates to agents)."""
+    import sys
+    print("Warning: 'ontos agent-export' is deprecated. Use 'ontos agents' instead.", file=sys.stderr)
+    
+    from ontos.commands.agents import agents_command, AgentsOptions
+
+    options = AgentsOptions(
+        output_path=args.output,
+        force=args.force,
+        format="agents",
+        all_formats=False,
+    )
+
+    exit_code, message = agents_command(options)
+
+    if args.json:
+        emit_json({
+            "status": "success" if exit_code == 0 else "error",
+            "message": message,
+            "exit_code": exit_code
+        })
+    elif not args.quiet:
+        print(message)
+
+    return exit_code
+
+
+def _cmd_export_data(args) -> int:
+    """Handle export data command."""
+    from ontos.commands.export_data import export_data_command, ExportDataOptions
+
+    options = ExportDataOptions(
+        output_path=args.output,
+        types=args.type,
+        status=args.status,
+        concepts=args.concept,
+        no_content=args.no_content,
+        deterministic=args.deterministic,
+        force=args.force,
+        quiet=args.quiet,
+        json_output=args.json,
+    )
+
+    exit_code, message = export_data_command(options)
+
+    if exit_code == 0 and not args.output:
+        # Output is JSON to stdout
+        print(message)
+    elif args.json:
+        emit_json({
+            "status": "success" if exit_code == 0 else "error",
+            "message": message if args.output else "Exported to stdout",
+            "exit_code": exit_code
+        })
+    elif not args.quiet:
+        print(message)
+
+    return exit_code
+
+
+def _cmd_export_claude(args) -> int:
+    """Handle export claude command."""
+    from ontos.commands.export_claude import export_claude_command, ExportClaudeOptions
+
+    options = ExportClaudeOptions(
+        output_path=args.output,
+        force=args.force,
+        quiet=args.quiet,
+        json_output=args.json,
+    )
+
+    exit_code, message = export_claude_command(options)
+
+    if args.json:
+        emit_json({
+            "status": "success" if exit_code == 0 else "error",
+            "message": message,
+            "exit_code": exit_code
+        })
+    elif not args.quiet:
+        print(message)
+
+    return exit_code
+
+
+def _cmd_export_deprecated(args) -> int:
+    """Handle deprecated bare export command."""
+    import sys
+    print("Warning: 'ontos export' is deprecated. Use 'ontos export claude' or 'ontos export data'.", file=sys.stderr)
+    print("This alias will be removed in v3.4.", file=sys.stderr)
+
+    # Delegate to export claude
+    return _cmd_export_claude(args)
+
+
 def _cmd_export(args) -> int:
     """Handle export command (deprecated - delegates to agents)."""
     import sys
@@ -507,8 +687,8 @@ def _cmd_export(args) -> int:
     return exit_code
 
 
-def _cmd_migrate(args) -> int:
-    """Handle migrate command."""
+def _cmd_schema_migrate(args) -> int:
+    """Handle schema-migrate command."""
     from ontos.commands.migrate import MigrateOptions, migrate_command
 
     options = MigrateOptions(
@@ -520,6 +700,60 @@ def _cmd_migrate(args) -> int:
         json_output=args.json,
     )
     exit_code, message = migrate_command(options)
+    return exit_code
+
+
+def _cmd_migration_report(args) -> int:
+    """Handle migration-report command."""
+    from ontos.commands.migration_report import migration_report_command, MigrationReportOptions
+
+    options = MigrationReportOptions(
+        output_path=args.output,
+        format=args.format,
+        force=args.force,
+        quiet=args.quiet,
+        json_output=args.json,
+    )
+
+    exit_code, message = migration_report_command(options)
+
+    if exit_code == 0 and not args.output:
+        # Output is report to stdout
+        print(message)
+    elif args.json:
+        emit_json({
+            "status": "success" if exit_code == 0 else "error",
+            "message": message if args.output else "Report output to stdout",
+            "exit_code": exit_code
+        })
+    elif not args.quiet:
+        print(message)
+
+    return exit_code
+
+
+def _cmd_migrate_convenience(args) -> int:
+    """Handle migrate convenience command."""
+    from ontos.commands.migrate_cmd import migrate_convenience_command, MigrateOptions
+
+    options = MigrateOptions(
+        out_dir=args.out_dir,
+        force=args.force,
+        quiet=args.quiet,
+        json_output=args.json,
+    )
+
+    exit_code, message = migrate_convenience_command(options)
+
+    if args.json:
+        emit_json({
+            "status": "success" if exit_code == 0 else "error",
+            "message": message,
+            "exit_code": exit_code
+        })
+    elif not args.quiet:
+        print(message)
+
     return exit_code
 
 

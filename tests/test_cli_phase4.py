@@ -136,7 +136,7 @@ class TestCLIExportCommand:
         )
 
         assert result.returncode == 0
-        assert (tmp_path / "AGENTS.md").exists()  # v3.0.0: export creates AGENTS.md
+        assert (tmp_path / "CLAUDE.md").exists()  # v3.2: export creates CLAUDE.md (delegates to export claude)
 
 
 class TestCLIInitCommand:
